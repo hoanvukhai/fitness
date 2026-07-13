@@ -1,0 +1,60 @@
+{
+  "workoutSchedule": [
+    { "weekday": 1, "day": "push", "session": "A" },
+    { "weekday": 2, "day": "pull", "session": "A" },
+    { "weekday": 3, "day": "legs", "session": "A" },
+    { "weekday": 4, "day": "push", "session": "B" },
+    { "weekday": 5, "day": "pull", "session": "B" },
+    { "weekday": 6, "day": "legs", "session": "B" }
+  ],
+  "warmup": {
+    "push": [
+      { "name": "Xoay khớp vai", "nameEn": "Arm Circles", "duration": 30, "unit": "giây" },
+      { "name": "Kéo dây vai sau", "nameEn": "Band Pull-Aparts", "sets": 2, "reps": 15, "unit": "reps" },
+      { "name": "Chống đẩy nhẹ", "nameEn": "Light Push-up", "sets": 1, "reps": 10, "unit": "reps" },
+      { "name": "Đẩy vai nhẹ (50% tạ làm việc)", "nameEn": "Light DB Press", "sets": 2, "reps": 8, "unit": "reps" }
+    ],
+    "pull": [
+      { "name": "Co giãn lưng mèo bò", "nameEn": "Cat-Cow Stretch", "duration": 30, "unit": "giây" },
+      { "name": "Xoay cột sống ngực", "nameEn": "Thoracic Rotation", "reps": 10, "unit": "reps/bên" },
+      { "name": "Kéo dây vai sau", "nameEn": "Band Pull-Aparts", "sets": 2, "reps": 15, "unit": "reps" },
+      { "name": "Kéo nhẹ (50% tạ làm việc)", "nameEn": "Light Row", "sets": 2, "reps": 8, "unit": "reps" }
+    ],
+    "legs": [
+      { "name": "Xoay khớp háng", "nameEn": "Hip Circles", "duration": 30, "unit": "giây/bên" },
+      { "name": "Squat không tạ", "nameEn": "Bodyweight Squat", "sets": 2, "reps": 12, "unit": "reps" },
+      { "name": "Kéo giãn gấp háng", "nameEn": "Hip Flexor Stretch", "duration": 30, "unit": "giây/bên" },
+      { "name": "Goblet Squat nhẹ (50% tạ làm việc)", "nameEn": "Light Goblet Squat", "sets": 2, "reps": 8, "unit": "reps" }
+    ]
+  },
+  "cooldown": {
+    "push": [
+      { "name": "Giãn ngực tường", "nameEn": "Chest Wall Stretch", "duration": 30, "unit": "giây/bên" },
+      { "name": "Giãn tam đầu qua đầu", "nameEn": "Overhead Tricep Stretch", "duration": 30, "unit": "giây/bên" },
+      { "name": "Giãn vai chéo ngực", "nameEn": "Cross-body Shoulder Stretch", "duration": 30, "unit": "giây/bên" },
+      { "name": "Hít thở sâu cơ hoành", "nameEn": "Diaphragm Breathing", "duration": 60, "unit": "giây" }
+    ],
+    "pull": [
+      { "name": "Treo xà giãn cột sống", "nameEn": "Dead Hang", "duration": 30, "unit": "giây" },
+      { "name": "Giãn hai đầu cơ trước gương", "nameEn": "Bicep Wall Stretch", "duration": 30, "unit": "giây/bên" },
+      { "name": "Cúi người tay chạm sàn giãn lưng", "nameEn": "Standing Forward Fold", "duration": 45, "unit": "giây" },
+      { "name": "Hít thở sâu cơ hoành", "nameEn": "Diaphragm Breathing", "duration": 60, "unit": "giây" }
+    ],
+    "legs": [
+      { "name": "Giãn gấp háng nằm sấp", "nameEn": "Prone Hip Flexor Stretch", "duration": 30, "unit": "giây/bên" },
+      { "name": "Giãn đùi sau đứng", "nameEn": "Standing Hamstring Stretch", "duration": 30, "unit": "giây/bên" },
+      { "name": "Ngồi thiền / Pigeon Pose", "nameEn": "Pigeon Pose", "duration": 45, "unit": "giây/bên" },
+      { "name": "Nằm co gối thả lỏng", "nameEn": "Supine Knee Hug", "duration": 60, "unit": "giây" }
+    ]
+  },
+  "motivationalQuotes": [
+    "Đau cơ hôm nay, mạnh hơn ngày mai.",
+    "Không ai tiếc nuối vì đã tập xong buổi.",
+    "Progressive overload là chìa khoá duy nhất.",
+    "Consistency > Intensity.",
+    "Tier 1 không thay đổi. Kỹ thuật không thỏa hiệp.",
+    "RIR 1 hôm nay, RIR 0 tuần sau.",
+    "Buổi tập tệ vẫn tốt hơn không tập.",
+    "Giãn cơ là đầu tư cho buổi tập sau."
+  ]
+}
