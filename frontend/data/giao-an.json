@@ -1,0 +1,2324 @@
+{
+  "meta": {
+    "programName": "Giáo Án Tập PPL – Bản 2.0",
+    "version": "2.0",
+    "language": "vi",
+    "totalWeeks": 12,
+    "totalMonths": 3,
+    "description": "Giáo án Push/Pull/Legs chu kỳ 3 tháng. Buổi A (Power - tạ đòn, ít reps, nghỉ dài) và Buổi B (Hypertrophy - tạ đơn/máy, nhiều reps, nghỉ ngắn hơn) dành cho lịch 6 buổi/tuần. Lịch 3 buổi/tuần chỉ dùng Buổi A.",
+    "changesFromV1": [
+      "Xây đầy đủ Buổi B (Hypertrophy) cho cả Push/Pull/Legs, 3 tháng — trước đây lịch 6 buổi/tuần lặp lại y hệt Buổi A 2 lần.",
+      "Giữ nguyên số liệu ramp Core đã thống nhất trước đó (không đổi sang bộ số khác của bản tham khảo).",
+      "Giữ nguyên mức nghỉ 90-120 giây cho bài phụ Buổi A (Schoenfeld) — bản tham khảo bị revert về 45-90s, đã khôi phục.",
+      "Khôi phục ví dụ Macrocycle chi tiết theo từng tuần (không chỉ mức tháng).",
+      "Thêm id riêng cho từng bài tập + Progress Log Template đầy đủ (bản tham khảo JSON thiếu 2 phần này).",
+      "Thay Sissy Squat (Tháng 3 Legs B) bằng lựa chọn an toàn hơn làm mặc định, giữ Sissy Squat như phương án nâng cao.",
+      "Sửa ghi chú Push B Tháng 2 (bỏ so sánh tạ giữa 2 bài tập khác nhau)."
+    ]
+  },
+  "frequencyOptions": [
+    {
+      "id": "3day",
+      "label": "3 buổi/tuần",
+      "suitableFor": "Mới bắt đầu, lịch bận, ưu tiên hồi phục khớp",
+      "schedule": "T2: Push A – T4: Pull A – T6: Legs A, nghỉ các ngày còn lại",
+      "usesSessionB": false
+    },
+    {
+      "id": "6day",
+      "label": "6 buổi/tuần",
+      "suitableFor": "Đã có nền tảng, muốn tăng tần suất kích thích cơ lên 2 lần/tuần",
+      "schedule": "T2: Push A – T3: Pull A – T4: Legs A – T5: Push B – T6: Pull B – T7: Legs B, nghỉ Chủ Nhật",
+      "usesSessionB": true
+    }
+  ],
+  "principles": [
+    {
+      "key": "sessionSize",
+      "title": "Số bài/buổi",
+      "content": "Buổi A: 2 Tier 1 + 3 phụ + 1 core = 6 bài. Buổi B: 1 bài chính + 3 phụ + 1 core = 5 bài (nhẹ hơn A vì A đã gánh phần tải nặng nhất tuần)."
+    },
+    {
+      "key": "tier1",
+      "title": "Bài Tier 1 (khóa cứng 3 tháng, chỉ ở Buổi A)",
+      "content": "Push: Bench Press + OHP · Pull: Barbell Row + Pull-up/Lat Pulldown · Legs: Back Squat + RDL"
+    },
+    {
+      "key": "mesocycle",
+      "title": "Chu kỳ Reset (Mesocycle)",
+      "content": "4 tuần là mức phổ biến và hiệu quả; có thể co giãn 3-6 tuần tùy khả năng hồi phục cá nhân."
+    },
+    {
+      "key": "repsA",
+      "title": "Tiến trình Reps 3 tháng (Buổi A)",
+      "content": "Tháng 1: 8-10 → Tháng 2: 6-8 → Tháng 3: 4-6 reps (Tier 1)."
+    },
+    {
+      "key": "repsB",
+      "title": "Tiến trình Reps 3 tháng (Buổi B)",
+      "content": "Tháng 1: 12-15 → Tháng 2: 10-12 → Tháng 3: 8-10 reps (bài chính B) — luôn cao hơn Buổi A cùng tháng."
+    },
+    {
+      "key": "accessoryRotation",
+      "title": "Bài phụ & bài chính Buổi B",
+      "content": "Đổi toàn bộ mỗi 4 tuần để tạo góc kích thích mới."
+    },
+    {
+      "key": "core",
+      "title": "Core",
+      "content": "Dùng đúng 1 bài cho cả A lẫn B trong tuần (không tách riêng, không đổi bài suốt 3 tháng) — core hồi phục nhanh, 2 lần/tuần cùng 1 bài là hợp lý."
+    },
+    {
+      "key": "macrocycle",
+      "title": "Macrocycle",
+      "content": "Muscle Confusion là lầm tưởng — không đổi bài liên tục. Lặp lại chu kỳ 3 tháng với mức tạ khởi điểm cao hơn."
+    }
+  ],
+  "restRules": {
+    "sessionA": {
+      "tier1": "2-3 phút (một số bài cố định 2 hoặc 3 phút, xem từng bài)",
+      "accessory": "90-120 giây",
+      "accessoryRationale": "Nghiên cứu Schoenfeld (2016, so sánh nghỉ 1 phút vs 3 phút ở người có kinh nghiệm): nghỉ dài hơn giữ Total Volume Load qua các hiệp tốt hơn — biến số cốt lõi quyết định phì đại.",
+      "core": "45 giây"
+    },
+    "sessionB": {
+      "main": "90 giây",
+      "accessory": "60-90 giây",
+      "accessoryRationale": "Ngắn hơn Buổi A có chủ đích: Buổi B ưu tiên tần suất/mật độ buổi tập hơn là phá mức tạ tối đa, nên không cần nghỉ dài như Buổi A. Nới nhẹ so với 45-60s ban đầu để vẫn giữ một phần lợi ích volume load.",
+      "core": "45 giây"
+    }
+  },
+  "weeklyProgressionRules": {
+    "rirDefinition": "RIR (Reps In Reserve) = số reps còn có thể làm thêm nếu cố hết sức. RIR 2-3 = còn dư sức nhiều; RIR 0-1 = gần hết sức.",
+    "tier1GeneralFormula": [
+      {
+        "week": 1,
+        "goal": "Làm quen mức tạ khởi điểm",
+        "instruction": "Giữ tạ, ưu tiên kỹ thuật",
+        "rir": "2-3"
+      },
+      {
+        "week": 2,
+        "goal": "Củng cố, đạt đủ reps",
+        "instruction": "Giữ nguyên tạ Tuần 1",
+        "rir": "2"
+      },
+      {
+        "week": 3,
+        "goal": "Bắt đầu đẩy cường độ",
+        "instruction": "Tăng tạ nhẹ (+2.5-5%)",
+        "rir": "1-2"
+      },
+      {
+        "week": 4,
+        "goal": "Đỉnh điểm (test)",
+        "instruction": "Giữ tạ Tuần 3, dồn sức. Mức tạ tuần này = cơ sở tính khởi điểm tháng/Block kế tiếp",
+        "rir": "1"
+      }
+    ],
+    "doubleProgressionRule": "Hễ hoàn thành đủ số hiệp ở đầu trên rep range trong 2 buổi liên tiếp → tăng nhẹ tạ (0.5-2kg) ở buổi kế tiếp. Áp dụng cho bài phụ (Buổi A) và toàn bộ bài (Buổi B)."
+  },
+  "coreRamp": {
+    "push": {
+      "exerciseVi": "Plank",
+      "metric": "time",
+      "unit": "giây",
+      "sets": 3,
+      "months": [
+        {
+          "month": 1,
+          "target": 30,
+          "weeks": [
+            20,
+            24,
+            27,
+            30
+          ],
+          "note": null
+        },
+        {
+          "month": 2,
+          "target": 45,
+          "weeks": [
+            33,
+            38,
+            42,
+            45
+          ],
+          "note": "thêm đĩa tạ nhẹ"
+        },
+        {
+          "month": 3,
+          "target": 60,
+          "weeks": [
+            48,
+            53,
+            57,
+            60
+          ],
+          "note": "thêm đĩa tạ nặng hơn"
+        }
+      ]
+    },
+    "pull": {
+      "exerciseVi": "Nâng gối treo xà (Hanging Leg Raise)",
+      "metric": "reps",
+      "unit": "reps",
+      "sets": 3,
+      "months": [
+        {
+          "month": 1,
+          "target": 12,
+          "weeks": [
+            8,
+            10,
+            11,
+            12
+          ],
+          "note": "gối co"
+        },
+        {
+          "month": 2,
+          "target": 15,
+          "weeks": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "note": "chân duỗi thẳng hơn"
+        },
+        {
+          "month": 3,
+          "target": 18,
+          "weeks": [
+            11,
+            13,
+            15,
+            18
+          ],
+          "note": "chuyển hẳn sang chân thẳng — reset thấp hơn tuần 1 rồi ramp lại, giống cách Tier 1 reset ở mức tạ mới mỗi tháng"
+        }
+      ]
+    },
+    "legs": {
+      "exerciseVi": "Pallof Press",
+      "metric": "reps_per_side",
+      "unit": "reps/bên",
+      "sets": 3,
+      "months": [
+        {
+          "month": 1,
+          "target": 12,
+          "weeks": [
+            8,
+            10,
+            11,
+            12
+          ],
+          "note": "kháng lực nhẹ"
+        },
+        {
+          "month": 2,
+          "target": 12,
+          "weeks": [
+            10,
+            11,
+            12,
+            12
+          ],
+          "note": "kháng lực tăng — reset reps"
+        },
+        {
+          "month": 3,
+          "target": 15,
+          "weeks": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "note": "kháng lực cao nhất"
+        }
+      ]
+    }
+  },
+  "months": [
+    {
+      "monthNumber": 1,
+      "weekRange": [
+        1,
+        4
+      ],
+      "phaseName": "Xây dựng nền tảng",
+      "days": {
+        "push": {
+          "dayLabel": "PUSH (Ngực – Vai trước/giữa – Tay sau)",
+          "sessionA": [
+            {
+              "id": "m1-push-a-1",
+              "order": 1,
+              "name": "Đẩy ngực tạ đòn",
+              "nameEn": "Bench Press",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "8-10",
+              "rest": "2-3 phút",
+              "notes": "Tier 1 – khóa cứng",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              },
+              "substitute": "Đẩy ngực tạ đơn"
+            },
+            {
+              "id": "m1-push-a-2",
+              "order": 2,
+              "name": "Đẩy vai tạ đơn ngồi",
+              "nameEn": "Seated DB Shoulder Press",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "8-10",
+              "rest": "2 phút",
+              "notes": "Tier 1 – khóa cứng",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              }
+            },
+            {
+              "id": "m1-push-a-3",
+              "order": 3,
+              "name": "Đẩy ngực ghế dốc tạ đơn",
+              "nameEn": "Incline DB Press",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Bơm ngực trên",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m1-push-a-4",
+              "order": 4,
+              "name": "Dang vai ngang tạ đơn",
+              "nameEn": "Lateral Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "90-120 giây",
+              "notes": "Tạ nhẹ, kiểm soát",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-push-a-5",
+              "order": 5,
+              "name": "Kéo cáp tay sau",
+              "nameEn": "Tricep Pushdown",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "90-120 giây",
+              "notes": "Làm cuối, tay sau đã mỏi sẵn",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-push-a-6",
+              "order": 6,
+              "name": "Plank",
+              "nameEn": "Plank",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "20 giây (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — xem bảng ramp",
+              "rampRef": "coreRamp.push"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m1-push-b-1",
+              "order": 1,
+              "name": "Đẩy ngực tạ đơn ghế phẳng",
+              "nameEn": "Flat DB Press",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "12-15",
+              "rest": "90 giây",
+              "notes": "Bài chính B",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-push-b-2",
+              "order": 2,
+              "name": "Ép ngực máy",
+              "nameEn": "Pec Deck / Machine Fly",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "60-90 giây",
+              "notes": "",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-push-b-3",
+              "order": 3,
+              "name": "Nâng vai trước tạ đơn",
+              "nameEn": "DB Front Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15-20",
+              "rest": "60-90 giây",
+              "notes": "",
+              "repsRange": {
+                "min": 15,
+                "max": 20
+              }
+            },
+            {
+              "id": "m1-push-b-4",
+              "order": 4,
+              "name": "Đá tay sau tạ đơn",
+              "nameEn": "DB Tricep Kickback",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "60-90 giây",
+              "notes": "",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-push-b-5",
+              "order": 5,
+              "name": "Plank",
+              "nameEn": "Plank",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "20 giây (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — cùng target với Buổi A tuần này",
+              "rampRef": "coreRamp.push"
+            }
+          ]
+        },
+        "pull": {
+          "dayLabel": "PULL (Lưng/Xô – Vai sau – Tay trước)",
+          "sessionA": [
+            {
+              "id": "m1-pull-a-1",
+              "order": 1,
+              "name": "Kéo tạ đòn cúi người",
+              "nameEn": "Barbell Row",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "8-10",
+              "rest": "2-3 phút",
+              "notes": "Tier 1 – khóa cứng",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              },
+              "substitute": "Kéo tạ đơn 1 tay"
+            },
+            {
+              "id": "m1-pull-a-2",
+              "order": 2,
+              "name": "Kéo xà / Lat Pulldown",
+              "nameEn": "Pull-up / Lat Pulldown",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "8-10",
+              "rest": "2 phút",
+              "notes": "Tier 1 – khóa cứng. Chưa kéo xà được thì dùng Lat Pulldown",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              }
+            },
+            {
+              "id": "m1-pull-a-3",
+              "order": 3,
+              "name": "Kéo cáp ngồi",
+              "nameEn": "Seated Cable Row",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Độ dày lưng",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m1-pull-a-4",
+              "order": 4,
+              "name": "Kéo mặt cáp",
+              "nameEn": "Face Pull",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "90-120 giây",
+              "notes": "Vai sau, đối trọng lại buổi Push",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-pull-a-5",
+              "order": 5,
+              "name": "Cuốn tay trước tạ đòn EZ",
+              "nameEn": "EZ-bar Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Làm cuối, tay trước đã mỏi sẵn",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m1-pull-a-6",
+              "order": 6,
+              "name": "Nâng gối treo xà",
+              "nameEn": "Hanging Leg Raise",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "8 (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — Chưa đủ sức thì dùng Lying Leg Raise",
+              "rampRef": "coreRamp.pull"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m1-pull-b-1",
+              "order": 1,
+              "name": "Kéo tạ đơn ngực tựa ghế",
+              "nameEn": "Chest-supported DB Row",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "12-15",
+              "rest": "90 giây",
+              "notes": "Bài chính B",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-pull-b-2",
+              "order": 2,
+              "name": "Kéo cáp cao nắm rộng",
+              "nameEn": "Wide-grip Lat Pulldown",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "60-90 giây",
+              "notes": "",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-pull-b-3",
+              "order": 3,
+              "name": "Bay vai sau cáp",
+              "nameEn": "Cable Reverse Fly",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "60-90 giây",
+              "notes": "Khác Face Pull: không xoay vai, cô lập vai sau thuần hơn",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-pull-b-4",
+              "order": 4,
+              "name": "Cuốn tay trước ghế Scott",
+              "nameEn": "DB Preacher/Concentration Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-pull-b-5",
+              "order": 5,
+              "name": "Nâng gối treo xà",
+              "nameEn": "Hanging Leg Raise",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "8 (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — cùng target với Buổi A tuần này",
+              "rampRef": "coreRamp.pull"
+            }
+          ]
+        },
+        "legs": {
+          "dayLabel": "LEGS (Đùi trước/sau – Mông – Bắp chân)",
+          "sessionA": [
+            {
+              "id": "m1-legs-a-1",
+              "order": 1,
+              "name": "Squat tạ đòn",
+              "nameEn": "Back Squat",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "8-10",
+              "rest": "2-3 phút",
+              "notes": "Tier 1 – khóa cứng",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              }
+            },
+            {
+              "id": "m1-legs-a-2",
+              "order": 2,
+              "name": "RDL",
+              "nameEn": "Romanian Deadlift",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "8-10",
+              "rest": "2-3 phút",
+              "notes": "Tier 1 – khóa cứng",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              }
+            },
+            {
+              "id": "m1-legs-a-3",
+              "order": 3,
+              "name": "Đẩy đùi",
+              "nameEn": "Leg Press",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Thêm khối lượng đùi trước/mông",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m1-legs-a-4",
+              "order": 4,
+              "name": "Cuốn gân kheo ngồi",
+              "nameEn": "Seated Leg Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "90-120 giây",
+              "notes": "Đùi sau",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-legs-a-5",
+              "order": 5,
+              "name": "Nhón gót đứng",
+              "nameEn": "Standing Calf Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "15-20",
+              "rest": "90-120 giây",
+              "notes": "Bắp chân",
+              "repsRange": {
+                "min": 15,
+                "max": 20
+              }
+            },
+            {
+              "id": "m1-legs-a-6",
+              "order": 6,
+              "name": "Pallof Press",
+              "nameEn": "Pallof Press",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "8/bên (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — chống xoay",
+              "perUnit": "side",
+              "rampRef": "coreRamp.legs"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m1-legs-b-1",
+              "order": 1,
+              "name": "Squat tạ đơn kiểu cốc",
+              "nameEn": "Goblet Squat",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "12-15",
+              "rest": "90 giây",
+              "notes": "Bài chính B",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-legs-b-2",
+              "order": 2,
+              "name": "Cuốn gân kheo đứng máy",
+              "nameEn": "Standing Leg Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "60-90 giây",
+              "notes": "",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-legs-b-3",
+              "order": 3,
+              "name": "Đá đùi trước máy",
+              "nameEn": "Leg Extension",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "60-90 giây",
+              "notes": "",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m1-legs-b-4",
+              "order": 4,
+              "name": "Nhón gót tạ đơn",
+              "nameEn": "DB Calf Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15-20",
+              "rest": "60-90 giây",
+              "notes": "",
+              "repsRange": {
+                "min": 15,
+                "max": 20
+              }
+            },
+            {
+              "id": "m1-legs-b-5",
+              "order": 5,
+              "name": "Pallof Press",
+              "nameEn": "Pallof Press",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "8/bên (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — cùng target với Buổi A tuần này",
+              "perUnit": "side",
+              "rampRef": "coreRamp.legs"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "monthNumber": 2,
+      "weekRange": [
+        5,
+        8
+      ],
+      "phaseName": "Tăng cường sức mạnh",
+      "days": {
+        "push": {
+          "dayLabel": "PUSH (Ngực – Vai trước/giữa – Tay sau)",
+          "sessionA": [
+            {
+              "id": "m2-push-a-1",
+              "order": 1,
+              "name": "Bench Press",
+              "nameEn": "Bench Press",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "6-8",
+              "rest": "2-3 phút",
+              "notes": "Tier 1. Tăng tạ so với Tháng 1",
+              "repsRange": {
+                "min": 6,
+                "max": 8
+              }
+            },
+            {
+              "id": "m2-push-a-2",
+              "order": 2,
+              "name": "Seated DB Shoulder Press",
+              "nameEn": "Seated DB Shoulder Press",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "6-8",
+              "rest": "2 phút",
+              "notes": "Tier 1. Tăng tạ",
+              "repsRange": {
+                "min": 6,
+                "max": 8
+              }
+            },
+            {
+              "id": "m2-push-a-3",
+              "order": 3,
+              "name": "Ép ngực cáp",
+              "nameEn": "Cable Crossover",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m2-push-a-4",
+              "order": 4,
+              "name": "Dang vai cáp",
+              "nameEn": "Cable Lateral Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m2-push-a-5",
+              "order": 5,
+              "name": "Nằm đẩy tạ EZ",
+              "nameEn": "Skullcrusher",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m2-push-a-6",
+              "order": 6,
+              "name": "Plank",
+              "nameEn": "Plank",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "33 giây (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core",
+              "rampRef": "coreRamp.push"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m2-push-b-1",
+              "order": 1,
+              "name": "Đẩy ngực máy",
+              "nameEn": "Machine Chest Press",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "10-12",
+              "rest": "90 giây",
+              "notes": "Đổi bài, cường độ tăng so với Tháng 1",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m2-push-b-2",
+              "order": 2,
+              "name": "Ép ngực tạ đơn ghế nghiêng",
+              "nameEn": "Incline DB Fly",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m2-push-b-3",
+              "order": 3,
+              "name": "Đẩy vai Arnold",
+              "nameEn": "Arnold Press",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m2-push-b-4",
+              "order": 4,
+              "name": "Duỗi tay sau cáp 1 tay",
+              "nameEn": "Single-arm Cable Tricep Extension",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m2-push-b-5",
+              "order": 5,
+              "name": "Plank",
+              "nameEn": "Plank",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "33 giây (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core",
+              "rampRef": "coreRamp.push"
+            }
+          ]
+        },
+        "pull": {
+          "dayLabel": "PULL (Lưng/Xô – Vai sau – Tay trước)",
+          "sessionA": [
+            {
+              "id": "m2-pull-a-1",
+              "order": 1,
+              "name": "Barbell Row",
+              "nameEn": "Barbell Row",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "6-8",
+              "rest": "2-3 phút",
+              "notes": "Tier 1. Tăng tạ",
+              "repsRange": {
+                "min": 6,
+                "max": 8
+              }
+            },
+            {
+              "id": "m2-pull-a-2",
+              "order": 2,
+              "name": "Pull-up / Lat Pulldown",
+              "nameEn": "Pull-up / Lat Pulldown",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "6-8",
+              "rest": "2 phút",
+              "notes": "Tier 1. Tăng tạ",
+              "repsRange": {
+                "min": 6,
+                "max": 8
+              }
+            },
+            {
+              "id": "m2-pull-a-3",
+              "order": 3,
+              "name": "Kéo tạ đơn 1 tay",
+              "nameEn": "Single-arm DB Row",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              },
+              "perUnit": "side"
+            },
+            {
+              "id": "m2-pull-a-4",
+              "order": 4,
+              "name": "Bay vai sau máy",
+              "nameEn": "Reverse Pec Deck Fly",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m2-pull-a-5",
+              "order": 5,
+              "name": "Cuốn tay trước luân phiên",
+              "nameEn": "Alternating DB Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              },
+              "perUnit": "side"
+            },
+            {
+              "id": "m2-pull-a-6",
+              "order": 6,
+              "name": "Nâng gối treo xà",
+              "nameEn": "Hanging Leg Raise",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "12 (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — chân duỗi thẳng hơn",
+              "rampRef": "coreRamp.pull"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m2-pull-b-1",
+              "order": 1,
+              "name": "Kéo cáp 1 tay đứng",
+              "nameEn": "Standing Single-arm Cable Row",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "10-12",
+              "rest": "90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              },
+              "perUnit": "side"
+            },
+            {
+              "id": "m2-pull-b-2",
+              "order": 2,
+              "name": "Kéo cáp cao tay hẹp",
+              "nameEn": "Close-grip / V-bar Pulldown",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m2-pull-b-3",
+              "order": 3,
+              "name": "Nâng tạ đơn chữ Y ghế nghiêng",
+              "nameEn": "Incline Bench Y-Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài — vai sau/trap dưới",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m2-pull-b-4",
+              "order": 4,
+              "name": "Cuốn tay cáp thanh chữ V",
+              "nameEn": "Cable Bar Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m2-pull-b-5",
+              "order": 5,
+              "name": "Nâng gối treo xà",
+              "nameEn": "Hanging Leg Raise",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "12 (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core",
+              "rampRef": "coreRamp.pull"
+            }
+          ]
+        },
+        "legs": {
+          "dayLabel": "LEGS (Đùi trước/sau – Mông – Bắp chân)",
+          "sessionA": [
+            {
+              "id": "m2-legs-a-1",
+              "order": 1,
+              "name": "Back Squat",
+              "nameEn": "Back Squat",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "6-8",
+              "rest": "3 phút",
+              "notes": "Tier 1. Tăng tạ",
+              "repsRange": {
+                "min": 6,
+                "max": 8
+              }
+            },
+            {
+              "id": "m2-legs-a-2",
+              "order": 2,
+              "name": "RDL",
+              "nameEn": "Romanian Deadlift",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "6-8",
+              "rest": "2-3 phút",
+              "notes": "Tier 1. Tăng tạ",
+              "repsRange": {
+                "min": 6,
+                "max": 8
+              }
+            },
+            {
+              "id": "m2-legs-a-3",
+              "order": 3,
+              "name": "Lunge bước tạ đơn",
+              "nameEn": "Walking Lunge",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12/chân",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 12
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m2-legs-a-4",
+              "order": 4,
+              "name": "Cuốn gân kheo nằm",
+              "nameEn": "Lying Leg Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m2-legs-a-5",
+              "order": 5,
+              "name": "Nhón gót ngồi",
+              "nameEn": "Seated Calf Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "15-20",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 15,
+                "max": 20
+              }
+            },
+            {
+              "id": "m2-legs-a-6",
+              "order": 6,
+              "name": "Pallof Press",
+              "nameEn": "Pallof Press",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "10/bên (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — kháng lực tăng",
+              "perUnit": "side",
+              "rampRef": "coreRamp.legs"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m2-legs-b-1",
+              "order": 1,
+              "name": "Bước lên bục tạ đơn",
+              "nameEn": "DB Step-up",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "10-12",
+              "rest": "90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m2-legs-b-2",
+              "order": 2,
+              "name": "Đá đùi trước 1 chân",
+              "nameEn": "Single-leg Leg Extension",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m2-legs-b-3",
+              "order": 3,
+              "name": "Cuốn gân kheo đứng 1 chân",
+              "nameEn": "Single-leg Standing Leg Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m2-legs-b-4",
+              "order": 4,
+              "name": "Nhón gót tạ đơn 1 chân",
+              "nameEn": "Single-leg DB Calf Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m2-legs-b-5",
+              "order": 5,
+              "name": "Pallof Press",
+              "nameEn": "Pallof Press",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "10/bên (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core",
+              "perUnit": "side",
+              "rampRef": "coreRamp.legs"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "monthNumber": 3,
+      "weekRange": [
+        9,
+        12
+      ],
+      "phaseName": "Đỉnh cao sức mạnh",
+      "days": {
+        "push": {
+          "dayLabel": "PUSH (Ngực – Vai trước/giữa – Tay sau)",
+          "sessionA": [
+            {
+              "id": "m3-push-a-1",
+              "order": 1,
+              "name": "Bench Press",
+              "nameEn": "Bench Press",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "4-6",
+              "rest": "3 phút",
+              "notes": "Tier 1. Nặng nhất block",
+              "repsRange": {
+                "min": 4,
+                "max": 6
+              }
+            },
+            {
+              "id": "m3-push-a-2",
+              "order": 2,
+              "name": "Seated DB Shoulder Press",
+              "nameEn": "Seated DB Shoulder Press",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "4-6",
+              "rest": "2-3 phút",
+              "notes": "Tier 1",
+              "repsRange": {
+                "min": 4,
+                "max": 6
+              }
+            },
+            {
+              "id": "m3-push-a-3",
+              "order": 3,
+              "name": "Xà kép",
+              "nameEn": "Dips",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "8-10",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài — hoặc Máy đẩy ngực nếu chưa quen Dips",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              }
+            },
+            {
+              "id": "m3-push-a-4",
+              "order": 4,
+              "name": "Dang vai cáp nghiêng người",
+              "nameEn": "Leaning Cable Lateral Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m3-push-a-5",
+              "order": 5,
+              "name": "Duỗi tay sau qua đầu",
+              "nameEn": "Overhead Tricep Extension",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m3-push-a-6",
+              "order": 6,
+              "name": "Plank (thêm tạ đĩa)",
+              "nameEn": "Weighted Plank",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "48 giây (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — đỉnh điểm tiến trình",
+              "rampRef": "coreRamp.push"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m3-push-b-1",
+              "order": 1,
+              "name": "Đẩy ngực ghế dốc âm tạ đơn",
+              "nameEn": "Decline DB Press",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "8-10",
+              "rest": "90 giây",
+              "notes": "Đổi bài, nặng nhất block B. Thay thế: Weighted Push-up",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              }
+            },
+            {
+              "id": "m3-push-b-2",
+              "order": 2,
+              "name": "Ép ngực cáp 1 tay",
+              "nameEn": "Single-arm Cable Fly",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m3-push-b-3",
+              "order": 3,
+              "name": "Nâng vai chữ Y tạ đơn",
+              "nameEn": "DB Y-Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m3-push-b-4",
+              "order": 4,
+              "name": "Đẩy tạ đơn hẹp tay nằm sàn",
+              "nameEn": "Close-grip DB Floor Press",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m3-push-b-5",
+              "order": 5,
+              "name": "Plank (thêm tạ đĩa)",
+              "nameEn": "Weighted Plank",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "48 giây (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — đỉnh điểm tiến trình",
+              "rampRef": "coreRamp.push"
+            }
+          ]
+        },
+        "pull": {
+          "dayLabel": "PULL (Lưng/Xô – Vai sau – Tay trước)",
+          "sessionA": [
+            {
+              "id": "m3-pull-a-1",
+              "order": 1,
+              "name": "Barbell Row",
+              "nameEn": "Barbell Row",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "4-6",
+              "rest": "3 phút",
+              "notes": "Tier 1. Nặng nhất",
+              "repsRange": {
+                "min": 4,
+                "max": 6
+              }
+            },
+            {
+              "id": "m3-pull-a-2",
+              "order": 2,
+              "name": "Pull-up / Lat Pulldown",
+              "nameEn": "Pull-up / Lat Pulldown",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "4-6",
+              "rest": "2-3 phút",
+              "notes": "Tier 1",
+              "repsRange": {
+                "min": 4,
+                "max": 6
+              }
+            },
+            {
+              "id": "m3-pull-a-3",
+              "order": 3,
+              "name": "Kéo cáp thẳng tay",
+              "nameEn": "Straight-arm Pulldown",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài — cô lập xô, ít tay trước",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m3-pull-a-4",
+              "order": 4,
+              "name": "Bay ngược tạ đơn cúi người",
+              "nameEn": "Bent-over DB Reverse Fly",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 15,
+                "max": 15
+              }
+            },
+            {
+              "id": "m3-pull-a-5",
+              "order": 5,
+              "name": "Cuốn tay cáp",
+              "nameEn": "Cable Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m3-pull-a-6",
+              "order": 6,
+              "name": "Nâng gối treo xà (chân thẳng)",
+              "nameEn": "Hanging Leg Raise (straight leg)",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "11 (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — đỉnh điểm tiến trình",
+              "rampRef": "coreRamp.pull"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m3-pull-b-1",
+              "order": 1,
+              "name": "T-bar Row",
+              "nameEn": "T-bar Row",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "8-10",
+              "rest": "90 giây",
+              "notes": "Đổi bài, nặng nhất block B. Thay thế: Chest-supported DB Row nặng hơn",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              }
+            },
+            {
+              "id": "m3-pull-b-2",
+              "order": 2,
+              "name": "Kéo cáp đơn tay chéo người",
+              "nameEn": "Cross-body Cable Row",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m3-pull-b-3",
+              "order": 3,
+              "name": "Bay vai sau cáp chéo người",
+              "nameEn": "Cross-body Cable Reverse Fly",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m3-pull-b-4",
+              "order": 4,
+              "name": "Cuốn tay đơn kiểu búa",
+              "nameEn": "DB Hammer Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              }
+            },
+            {
+              "id": "m3-pull-b-5",
+              "order": 5,
+              "name": "Nâng gối treo xà (chân thẳng)",
+              "nameEn": "Hanging Leg Raise (straight leg)",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "11 (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — đỉnh điểm tiến trình",
+              "rampRef": "coreRamp.pull"
+            }
+          ]
+        },
+        "legs": {
+          "dayLabel": "LEGS (Đùi trước/sau – Mông – Bắp chân)",
+          "sessionA": [
+            {
+              "id": "m3-legs-a-1",
+              "order": 1,
+              "name": "Back Squat",
+              "nameEn": "Back Squat",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 4,
+              "repsDisplay": "4-6",
+              "rest": "3 phút",
+              "notes": "Tier 1. Nặng nhất",
+              "repsRange": {
+                "min": 4,
+                "max": 6
+              }
+            },
+            {
+              "id": "m3-legs-a-2",
+              "order": 2,
+              "name": "RDL",
+              "nameEn": "Romanian Deadlift",
+              "tier": "tier1",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "4-6",
+              "rest": "3 phút",
+              "notes": "Tier 1",
+              "repsRange": {
+                "min": 4,
+                "max": 6
+              }
+            },
+            {
+              "id": "m3-legs-a-3",
+              "order": 3,
+              "name": "Squat Bulgaria",
+              "nameEn": "Bulgarian Split Squat",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10/chân",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài — nâng cao hơn, phù hợp cuối block",
+              "repsRange": {
+                "min": 10,
+                "max": 10
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m3-legs-a-4",
+              "order": 4,
+              "name": "Cuốn gân kheo 1 chân",
+              "nameEn": "Single-leg Leg Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "8-10/chân",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m3-legs-a-5",
+              "order": 5,
+              "name": "Nhón gót 1 chân",
+              "nameEn": "Single-leg Calf Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12/chân",
+              "rest": "90-120 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 12,
+                "max": 12
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m3-legs-a-6",
+              "order": 6,
+              "name": "Pallof Press",
+              "nameEn": "Pallof Press",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "12/bên (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core — kháng lực cao nhất",
+              "perUnit": "side",
+              "rampRef": "coreRamp.legs"
+            }
+          ],
+          "sessionB": [
+            {
+              "id": "m3-legs-b-1",
+              "order": 1,
+              "name": "Hack Squat máy",
+              "nameEn": "Hack Squat",
+              "tier": "main",
+              "locked": false,
+              "sets": 4,
+              "repsDisplay": "8-10",
+              "rest": "90 giây",
+              "notes": "Đổi bài, nặng nhất block B. Thay thế: Sumo DB Squat",
+              "repsRange": {
+                "min": 8,
+                "max": 10
+              }
+            },
+            {
+              "id": "m3-legs-b-2",
+              "order": 2,
+              "name": "Đá đùi trước nặng (drop-set hiệp cuối)",
+              "nameEn": "Heavy Leg Extension (drop-set last set)",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "12-15",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài. Phương án nâng cao (đã quen tập): thay bằng Sissy Squat",
+              "repsRange": {
+                "min": 12,
+                "max": 15
+              }
+            },
+            {
+              "id": "m3-legs-b-3",
+              "order": 3,
+              "name": "Cuốn gân kheo nằm 1 chân, nặng hơn",
+              "nameEn": "Single-leg Lying Leg Curl",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "10-12/chân",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 10,
+                "max": 12
+              },
+              "perUnit": "leg"
+            },
+            {
+              "id": "m3-legs-b-4",
+              "order": 4,
+              "name": "Nhón gót đẩy đùi",
+              "nameEn": "Leg Press Calf Raise",
+              "tier": "accessory",
+              "locked": false,
+              "sets": 3,
+              "repsDisplay": "15-20",
+              "rest": "60-90 giây",
+              "notes": "Đổi bài",
+              "repsRange": {
+                "min": 15,
+                "max": 20
+              }
+            },
+            {
+              "id": "m3-legs-b-5",
+              "order": 5,
+              "name": "Pallof Press",
+              "nameEn": "Pallof Press",
+              "tier": "core",
+              "locked": true,
+              "sets": 3,
+              "repsDisplay": "12/bên (xem ramp)",
+              "rest": "45 giây",
+              "notes": "Core",
+              "perUnit": "side",
+              "rampRef": "coreRamp.legs"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "macrocycleRepeat": {
+    "repeatRule": "Quay lại Tháng 1 (Block mới) với rep range 8-10 (A) / 12-15 (B), nhưng mức tạ khởi điểm cao hơn Block cũ, dựa trên mức tạ đạt được ở Tuần 4 Tháng 3.",
+    "deload": "1 tuần giảm tải giữa Block cũ và Block mới — giảm khối lượng và cường độ còn ~50-60%.",
+    "sessionBNote": "Buổi B dùng Double Progression (không có bảng kg định sẵn theo tuần) — ghi nhận mức tạ nặng nhất đạt ở bài chính B cuối Tháng 3, Block mới bắt đầu cao hơn mức đó một chút.",
+    "workedExampleBenchPress": {
+      "note": "Số kg minh họa dựa trên ví dụ 20kg đã dùng xuyên suốt — thay bằng số thật khi dùng.",
+      "block1_month1": [
+        {
+          "week": 1,
+          "kg": 20,
+          "rir": "2-3"
+        },
+        {
+          "week": 2,
+          "kg": 20,
+          "rir": "2"
+        },
+        {
+          "week": 3,
+          "kg": 22.5,
+          "rir": "1-2"
+        },
+        {
+          "week": 4,
+          "kg": 22.5,
+          "rir": "1"
+        }
+      ],
+      "block1_month3_end_estimate_kg": "27-28 (ở 4-6 reps)",
+      "block2_month1": [
+        {
+          "week": 1,
+          "kg": 24,
+          "rir": "2-3"
+        },
+        {
+          "week": 2,
+          "kg": 24,
+          "rir": "2"
+        },
+        {
+          "week": 3,
+          "kg": 26.5,
+          "rir": "1-2"
+        },
+        {
+          "week": 4,
+          "kg": 26.5,
+          "rir": "1"
+        }
+      ]
+    }
+  },
+  "progressLogTemplate": {
+    "weeks": 12,
+    "sessionA": {
+      "lifts": [
+        "Bench Press",
+        "OHP",
+        "Barbell Row",
+        "Pull-up/Pulldown",
+        "Squat",
+        "RDL"
+      ],
+      "entries": [
+        {
+          "week": 1,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 2,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 3,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 4,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 5,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 6,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 7,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 8,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 9,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 10,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 11,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        },
+        {
+          "week": 12,
+          "values": {
+            "Bench Press": null,
+            "OHP": null,
+            "Barbell Row": null,
+            "Pull-up/Pulldown": null,
+            "Squat": null,
+            "RDL": null
+          }
+        }
+      ]
+    },
+    "sessionB": {
+      "note": "Tên bài đổi mỗi tháng (Double Progression) — ghi cả tên bài + kg mỗi tuần.",
+      "slots": [
+        "push",
+        "pull",
+        "legs"
+      ],
+      "entries": [
+        {
+          "week": 1,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 2,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 3,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 4,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 5,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 6,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 7,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 8,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 9,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 10,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 11,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        },
+        {
+          "week": 12,
+          "values": {
+            "push": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "pull": {
+              "exerciseName": null,
+              "kg": null
+            },
+            "legs": {
+              "exerciseName": null,
+              "kg": null
+            }
+          }
+        }
+      ]
+    }
+  },
+  "changelogV1": [
+    "Thiếu bài Core → bổ sung Plank/Hanging Leg Raise/Pallof Press cho cả 3 buổi.",
+    "Thiếu khởi động chuyên biệt cho bài chính nặng → bổ sung hiệp tăng dần tải.",
+    "Thiếu thời gian nghỉ giữa hiệp → bổ sung.",
+    "Mâu thuẫn số reps Tháng 2 (4-6 vs 6-8) → thống nhất 8-10/6-8/4-6.",
+    "Mơ hồ đổi bài Dang vai Tháng 2 → áp dụng nhất quán.",
+    "Chưa có buổi Pull và Legs → thiết kế đầy đủ.",
+    "Tiến trình theo tuần trong tháng chưa đặc tả → bổ sung RIR (Tier1) + ramp (Core).",
+    "Bài phụ và Core từng gộp chung logic tiến trình → tách riêng."
+  ],
+  "changelogV2": [
+    "Xây đầy đủ Buổi B (Hypertrophy) cho cả Push/Pull/Legs, 3 tháng — trước đây lịch 6 buổi/tuần lặp lại y hệt Buổi A 2 lần, không có gì phân biệt.",
+    "Giữ nguyên số liệu ramp Core đã thống nhất trước đó (bản tham khảo đề xuất bộ số khác — không dùng vì không có lý do rõ ràng để đổi số đã chốt).",
+    "Khôi phục mức nghỉ 90-120 giây cho bài phụ Buổi A theo Schoenfeld — bản tham khảo bị revert về 45-90s dù tự nhận 'giữ nguyên 100% Buổi A'.",
+    "Khôi phục ví dụ Macrocycle chi tiết theo từng tuần (bản tham khảo chỉ còn mức tháng).",
+    "Thêm id riêng cho từng bài + Progress Log Template (bản tham khảo JSON thiếu 2 phần này).",
+    "Thay Sissy Squat (Tháng 3 Legs B) bằng Leg Extension nặng làm mặc định — an toàn hơn cho người mới/trung cấp; giữ Sissy Squat như phương án nâng cao.",
+    "Sửa ghi chú Push B Tháng 2: bỏ so sánh tạ giữa Machine Chest Press và Flat DB Press (2 bài khác nhau, không so tạ trực tiếp được)."
+  ]
+}
