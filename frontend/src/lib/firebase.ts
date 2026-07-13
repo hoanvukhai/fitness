@@ -1,5 +1,4 @@
 // Firebase configuration
-// Bạn cần điền API keys từ Firebase Console vào .env.local
 import { initializeApp, getApps, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
 

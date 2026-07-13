@@ -172,10 +172,52 @@ export default function TodayPage() {
   const doneCount = session?.exercises.filter(ex => ex.checked).length || 0;
   const totalCount = session?.exercises.length || 0;
 
+  // ─── Loading skeleton ────────────────────────────────────────────────────
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <div className="text-slate-500 text-sm animate-pulse">Đang tải...</div>
+      <div className="bg-slate-950 min-h-screen max-w-lg mx-auto px-4 py-6 space-y-5">
+        {/* Header skeleton */}
+        <div className="space-y-2">
+          <div className="h-3 w-32 bg-slate-800 rounded-full animate-pulse" />
+          <div className="h-7 w-48 bg-slate-800 rounded-xl animate-pulse" />
+          <div className="h-3 w-24 bg-slate-800 rounded-full animate-pulse" />
+        </div>
+        {/* Progress bar skeleton */}
+        <div className="h-1.5 bg-slate-800 rounded-full animate-pulse" />
+        {/* Card skeletons */}
+        {[1, 2, 3].map(i => (
+          <div key={i} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3 animate-pulse">
+            <div className="flex items-start justify-between">
+              <div className="space-y-1.5">
+                <div className="h-3 w-14 bg-slate-800 rounded-full" />
+                <div className="h-5 w-40 bg-slate-800 rounded-lg" />
+                <div className="h-3 w-28 bg-slate-800 rounded-full" />
+              </div>
+              <div className="h-10 w-16 bg-slate-800 rounded-xl" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // ─── Error state ─────────────────────────────────────────────────────────
+  if (error) {
+    return (
+      <div className="bg-slate-950 min-h-screen flex flex-col items-center justify-center p-6 text-center gap-4">
+        <div className="text-4xl">⚠️</div>
+        <h2 className="text-lg font-bold text-white">Không kết nối được Firebase</h2>
+        <p className="text-slate-400 text-sm max-w-xs">{error}</p>
+        <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 text-left text-xs text-slate-400 font-mono w-full max-w-xs">
+          <p className="text-slate-500 mb-1">Kiểm tra file:</p>
+          <p className="text-emerald-400">frontend/.env.local</p>
+        </div>
+        <button
+          onClick={reload}
+          className="px-6 py-3 bg-blue-600 rounded-xl text-white font-semibold text-sm active:scale-95 transition-all"
+        >
+          Thử lại
+        </button>
       </div>
     );
   }
