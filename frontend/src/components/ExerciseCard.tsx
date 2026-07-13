@@ -40,9 +40,17 @@ export default function ExerciseCard({
   const restSeconds = parseRestSeconds(exercise.rest);
 
   const updateSet = (setIdx: number, field: 'weight' | 'reps', value: number) => {
-    const newSets = exercise.sets.map((s, i) =>
+    let newSets = exercise.sets.map((s, i) =>
       i === setIdx ? { ...s, [field]: value } : s
     );
+    // Nếu nhập tạ ở hiệp đầu tiên và các hiệp sau chưa có tạ → copy xuống
+    if (field === 'weight' && value > 0) {
+      newSets = newSets.map((s, i) =>
+        i > setIdx && !s.completed && s.weight === 0
+          ? { ...s, weight: value }
+          : s
+      );
+    }
     onChange({ ...exercise, sets: newSets });
   };
 
@@ -176,9 +184,9 @@ export default function ExerciseCard({
                   <div className="col-span-4">
                     <input
                       type="number"
-                      value={set.weight || ''}
+                      value={set.weight > 0 ? set.weight : ''}
                       onChange={e => updateSet(i, 'weight', parseFloat(e.target.value) || 0)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-center font-mono font-bold text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-center font-mono font-bold text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-slate-600"
                       placeholder="kg"
                       inputMode="decimal"
                     />
