@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useRestTimer } from '@/hooks/useRestTimer';
 import { X, Plus, Minus, SkipForward } from 'lucide-react';
 
@@ -23,12 +24,18 @@ interface RestTimerProps {
 
 export default function RestTimer({ duration, nextExercise, onDone }: RestTimerProps) {
   const { seconds, isRunning, progress, formattedTime, start, skip, adjust } = useRestTimer(onDone);
-  const quote = REST_QUOTES[Math.floor(Math.random() * REST_QUOTES.length)];
+  const [quote, setQuote] = useState<string>('');
+
+  useEffect(() => {
+    setQuote(REST_QUOTES[Math.floor(Math.random() * REST_QUOTES.length)]);
+  }, []);
 
   // Auto-start on mount
-  if (!isRunning && seconds === 0 && progress === 0) {
-    start(duration);
-  }
+  useEffect(() => {
+    if (!isRunning && seconds === 0 && progress === 0) {
+      start(duration);
+    }
+  }, [isRunning, seconds, progress, start, duration]);
 
   const circumference = 2 * Math.PI * 54;
   const strokeDashoffset = circumference * (1 - progress);
@@ -38,9 +45,6 @@ export default function RestTimer({ duration, nextExercise, onDone }: RestTimerP
       {/* Quote */}
       <div className="text-center">
         <p className="text-slate-400 text-sm uppercase tracking-widest mb-2 font-medium">Đang nghỉ</p>
-        <p className="text-slate-200 text-lg font-medium italic max-w-xs text-center leading-relaxed">
-          "{quote}"
-        </p>
       </div>
 
       {/* Timer Circle */}
@@ -72,6 +76,11 @@ export default function RestTimer({ duration, nextExercise, onDone }: RestTimerP
         </div>
 
         {/* Adjust buttons */}
+        {quote && (
+          <div className="text-center italic text-slate-400 text-xs px-8">
+            &quot;{quote}&quot;
+          </div>
+        )}
         <div className="flex items-center gap-4">
           <button
             onClick={() => adjust(-10)}
