@@ -61,8 +61,8 @@ function buildCalendarData(workouts: WorkoutSession[]) {
   const thisMonday = new Date(today);
   thisMonday.setDate(today.getDate() - daysFromMon);
 
-  // 24 tuần = 168 ngày, từ T2 cách đây 23 tuần
-  const WEEKS = 24;
+  // 12 tuần = 84 ngày, từ T2 cách đây 11 tuần
+  const WEEKS = 12;
   const startMonday = new Date(thisMonday);
   startMonday.setDate(thisMonday.getDate() - ((WEEKS - 1) * 7));
 
@@ -206,10 +206,15 @@ export default function ProgressPage() {
 
         {/* A2: Calendar kiểu GitHub — cột=tuần, hàng=thứ */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
-          <h3 className="font-bold text-slate-200 mb-4 flex items-center gap-2">
-            <Calendar size={18} className="text-slate-500" />
-            6 tháng gần đây
-          </h3>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-bold text-slate-200 flex items-center gap-2">
+              <Calendar size={18} className="text-slate-500" />
+              3 tháng gần đây
+            </h3>
+            <Link href="/progress/heatmap" className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors">
+              Xem toàn bộ
+            </Link>
+          </div>
           <div className="flex gap-2">
             {/* Row labels */}
             <div className="flex flex-col gap-1 pt-0.5 justify-between">
