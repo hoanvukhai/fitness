@@ -288,7 +288,7 @@ export default function ProgressPage() {
               <Clock size={18} className="text-slate-500" />
               Lịch sử buổi tập
             </h3>
-            {completed.length > 5 && (
+            {completed.length > 0 && (
               <Link href="/progress/history" className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors">
                 Xem tất cả
               </Link>
