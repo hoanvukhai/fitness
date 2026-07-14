@@ -94,8 +94,10 @@ export default function TodayPage() {
   const [overrideDay, setOverrideDay] = useState<{ day: string; session: 'A' | 'B' } | null>(null);
   const [finished, setFinished] = useState(false);
   const [showDayPicker, setShowDayPicker] = useState(false);
-
+  
   const todayDate = formatDate();
+  const [confirmDate, setConfirmDate] = useState(todayDate);
+  const [showDateConfirm, setShowDateConfirm] = useState(false);
 
   useEffect(() => {
     if (!session || session.status !== 'in_progress') return;
@@ -141,11 +143,17 @@ export default function TodayPage() {
     if (settings && !loading) loadSession();
   }, [settings, loading, loadSession]);
 
-  const startSession = async () => {
+  const startSession = async (date: string = confirmDate) => {
     if (!session) return;
-    const updated = { ...session, status: 'in_progress' as const, startedAt: new Date().toISOString() };
+    const updated = { 
+      ...session, 
+      status: 'in_progress' as const, 
+      date, 
+      startedAt: new Date().toISOString() 
+    };
     setSession(updated);
     await saveWorkoutSession(updated);
+    setShowDateConfirm(false);
   };
 
   const updateExercise = async (index: number, updated: ExerciseLog) => {
@@ -243,6 +251,41 @@ export default function TodayPage() {
             <button
               key={`${opt.day}-${opt.session}`}
               onClick={() => setOverrideDay(opt)}
+              className="py-3 px-6 bg-slate-900 border border-slate-800 rounded-xl text-slate-300 text-sm font-medium hover:bg-slate-800 transition-colors text-left"
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (session?.status === 'completed' && !finished) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center gap-6">
+        <div className="text-6xl">🎉</div>
+        <div>
+          <h2 className="text-2xl font-bold text-white mb-2">Đã tập xong hôm nay!</h2>
+          <p className="text-slate-400 text-sm">Bạn đã hoàn thành buổi tập này. Bạn có thể xem kết quả hoặc chọn buổi tập khác để tập bù.</p>
+        </div>
+        <div className="flex flex-col gap-3 w-full max-w-xs">
+          <button
+            onClick={() => setFinished(true)}
+            className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl text-white font-bold transition-all shadow-lg shadow-emerald-600/20"
+          >
+            Xem tóm tắt kết quả
+          </button>
+          <div className="h-px bg-slate-800 my-2" />
+          <p className="text-slate-500 text-xs uppercase tracking-widest">Hoặc chọn buổi khác:</p>
+          {DAY_OPTIONS.map(opt => (
+            <button
+              key={`${opt.day}-${opt.session}`}
+              onClick={() => {
+                setOverrideDay(opt);
+                setSession(null);
+                setFinished(false);
+              }}
               className="py-3 px-6 bg-slate-900 border border-slate-800 rounded-xl text-slate-300 text-sm font-medium hover:bg-slate-800 transition-colors text-left"
             >
               {opt.label}
@@ -357,12 +400,44 @@ export default function TodayPage() {
         {/* Start button */}
         {session?.status === 'planned' && (
           <button
-            onClick={startSession}
+            onClick={() => setShowDateConfirm(true)}
             className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-600/20"
           >
             <Dumbbell size={22} />
             Bắt đầu buổi tập
           </button>
+        )}
+
+        {/* Date Confirm Mini Dialog */}
+        {showDateConfirm && (
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-50 p-4">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl">
+              <div>
+                <p className="font-bold text-white text-lg">Xác nhận ngày tập</p>
+                <p className="text-slate-400 text-sm mt-1">Sẽ dùng làm ngày lưu vào lịch sử.</p>
+              </div>
+              <input 
+                type="date" 
+                value={confirmDate}
+                onChange={e => setConfirmDate(e.target.value)}
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-blue-500 focus:outline-none" 
+              />
+              <div className="flex gap-2 pt-2">
+                <button 
+                  onClick={() => setShowDateConfirm(false)}
+                  className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl text-white font-semibold transition-colors"
+                >
+                  Hủy
+                </button>
+                <button 
+                  onClick={() => startSession(confirmDate)}
+                  className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-bold transition-colors"
+                >
+                  Bắt đầu
+                </button>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Warmup */}

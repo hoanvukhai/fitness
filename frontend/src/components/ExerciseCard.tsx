@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, ChevronDown, ChevronUp, Lock, Timer, StickyNote } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, Lock, Timer, StickyNote, Info, X } from 'lucide-react';
 import { ExerciseLog, SetLog } from '@/lib/types';
 import RestTimer from './RestTimer';
+import dbData from '../../data/db.json';
 
 interface ExerciseCardProps {
   exercise: ExerciseLog;
@@ -26,6 +27,9 @@ export default function ExerciseCard({
   const [showTimer, setShowTimer] = useState(false);
   const [activeRestSet, setActiveRestSet] = useState<number | null>(null);
   const [note, setNote] = useState(exercise.notes || '');
+  const [showGuide, setShowGuide] = useState(false);
+
+  const guide = dbData.exercises.find((e: any) => e.name === exercise.nameEn || e.name === exercise.name);
 
   // Parse thời gian nghỉ từ string sang giây
   const parseRestSeconds = (restStr: string): number => {
@@ -99,6 +103,54 @@ export default function ExerciseCard({
         />
       )}
 
+      {showGuide && guide && (
+        <div className="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-4 sm:p-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowGuide(false)}>
+          <div 
+            className="bg-slate-900 w-full max-w-lg rounded-t-3xl sm:rounded-2xl border border-slate-800 flex flex-col max-h-[85vh] shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-5 border-b border-slate-800/50">
+              <div>
+                <h3 className="font-bold text-white text-lg">{exercise.name}</h3>
+                <p className="text-slate-500 text-xs">{exercise.nameEn}</p>
+              </div>
+              <button onClick={() => setShowGuide(false)} className="p-2 bg-slate-800 hover:bg-slate-700 rounded-full text-slate-400 transition-colors">
+                <X size={18} />
+              </button>
+            </div>
+            
+            {/* Content */}
+            <div className="p-5 overflow-y-auto space-y-6">
+              <div>
+                <h4 className="text-xs font-bold text-slate-500 mb-3 uppercase tracking-widest flex items-center gap-2">
+                  <Info size={14} /> Hướng dẫn kỹ thuật
+                </h4>
+                <div className="space-y-3">
+                  {guide.instructions.split('. ').map((step: string, idx: number) => step.trim() && (
+                    <div key={idx} className="flex gap-3 text-sm text-slate-300 leading-relaxed">
+                      <span className="w-5 h-5 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0 text-[10px] font-bold mt-0.5">{idx + 1}</span>
+                      <span>{step.replace(/^\d+\.\s*/, '')}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              {guide.alternatives && guide.alternatives.length > 0 && (
+                <div>
+                  <h4 className="text-xs font-bold text-slate-500 mb-2 uppercase tracking-widest">Bài thay thế</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {guide.alternatives.map((alt: string) => (
+                      <span key={alt} className="px-3 py-1.5 bg-slate-800/50 border border-slate-700/50 rounded-lg text-xs text-slate-400">{alt}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
         exercise.checked
           ? 'bg-slate-900/40 border-slate-800/40 opacity-70'
@@ -128,6 +180,14 @@ export default function ExerciseCard({
                   {exercise.tier === 'tier1' && <Lock size={8} className="inline mr-0.5" />}
                   {tierLabels[exercise.tier]}
                 </span>
+                {guide && (
+                  <button
+                    onClick={e => { e.stopPropagation(); setShowGuide(true); }}
+                    className="p-1 text-slate-500 hover:text-blue-400 bg-slate-800/50 rounded-full transition-colors"
+                  >
+                    <Info size={12} />
+                  </button>
+                )}
               </div>
               <h3 className="font-bold text-slate-100 text-base leading-tight">{exercise.name}</h3>
               <p className="text-xs text-slate-500 font-medium">{exercise.nameEn}</p>
