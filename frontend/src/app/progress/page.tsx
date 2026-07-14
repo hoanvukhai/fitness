@@ -305,9 +305,9 @@ export default function ProgressPage() {
           <div className="divide-y divide-slate-800">
             {[...completed].sort((a, b) => b.date.localeCompare(a.date)).map(w => (
               <div key={w.id}>
-                <button
+                <div
                   onClick={() => setExpandedSession(expandedSession === w.id ? null : w.id)}
-                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-800/50 transition-colors"
+                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-800/50 transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
                     <div className="text-left">
@@ -328,14 +328,14 @@ export default function ProgressPage() {
                     <div className="flex items-center gap-1 mr-2">
                       <button
                         onClick={e => { e.stopPropagation(); setEditingId(w.id); }}
-                        className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors"
+                        className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors cursor-pointer"
                         title="Sửa buổi tập"
                       >
                         <Pencil size={15} />
                       </button>
                       <button
                         onClick={e => { e.stopPropagation(); handleDelete(w.id); }}
-                        className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                        className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors cursor-pointer"
                         title="Xóa buổi tập"
                       >
                         <Trash2 size={15} />
@@ -347,7 +347,7 @@ export default function ProgressPage() {
                       : <ChevronRight size={16} className="text-slate-500" />
                     }
                   </div>
-                </button>
+                </div>
                 {expandedSession === w.id && (
                   <div className="px-5 pb-5 space-y-2">
                     {w.exercises.map(ex => {
