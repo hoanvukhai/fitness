@@ -24,29 +24,25 @@ export default function BottomNav() {
               <Link
                 key={href}
                 href={href}
-                className={`flex flex-col items-center justify-center gap-1 py-3 px-6 min-w-[72px] transition-all duration-200 ${
+                className={`flex items-center justify-center p-2 min-w-[64px] transition-all duration-200 ${
                   isActive
                     ? 'text-blue-400'
                     : 'text-slate-500 hover:text-slate-300'
                 }`}
               >
-                <div className={`relative flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-200 ${
+                <div className={`relative flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-200 ${
                   isActive ? 'bg-blue-500/15' : ''
                 }`}>
                   {isActive && (
-                    <div className="absolute inset-0 rounded-xl bg-blue-500/10 blur-sm" />
+                    <div className="absolute inset-0 rounded-2xl bg-blue-500/10 blur-sm" />
                   )}
                   <Icon
-                    size={22}
+                    size={24}
                     strokeWidth={isActive ? 2.5 : 2}
                     className="relative"
                   />
+                  <span className="sr-only">{label}</span>
                 </div>
-                <span className={`text-[11px] font-medium tracking-wide ${
-                  isActive ? 'text-blue-400' : 'text-slate-500'
-                }`}>
-                  {label}
-                </span>
               </Link>
             );
           })}

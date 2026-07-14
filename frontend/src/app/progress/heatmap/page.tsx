@@ -27,6 +27,12 @@ export default function HeatmapPage() {
   }, [workouts]);
 
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [timelineLimit, setTimelineLimit] = useState(3);
+
+  // Reset limit khi đổi năm
+  useEffect(() => {
+    setTimelineLimit(3);
+  }, [selectedYear]);
 
   useEffect(() => {
     getAllWorkouts().then(data => {
@@ -109,7 +115,7 @@ export default function HeatmapPage() {
   }
 
   return (
-    <div className="bg-slate-950 min-h-screen pb-8">
+    <div className="bg-slate-950 pb-8">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 px-4 py-4">
         <div className="max-w-6xl mx-auto flex items-center">
@@ -218,7 +224,7 @@ export default function HeatmapPage() {
               <div className="text-slate-500 text-sm">Không có hoạt động nào trong năm nay.</div>
             ) : (
               <div className="relative border-l border-slate-800 ml-3 space-y-8 pb-8">
-                {monthsInOrder.map((month) => {
+                {monthsInOrder.slice(0, timelineLimit).map((month) => {
                   const sessions = activityByMonth[month];
                   const pushCount = sessions.filter(s => s.day === 'push').length;
                   const pullCount = sessions.filter(s => s.day === 'pull').length;
@@ -260,6 +266,16 @@ export default function HeatmapPage() {
                     </div>
                   );
                 })}
+                {monthsInOrder.length > timelineLimit && (
+                  <div className="relative pl-6">
+                    <button
+                      onClick={() => setTimelineLimit(prev => prev + 3)}
+                      className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors bg-slate-900/50 hover:bg-slate-900 px-4 py-2 rounded-lg border border-slate-800 w-full text-center"
+                    >
+                      Xem thêm hoạt động cũ hơn
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>

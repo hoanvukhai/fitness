@@ -184,7 +184,7 @@ export default function ProgressPage() {
   }
 
   return (
-    <div className="bg-slate-950 min-h-screen pb-8">
+    <div className="bg-slate-950 pb-8">
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <h1 className="text-2xl font-extrabold text-white">Tiến độ</h1>
