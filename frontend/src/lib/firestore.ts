@@ -2,7 +2,7 @@
 'use client';
 
 import {
-  doc, getDoc, setDoc, updateDoc, addDoc,
+  doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc,
   collection, query, where, orderBy, getDocs, limit,
   serverTimestamp, Timestamp,
 } from 'firebase/firestore';
@@ -80,4 +80,9 @@ export async function getAllWorkouts(): Promise<WorkoutSession[]> {
   );
   const snap = await getDocs(q);
   return snap.docs.map(d => d.data() as WorkoutSession);
+}
+
+export async function deleteWorkout(id: string): Promise<void> {
+  const ref = doc(db, 'workouts', id);
+  await deleteDoc(ref);
 }
