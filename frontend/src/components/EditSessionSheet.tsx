@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { X, Save, Clock, Calendar, CheckCircle2 } from 'lucide-react';
 import { WorkoutSession, ExerciseLog } from '@/lib/types';
 import { calcTotalVolume } from '@/lib/workout-engine';
+import dbData from '../../data/db.json';
 
 interface EditSessionSheetProps {
   session: WorkoutSession;
@@ -32,6 +33,19 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
       const newSets = [...newExercises[exerciseIndex].sets];
       newSets[setIndex] = { ...newSets[setIndex], [field]: value };
       newExercises[exerciseIndex] = { ...newExercises[exerciseIndex], sets: newSets };
+      return { ...prev, exercises: newExercises };
+    });
+  };
+
+  const updateExerciseName = (exerciseIndex: number, newName: string) => {
+    setEdited(prev => {
+      const newExercises = [...prev.exercises];
+      newExercises[exerciseIndex] = { 
+        ...newExercises[exerciseIndex], 
+        name: newName, 
+        nameEn: newName, 
+        selectedAlternative: newName 
+      };
       return { ...prev, exercises: newExercises };
     });
   };
@@ -134,9 +148,58 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
               {edited.exercises.map((ex, eIdx) => {
                 const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
                 
+                const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+                const guide = dbData.exercises.find((e: any) => {
+                  const eName = normalize(e.name);
+                  const exNameEn = normalize(ex.nameEn);
+                  const exName = normalize(ex.name);
+                  if (eName === exNameEn || eName === exName) return true;
+                  const manualMap: Record<string, string> = {
+                    'benchpress': 'barbellbenchpress',
+                    'inclinebenchpress': 'inclinebarbellpress',
+                    'flatdbpress': 'dumbbellbenchpress',
+                    'pecdeckmachinefly': 'reversepecdeck',
+                    'chestsupporteddbrow': 'dumbbellrow',
+                    'pulluplatpulldown': 'latpulldown',
+                    'widegriplatpulldown': 'latpulldown',
+                    'dbpreacherconcentrationcurl': 'dumbbellcurl',
+                    'ezbarcurl': 'barbellcurl',
+                    'backsquat': 'barbellsquat',
+                    'romaniandeadlift': 'romaniandeadliftrdl',
+                    'seatedlegcurl': 'legcurl',
+                    'standinglegcurl': 'legcurl',
+                    'gobletsquat': 'frontsquat',
+                    'dbcalfraise': 'standingcalfraise',
+                    'cablereversefly': 'reversepecdeck',
+                    'dbtricepkickback': 'overheadtricepextension'
+                  };
+                  if (exNameEn && manualMap[exNameEn] === eName) return true;
+                  if (exName && manualMap[exName] === eName) return true;
+                  return false;
+                });
+
                 return (
                   <div key={eIdx} className="bg-slate-800/30 rounded-2xl p-3 border border-slate-700/30">
-                    <div className="font-semibold text-slate-200 text-sm mb-3 px-1">{ex.name}</div>
+                    <div className="flex items-center justify-between mb-3 px-1">
+                      <div className="font-semibold text-slate-200 text-sm">{ex.name}</div>
+                      {guide?.alternatives && guide.alternatives.length > 0 && (
+                        <select
+                          onChange={e => {
+                            const newName = e.target.value;
+                            if (newName !== ex.nameEn) {
+                              updateExerciseName(eIdx, newName);
+                            }
+                          }}
+                          className="bg-slate-800/80 text-[10px] text-slate-400 border border-slate-700 rounded px-2 py-0.5 outline-none max-w-[120px]"
+                          value={ex.nameEn}
+                        >
+                          <option value={ex.nameEn}>Đổi bài...</option>
+                          {guide.alternatives.map((alt: string) => (
+                            <option key={alt} value={alt}>{alt}</option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
                     
                     <div className="space-y-2">
                       <div className={`grid text-[10px] text-slate-500 font-bold uppercase tracking-wider px-1 gap-1 ${isTimeBased ? 'grid-cols-6' : 'grid-cols-10'}`}>
