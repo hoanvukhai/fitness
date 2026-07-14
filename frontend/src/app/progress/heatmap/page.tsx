@@ -112,7 +112,7 @@ export default function HeatmapPage() {
     <div className="bg-slate-950 min-h-screen pb-8">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 px-4 py-4">
-        <div className="max-w-4xl mx-auto flex items-center">
+        <div className="max-w-6xl mx-auto flex items-center">
           <button 
             onClick={() => router.back()}
             className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors -ml-2 p-2"
@@ -126,10 +126,10 @@ export default function HeatmapPage() {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-8">
+      <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-8">
         
         {/* Main Content */}
-        <div className="flex-1 space-y-8 order-2 md:order-1">
+        <div className="flex-1 space-y-8 order-2 md:order-1 min-w-0">
           <div className="text-xl font-medium text-slate-300">
             {completedThisYear.length} buổi tập trong năm {selectedYear}
           </div>
