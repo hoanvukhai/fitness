@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Search, X, ChevronRight, Dumbbell, Zap, Target, LayoutGrid, List } from 'lucide-react';
 import type { Exercise } from './page';
 
@@ -84,11 +84,25 @@ function ExModal({ ex, onClose }: { ex: Exercise; onClose: () => void }) {
     .map(s => s.trim())
     .filter(Boolean);
 
+  // Khóa scroll của trang nền khi mở modal
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
-      <div className="bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+    <div 
+      className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
-        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 px-5 pt-5 pb-4 rounded-t-3xl">
+        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800 px-5 pt-5 pb-4 rounded-t-3xl z-10">
           <div className="flex items-start justify-between gap-3">
             <div>
               <div className="flex flex-wrap gap-1.5 mb-2">
