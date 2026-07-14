@@ -80,17 +80,36 @@ function buildCalendarData(workouts: WorkoutSession[]) {
   return weeks;
 }
 
-// A1: Tính streak dùng VN timezone
+function getDaysDiff(d1: string, d2: string) {
+  const date1 = new Date(d1);
+  const date2 = new Date(d2);
+  return Math.round((date1.getTime() - date2.getTime()) / (1000 * 3600 * 24));
+}
+
+// A1: Tính chuỗi buổi tập (cho phép nghỉ tối đa 3 ngày mà không mất chuỗi)
 function calcStreak(workouts: WorkoutSession[]): number {
-  const done = new Set(workouts.filter(w => w.status === 'completed').map(w => w.date));
-  let streak = 0;
-  const today = new Date(todayVN());
-  for (let i = 0; i < 365; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    if (done.has(dateVN(d))) streak++;
-    else break;
+  const doneDates = Array.from(new Set(workouts.filter(w => w.status === 'completed').map(w => w.date))).sort().reverse();
+  
+  if (doneDates.length === 0) return 0;
+
+  const todayStr = todayVN();
+  const lastWorkoutStr = doneDates[0];
+  
+  // Nếu đã nghỉ quá 3 ngày tính từ hôm nay, chuỗi bị reset về 0
+  if (getDaysDiff(todayStr, lastWorkoutStr) > 3) return 0;
+
+  let streak = 1;
+  for (let i = 0; i < doneDates.length - 1; i++) {
+    const gap = getDaysDiff(doneDates[i], doneDates[i+1]);
+    
+    // Nếu khoảng cách giữa 2 buổi tập <= 3 ngày (tức là nghỉ tối đa 2 ngày)
+    if (gap <= 3) {
+      streak++;
+    } else {
+      break;
+    }
   }
+  
   return streak;
 }
 
