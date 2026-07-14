@@ -11,7 +11,7 @@ import { ExerciseLog, WorkoutSession } from '@/lib/types';
 import Onboarding from '@/components/Onboarding';
 import ExerciseCard from '@/components/ExerciseCard';
 import WarmupCooldown from '@/components/WarmupCooldown';
-import { TrendingUp, Flame, Calendar, CalendarDays, Clock, Target, ChevronRight, ChevronDown, CheckCircle2, RefreshCw, Weight, Plus, Play, Pause } from 'lucide-react';
+import { TrendingUp, Flame, Calendar, CalendarDays, Clock, Target, ChevronRight, ChevronDown, CheckCircle2, RefreshCw, Weight, Plus, Play, Pause, Dumbbell } from 'lucide-react';
 
 // Dynamic imports để tránh lỗi SSR
 let appConfig: any = null;
