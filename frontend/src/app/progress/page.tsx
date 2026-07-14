@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { getAllWorkouts, deleteWorkout, saveWorkoutSession } from '@/lib/firestore';
 import { WorkoutSession } from '@/lib/types';
 import { getDayLabel, getSessionLabel } from '@/lib/workout-engine';
