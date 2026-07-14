@@ -127,9 +127,9 @@ export default function HistoryPage() {
                               <div className="text-sm font-medium text-slate-300">{ex.name}</div>
                               <div className="text-xs text-slate-500">{doneSets.length}/{ex.targetSets} hiệp</div>
                             </div>
-                            {maxW > 0 && !isTimeBased && (
+                            {!isTimeBased && (
                               <div className="font-mono text-sm font-bold text-slate-400">
-                                {maxW}kg × {Math.round(doneSets.reduce((s, h) => s + h.reps, 0) / doneSets.length)}r
+                                {maxW > 0 ? `${maxW}kg × ` : ''}{Math.round(doneSets.reduce((s, h) => s + h.reps, 0) / doneSets.length)}r
                               </div>
                             )}
                             {isTimeBased && (
