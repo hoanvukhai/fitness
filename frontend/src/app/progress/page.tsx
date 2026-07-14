@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { getAllWorkouts, deleteWorkout, saveWorkoutSession } from '@/lib/firestore';
 import { WorkoutSession } from '@/lib/types';
 import { getDayLabel, getSessionLabel } from '@/lib/workout-engine';
+import { useRouter } from 'next/navigation';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer,
