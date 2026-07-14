@@ -73,7 +73,7 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
         </div>
 
         {/* Scrollable Body */}
-        <div className="p-4 overflow-y-auto space-y-6 pb-20">
+        <div className="p-4 overflow-y-auto space-y-6 pb-20 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:bg-slate-700 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-slate-600">
           
           {/* General Info */}
           <div className="space-y-4">
