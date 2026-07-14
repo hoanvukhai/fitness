@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getAllWorkouts } from '@/lib/firestore';
+import { getAllWorkouts, deleteWorkout, saveWorkoutSession } from '@/lib/firestore';
 import { WorkoutSession } from '@/lib/types';
 import { getDayLabel, getSessionLabel } from '@/lib/workout-engine';
 import { ChevronLeft, ChevronRight, ChevronDown, Clock, Pencil, Trash2 } from 'lucide-react';
