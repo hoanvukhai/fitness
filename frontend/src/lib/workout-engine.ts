@@ -124,10 +124,11 @@ export function generateWorkoutId(
 }
 
 /**
- * Định dạng ngày YYYY-MM-DD
+ * Định dạng ngày YYYY-MM-DD theo múi giờ Việt Nam (UTC+7)
+ * QUAN TRỌNG: KHÔNG dùng toISOString() — trả về UTC, sai giờ VN buổi tối
  */
 export function formatDate(date: Date = new Date()): string {
-  return date.toISOString().split('T')[0];
+  return date.toLocaleDateString('sv', { timeZone: 'Asia/Ho_Chi_Minh' });
 }
 
 /**
