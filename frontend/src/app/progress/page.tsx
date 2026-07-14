@@ -67,14 +67,14 @@ function buildCalendarData(workouts: WorkoutSession[]) {
   startMonday.setDate(thisMonday.getDate() - ((WEEKS - 1) * 7));
 
   // weeks[col][row] where col=week, row=day(0=T2..6=CN)
-  const weeks: { date: string; session?: WorkoutSession }[][] = [];
+  const weeks: { date: string; session?: WorkoutSession; month: number }[][] = [];
   for (let w = 0; w < WEEKS; w++) {
-    const week: { date: string; session?: WorkoutSession }[] = [];
+    const week: { date: string; session?: WorkoutSession; month: number }[] = [];
     for (let d = 0; d < 7; d++) {
       const dt = new Date(startMonday);
       dt.setDate(startMonday.getDate() + w * 7 + d);
       const iso = dateVN(dt);
-      week.push({ date: iso, session: done.get(iso) });
+      week.push({ date: iso, session: done.get(iso), month: dt.getMonth() });
     }
     weeks.push(week);
   }
@@ -152,8 +152,23 @@ export default function ProgressPage() {
   const calendarWeeks = buildCalendarData(workouts);
   const streak = calcStreak(workouts);
   const totalTime = completed.reduce((s, w) => s + w.durationSeconds, 0);
-  // A3: tổng buổi thay cho tổng khối lượng
   const totalSessions = completed.length;
+
+  const monthLabels = useMemo(() => {
+    const labels: { label: string; colIndex: number }[] = [];
+    let currentMonth = -1;
+    calendarWeeks.forEach((week, index) => {
+      const firstDayOfMonth = week.find(d => d.month !== currentMonth);
+      if (firstDayOfMonth) {
+        currentMonth = firstDayOfMonth.month;
+        labels.push({
+          label: `Th ${currentMonth + 1}`,
+          colIndex: index
+        });
+      }
+    });
+    return labels;
+  }, [calendarWeeks]);
 
   const toggleLine = (label: string) => {
     setActiveLines(prev => {
@@ -217,46 +232,59 @@ export default function ProgressPage() {
           </div>
           <div className="flex gap-2">
             {/* Row labels */}
-            <div className="flex flex-col gap-1 pt-0.5 justify-between">
-              {['T2','T3','T4','T5','T6','T7','CN'].map(d => (
-                <div key={d} className="h-4 flex items-center text-[10px] text-slate-500 w-4">{d}</div>
+            <div className="flex flex-col gap-1 pt-5 justify-between">
+              {['T2','T3','T4','T5','T6','T7','CN'].map((d, i) => (
+                <div key={d} className={`h-3 flex items-center text-[10px] text-slate-500 w-4 ${(i%2===1) ? 'opacity-0' : ''}`}>{d}</div>
               ))}
             </div>
             {/* Grid: cột = tuần */}
-            <div className="flex-1 overflow-x-auto scrollbar-none pb-2 flex justify-end">
-              <div className="flex gap-1 min-w-max">
-                {calendarWeeks.map((week, wi) => (
-                  <div key={wi} className="flex flex-col gap-1">
-                    {week.map((cell, di) => {
-                      const dayColors: Record<string, string> = {
-                        push: 'bg-sky-500',
-                        pull: 'bg-indigo-500',
-                        legs: 'bg-emerald-500',
-                      };
-                      const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
-                      
-                      let opacityClass = 'opacity-100';
-                      if (cell.session) {
-                        const mins = Math.floor(cell.session.durationSeconds / 60);
-                        if (mins < 45) opacityClass = 'opacity-40';
-                        else if (mins <= 60) opacityClass = 'opacity-70';
-                        else opacityClass = 'opacity-100';
-                      }
-
-                      const title = cell.session
-                        ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
-                        : new Date(cell.date).toLocaleDateString('vi-VN');
-                      
-                      return (
-                        <div
-                          key={di}
-                          title={title}
-                          className={`w-4 h-4 rounded-[3px] transition-colors ${color} ${opacityClass}`}
-                        />
-                      );
-                    })}
+            <div className="flex-1 overflow-x-auto scrollbar-none pb-2">
+              <div className="min-w-max relative pt-5">
+                {/* Month Labels */}
+                {monthLabels.map((m, i) => (
+                  <div 
+                    key={i} 
+                    className="absolute top-0 text-[10px] text-slate-400"
+                    style={{ left: `${m.colIndex * 16}px` }} 
+                  >
+                    {m.label}
                   </div>
                 ))}
+                
+                <div className="flex gap-1">
+                  {calendarWeeks.map((week, wi) => (
+                    <div key={wi} className="flex flex-col gap-1">
+                      {week.map((cell, di) => {
+                        const dayColors: Record<string, string> = {
+                          push: 'bg-sky-500',
+                          pull: 'bg-indigo-500',
+                          legs: 'bg-emerald-500',
+                        };
+                        const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
+                        
+                        let opacityClass = 'opacity-100';
+                        if (cell.session) {
+                          const mins = Math.floor(cell.session.durationSeconds / 60);
+                          if (mins < 45) opacityClass = 'opacity-40';
+                          else if (mins <= 60) opacityClass = 'opacity-70';
+                          else opacityClass = 'opacity-100';
+                        }
+
+                        const title = cell.session
+                          ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
+                          : new Date(cell.date).toLocaleDateString('vi-VN');
+                        
+                        return (
+                          <div
+                            key={di}
+                            title={title}
+                            className={`w-3 h-3 rounded-[2px] transition-colors ${color} ${opacityClass}`}
+                          />
+                        );
+                      })}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
