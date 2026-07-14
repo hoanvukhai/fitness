@@ -2,24 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { CalendarDays, TrendingUp, BookOpen } from 'lucide-react';
+import { CalendarDays, TrendingUp, BookOpen, Library } from 'lucide-react';
 
 const navItems = [
-  {
-    href: '/',
-    icon: CalendarDays,
-    label: 'Hôm nay',
-  },
-  {
-    href: '/progress',
-    icon: TrendingUp,
-    label: 'Tiến độ',
-  },
-  {
-    href: '/reference',
-    icon: BookOpen,
-    label: 'Tài liệu',
-  },
+  { href: '/',          icon: CalendarDays, label: 'Hôm nay' },
+  { href: '/progress',  icon: TrendingUp,   label: 'Tiến độ' },
+  { href: '/library',   icon: Library,      label: 'Bài tập' },
+  { href: '/reference', icon: BookOpen,     label: 'Tài liệu' },
 ];
 
 export default function BottomNav() {

@@ -38,6 +38,8 @@ export default function ExerciseCard({
   };
 
   const restSeconds = parseRestSeconds(exercise.rest);
+  // Bài tính thời gian (Core như Plank, Ab...)
+  const isTimeBased = exercise.tier === 'core' || exercise.targetReps.includes('giây') || exercise.targetReps.includes('s');
 
   const updateSet = (setIdx: number, field: 'weight' | 'reps', value: number) => {
     let newSets = exercise.sets.map((s, i) =>
@@ -165,39 +167,41 @@ export default function ExerciseCard({
 
             {/* Sets */}
             <div className="space-y-2">
-              <div className="grid grid-cols-12 text-[11px] text-slate-500 font-medium uppercase tracking-wider px-1">
+              <div className={`grid text-[11px] text-slate-500 font-medium uppercase tracking-wider px-1 gap-1 ${isTimeBased ? 'grid-cols-8' : 'grid-cols-12'}`}>
                 <div className="col-span-2">Hiệp</div>
-                <div className="col-span-4 text-center">Tạ (kg)</div>
-                <div className="col-span-4 text-center">Reps</div>
+                {!isTimeBased && <div className="col-span-4 text-center">Tạ (kg)</div>}
+                <div className={`${isTimeBased ? 'col-span-4' : 'col-span-4'} text-center`}>{isTimeBased ? 'Giây' : 'Reps'}</div>
                 <div className="col-span-2 text-center">✓</div>
               </div>
               {exercise.sets.map((set, i) => (
                 <div
                   key={i}
-                  className={`grid grid-cols-12 items-center gap-1 py-2 px-1 rounded-xl transition-colors ${
+                  className={`grid items-center gap-1 py-2 px-1 rounded-xl transition-colors ${isTimeBased ? 'grid-cols-8' : 'grid-cols-12'} ${
                     set.completed ? 'bg-emerald-950/20' : 'bg-slate-800/40'
                   }`}
                 >
                   <div className="col-span-2 text-center text-slate-500 font-mono font-medium text-sm">
                     {i + 1}
                   </div>
-                  <div className="col-span-4">
+                  {!isTimeBased && (
+                    <div className="col-span-4">
+                      <input
+                        type="number"
+                        value={set.weight > 0 ? set.weight : ''}
+                        onChange={e => updateSet(i, 'weight', parseFloat(e.target.value) || 0)}
+                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-center font-mono font-bold text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-slate-600"
+                        placeholder="kg"
+                        inputMode="decimal"
+                      />
+                    </div>
+                  )}
+                  <div className={isTimeBased ? 'col-span-4' : 'col-span-4'}>
                     <input
                       type="number"
-                      value={set.weight > 0 ? set.weight : ''}
-                      onChange={e => updateSet(i, 'weight', parseFloat(e.target.value) || 0)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-center font-mono font-bold text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-slate-600"
-                      placeholder="kg"
-                      inputMode="decimal"
-                    />
-                  </div>
-                  <div className="col-span-4">
-                    <input
-                      type="number"
-                      value={set.reps || ''}
+                      value={set.reps > 0 ? set.reps : ''}
                       onChange={e => updateSet(i, 'reps', parseInt(e.target.value) || 0)}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-center font-mono font-bold text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-                      placeholder="reps"
+                      className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-center font-mono font-bold text-slate-100 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 placeholder-slate-600"
+                      placeholder={isTimeBased ? 'giây' : 'reps'}
                       inputMode="numeric"
                     />
                   </div>
