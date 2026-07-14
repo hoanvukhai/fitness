@@ -42,7 +42,7 @@ export interface WorkoutSession {
   session: SessionType;
   week: number;
   month: number;
-  status: 'planned' | 'in_progress' | 'completed' | 'skipped';
+  status: 'planned' | 'in_progress' | 'paused' | 'completed' | 'skipped';
   warmup: WarmupLog;
   exercises: ExerciseLog[];
   cooldown: CooldownLog;

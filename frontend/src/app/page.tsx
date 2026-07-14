@@ -11,7 +11,7 @@ import { ExerciseLog, WorkoutSession } from '@/lib/types';
 import Onboarding from '@/components/Onboarding';
 import ExerciseCard from '@/components/ExerciseCard';
 import WarmupCooldown from '@/components/WarmupCooldown';
-import { Dumbbell, RefreshCw, CheckCircle2, Flame, Clock, Weight } from 'lucide-react';
+import { TrendingUp, Flame, Calendar, CalendarDays, Clock, Target, ChevronRight, ChevronDown, CheckCircle2, RefreshCw, Weight, Plus, Play, Pause } from 'lucide-react';
 
 // Dynamic imports để tránh lỗi SSR
 let appConfig: any = null;
@@ -134,6 +134,8 @@ export default function TodayPage() {
         cooldown: { done: false },
         durationSeconds: 0, totalVolume: 0,
       };
+    } else {
+      setElapsedSeconds(existing.durationSeconds || 0);
     }
     setSession(existing);
     setLoadingSession(false);
@@ -175,6 +177,20 @@ export default function TodayPage() {
     await saveWorkoutSession(done);
     setSession(done);
     setFinished(true);
+  };
+
+  const pauseSession = async () => {
+    if (!session) return;
+    const updated: WorkoutSession = { ...session, status: 'paused', durationSeconds: elapsedSeconds };
+    await saveWorkoutSession(updated);
+    setSession(updated);
+  };
+
+  const resumeSession = async () => {
+    if (!session) return;
+    const updated: WorkoutSession = { ...session, status: 'in_progress' };
+    await saveWorkoutSession(updated);
+    setSession(updated);
   };
 
   const doneCount = session?.exercises.filter(ex => ex.checked).length || 0;
@@ -343,8 +359,11 @@ export default function TodayPage() {
           <div>
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500">
               <span>Tuần {settings.currentWeek} · Tháng {settings.currentMonth}</span>
-              {session?.status === 'in_progress' && (
-                <span className="text-blue-400 animate-pulse">⏱ {formatElapsed(elapsedSeconds)}</span>
+              {(session?.status === 'in_progress' || session?.status === 'paused') && (
+                <span className={`flex items-center gap-1 ${session.status === 'paused' ? 'text-amber-500' : 'text-blue-400 animate-pulse'}`}>
+                  ⏱ {formatElapsed(elapsedSeconds)}
+                  {session.status === 'paused' && ' (Đã dừng)'}
+                </span>
               )}
             </div>
             <h1 className="text-2xl font-extrabold text-white mt-1">
@@ -467,15 +486,32 @@ export default function TodayPage() {
           <WarmupCooldown title="Giãn cơ" emoji="🧘" items={cooldownItems} color="teal" />
         )}
 
-        {/* Finish */}
-        {session?.status === 'in_progress' && (
-          <button
-            onClick={finishSession}
-            className="w-full py-4 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-emerald-600/20"
-          >
-            <CheckCircle2 size={22} />
-            Kết thúc buổi tập
-          </button>
+        {/* Actions (Pause/Resume/Finish) */}
+        {(session?.status === 'in_progress' || session?.status === 'paused') && (
+          <div className="flex items-center gap-3">
+            {session.status === 'in_progress' ? (
+              <button
+                onClick={pauseSession}
+                className="py-4 px-6 bg-slate-800 hover:bg-slate-700 rounded-2xl font-bold text-slate-300 text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg"
+              >
+                <Pause size={22} />
+              </button>
+            ) : (
+              <button
+                onClick={resumeSession}
+                className="py-4 px-6 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-600/20"
+              >
+                <Play size={22} />
+              </button>
+            )}
+            <button
+              onClick={finishSession}
+              className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-emerald-600/20"
+            >
+              <CheckCircle2 size={22} />
+              Kết thúc
+            </button>
+          </div>
         )}
       </div>
     </div>
