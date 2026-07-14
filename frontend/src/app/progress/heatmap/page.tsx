@@ -100,17 +100,18 @@ export default function HeatmapPage() {
     let lastPushedCol = -5;
     
     calendarWeeks.forEach((week, index) => {
-      const firstDayOfMonth = week.find(d => d.month !== currentMonth && new Date(d.date).getFullYear() === selectedYear);
-      if (firstDayOfMonth) {
-        currentMonth = firstDayOfMonth.month;
-        if (index - lastPushedCol >= 3) {
-          labels[index] = `Th ${currentMonth + 1}`;
+      // Find thursday (index 3), if not use index 0
+      const thursdayMonth = week[3]?.month ?? week[0].month;
+      if (thursdayMonth !== currentMonth) {
+        if (index - lastPushedCol >= 3 || lastPushedCol === -5) {
+          labels[index] = `Th ${thursdayMonth + 1}`;
           lastPushedCol = index;
+          currentMonth = thursdayMonth;
         }
       }
     });
     return labels;
-  }, [calendarWeeks, selectedYear]);
+  }, [calendarWeeks]);
 
   if (loading) {
     return <div className="min-h-screen bg-slate-950 flex items-center justify-center"><div className="animate-pulse text-slate-500">Đang tải...</div></div>;

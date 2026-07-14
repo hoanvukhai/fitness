@@ -133,6 +133,7 @@ function CustomTooltip({ active, payload, label }: any) {
 
 // ─── Main Component ──────────────────────────────────────────────────────────
 export default function ProgressPage() {
+  const router = useRouter();
   const [workouts, setWorkouts] = useState<WorkoutSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeLines, setActiveLines] = useState<Set<string>>(
@@ -154,21 +155,18 @@ export default function ProgressPage() {
   const totalTime = completed.reduce((s, w) => s + w.durationSeconds, 0);
   const totalSessions = completed.length;
 
-  // Tính toán nhãn tháng cho mỗi cột
   const weekMonthLabels = useMemo(() => {
     const labels = new Array(calendarWeeks.length).fill(null);
     let currentMonth = -1;
     let lastPushedCol = -5;
     
     calendarWeeks.forEach((week, index) => {
-      // Lấy tháng của ngày Thứ 5 (giữa tuần) làm chuẩn cho tuần đó
       const thursdayMonth = week[3]?.month ?? week[0].month;
       if (thursdayMonth !== currentMonth) {
-        currentMonth = thursdayMonth;
-        // Đảm bảo các nhãn tháng cách nhau ít nhất 3 cột để không bị đè chữ
-        if (index - lastPushedCol >= 3) {
-          labels[index] = `Th ${currentMonth + 1}`;
+        if (index - lastPushedCol >= 3 || lastPushedCol === -5) {
+          labels[index] = `Th ${thursdayMonth + 1}`;
           lastPushedCol = index;
+          currentMonth = thursdayMonth;
         }
       }
     });
@@ -178,111 +176,104 @@ export default function ProgressPage() {
   const toggleLine = (label: string) => {
     setActiveLines(prev => {
       const next = new Set(prev);
-      next.has(label) ? next.delete(label) : next.add(label);
+      if (next.has(label)) next.delete(label);
+      else next.add(label);
       return next;
     });
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-slate-500 text-sm animate-pulse">Đang tải dữ liệu...</div>
-      </div>
-    );
-  }
-
-  if (completed.length === 0) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center gap-4">
-        <div className="text-5xl">📊</div>
-        <h2 className="text-xl font-bold text-white">Chưa có dữ liệu</h2>
-        <p className="text-slate-400 text-sm max-w-xs">
-          Hoàn thành buổi tập đầu tiên để xem biểu đồ tiến độ và thống kê của bạn ở đây.
-        </p>
-      </div>
-    );
+    return <div className="min-h-screen bg-slate-950 flex items-center justify-center"><div className="animate-pulse text-slate-500">Đang tải...</div></div>;
   }
 
   return (
     <div className="bg-slate-950 pb-8">
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
-        {/* Header */}
         <h1 className="text-2xl font-extrabold text-white">Tiến độ</h1>
-
-        {/* Stats Row — A3: thay tổng khối → tổng buổi */}
+        
         <div className="grid grid-cols-3 gap-3">
-          {[
-            { icon: Flame,  value: `${streak}`,        sub: 'ngày streak',   color: 'text-orange-400' },
-            { icon: Target, value: `${totalSessions}`, sub: 'buổi hoàn thành', color: 'text-emerald-400' },
-            { icon: Clock,  value: `${Math.floor(totalTime / 3600)}h ${Math.floor((totalTime % 3600) / 60)}m`, sub: 'tổng thời gian', color: 'text-blue-400' },
-          ].map(({ icon: Icon, value, sub, color }) => (
-            <div key={sub} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-1.5">
-              <Icon size={18} className={color} />
-              <div className="font-extrabold text-white text-lg leading-none text-center">{value}</div>
-              <div className="text-[10px] text-slate-500 text-center">{sub}</div>
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+            <Flame className="text-orange-500 mb-1" size={20} />
+            <div className="text-xl font-bold text-white">{streak}</div>
+            <div className="text-[10px] text-slate-400 mt-1 uppercase tracking-wider font-medium">ngày streak</div>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+            <Target className="text-emerald-500 mb-1" size={20} />
+            <div className="text-xl font-bold text-white">{totalSessions}</div>
+            <div className="text-[10px] text-slate-400 mt-1 uppercase tracking-wider font-medium">buổi hoàn thành</div>
+          </div>
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
+            <Clock className="text-blue-500 mb-1" size={20} />
+            <div className="text-xl font-bold text-white">
+              {Math.floor(totalTime / 3600)}h {Math.floor((totalTime % 3600) / 60)}m
             </div>
-          ))}
+            <div className="text-[10px] text-slate-400 mt-1 uppercase tracking-wider font-medium">tổng thời gian</div>
+          </div>
         </div>
 
-        {/* A2: Calendar kiểu GitHub — cột=tuần, hàng=thứ */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-bold text-slate-200 flex items-center gap-2">
-              <Calendar size={18} className="text-slate-500" />
-              3 tháng gần đây
-            </h3>
-            <Link href="/progress/heatmap" className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors">
-              Xem toàn bộ
-            </Link>
-          </div>
-          <div className="flex gap-2">
-            {/* Row labels */}
-            <div className="flex flex-col gap-1 md:gap-1.5 pt-5 justify-between">
-              {['T2','T3','T4','T5','T6','T7','CN'].map((d, i) => (
-                <div key={d} className={`h-4 md:h-5 flex items-center text-[10px] text-slate-500 w-5 ${(i%2===1) ? 'opacity-0' : ''}`}>{d}</div>
-              ))}
+            <div className="flex items-center gap-2">
+              <CalendarDays className="text-slate-400" size={18} />
+              <h2 className="text-base font-bold text-white">3 tháng gần đây</h2>
             </div>
-            {/* Grid: cột = tuần */}
-            <div className="flex-1 overflow-x-auto scrollbar-none pb-2">
-              <div className="min-w-max relative flex gap-1 md:gap-1.5">
-                {calendarWeeks.map((week, wi) => (
-                  <div key={wi} className="flex flex-col gap-1 md:gap-1.5">
-                    {/* Inline Month Label */}
-                    <div className="h-4 text-[10px] text-slate-400 whitespace-nowrap overflow-visible">
-                      {weekMonthLabels[wi] || ''}
-                    </div>
-                    {/* Days */}
-                    {week.map((cell, di) => {
-                      const dayColors: Record<string, string> = {
-                        push: 'bg-sky-500',
-                        pull: 'bg-indigo-500',
-                        legs: 'bg-emerald-500',
-                      };
-                      const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
-                      
-                      let opacityClass = 'opacity-100';
-                      if (cell.session) {
-                        const mins = Math.floor(cell.session.durationSeconds / 60);
-                        if (mins < 45) opacityClass = 'opacity-40';
-                        else if (mins <= 60) opacityClass = 'opacity-70';
-                        else opacityClass = 'opacity-100';
-                      }
+            <button 
+              onClick={() => router.push('/progress/heatmap')}
+              className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
+            >
+              Xem toàn bộ
+            </button>
+          </div>
+          
+          <div className="w-full pt-2">
+            <div className="grid grid-cols-[auto_repeat(12,_1fr)] gap-x-1 md:gap-x-1.5 gap-y-1 md:gap-y-1.5 w-full">
+              {/* Row 0: Month Labels */}
+              <div></div>
+              {calendarWeeks.map((week, wi) => (
+                <div key={wi} className="text-[10px] text-slate-400 whitespace-nowrap overflow-visible flex items-end pb-1">
+                  {weekMonthLabels[wi] || ''}
+                </div>
+              ))}
 
-                      const title = cell.session
-                        ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
-                        : new Date(cell.date).toLocaleDateString('vi-VN');
-                      
-                      return (
-                        <div
-                          key={di}
-                          title={title}
-                          className={`w-4 h-4 md:w-5 md:h-5 rounded-[3px] transition-colors ${color} ${opacityClass}`}
-                        />
-                      );
-                    })}
+              {/* Rows 1-7: Days */}
+              {[0, 1, 2, 3, 4, 5, 6].map(dayIndex => (
+                <React.Fragment key={dayIndex}>
+                  {/* Row Label */}
+                  <div className={`flex items-center justify-end pr-2 text-[10px] text-slate-500 ${(dayIndex%2===1) ? 'opacity-0' : ''}`}>
+                    {['T2','T3','T4','T5','T6','T7','CN'][dayIndex]}
                   </div>
-                ))}
-              </div>
+                  {/* Cells */}
+                  {calendarWeeks.map((week, wi) => {
+                    const cell = week[dayIndex];
+                    const dayColors: Record<string, string> = {
+                      push: 'bg-sky-500',
+                      pull: 'bg-indigo-500',
+                      legs: 'bg-emerald-500',
+                    };
+                    const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
+                    
+                    let opacityClass = 'opacity-100';
+                    if (cell.session) {
+                      const mins = Math.floor(cell.session.durationSeconds / 60);
+                      if (mins < 45) opacityClass = 'opacity-40';
+                      else if (mins <= 60) opacityClass = 'opacity-70';
+                      else opacityClass = 'opacity-100';
+                    }
+
+                    const title = cell.session
+                      ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
+                      : new Date(cell.date).toLocaleDateString('vi-VN');
+                    
+                    return (
+                      <div
+                        key={wi}
+                        title={title}
+                        className={`aspect-square w-full rounded-[2px] md:rounded-[3px] transition-colors ${color} ${opacityClass}`}
+                      />
+                    );
+                  })}
+                </React.Fragment>
+              ))}
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-3 gap-3 border-t border-slate-800 pt-3">
