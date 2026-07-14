@@ -8,7 +8,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { TrendingUp, Flame, Calendar, Clock, Target, ChevronRight } from 'lucide-react';
+import { TrendingUp, Flame, Calendar, Clock, Target, ChevronRight, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 
 // A1: Luôn dùng múi giờ Việt Nam (UTC+7)
@@ -118,7 +118,7 @@ export default function ProgressPage() {
   const [activeLines, setActiveLines] = useState<Set<string>>(
     new Set(TIER1_EXERCISES.map(e => e.label))
   );
-  const [showAllHistory, setShowAllHistory] = useState(false);
+  const [expandedSession, setExpandedSession] = useState<string | null>(null);
 
   useEffect(() => {
     getAllWorkouts().then(data => {
@@ -297,9 +297,9 @@ export default function ProgressPage() {
           <div className="divide-y divide-slate-800">
             {[...completed].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5).map(w => (
               <div key={w.id}>
-                <Link
-                  href={`/progress/${w.id}`}
-                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-800/50 transition-colors"
+                <div
+                  onClick={() => setExpandedSession(expandedSession === w.id ? null : w.id)}
+                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-800/50 transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
                     <div className="text-left">
@@ -316,9 +316,41 @@ export default function ProgressPage() {
                       <div className="text-xs text-slate-400 font-mono">Tuần {w.week}</div>
                       <div className="text-xs text-slate-600">{Math.floor(w.durationSeconds / 60)}m</div>
                     </div>
-                    <ChevronRight size={16} className="text-slate-500" />
+                    {expandedSession === w.id
+                      ? <ChevronDown size={16} className="text-slate-500" />
+                      : <ChevronRight size={16} className="text-slate-500" />
+                    }
                   </div>
-                </Link>
+                </div>
+                {expandedSession === w.id && (
+                  <div className="px-5 pb-5 space-y-2">
+                    {w.exercises.map(ex => {
+                      const doneSets = ex.sets.filter(s => s.completed);
+                      if (doneSets.length === 0) return null;
+                      const maxW = Math.max(...doneSets.map(s => s.weight));
+                      const isTimeBased = ex.tier === 'core' || ex.targetReps.includes('giây') || ex.targetReps.includes('s');
+                      
+                      return (
+                        <div key={ex.exerciseId} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
+                          <div>
+                            <div className="text-sm font-medium text-slate-300">{ex.name}</div>
+                            <div className="text-xs text-slate-500">{doneSets.length}/{ex.targetSets} hiệp</div>
+                          </div>
+                          {maxW > 0 && !isTimeBased && (
+                            <div className="font-mono text-sm font-bold text-slate-400">
+                              {maxW}kg × {Math.round(doneSets.reduce((s, h) => s + h.reps, 0) / doneSets.length)}r
+                            </div>
+                          )}
+                          {isTimeBased && (
+                            <div className="font-mono text-sm font-bold text-slate-400">
+                              {Math.round(doneSets.reduce((s, h) => s + h.reps, 0) / doneSets.length)}s
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             ))}
           </div>
