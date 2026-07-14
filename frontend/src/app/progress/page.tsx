@@ -227,7 +227,7 @@ export default function ProgressPage() {
           </div>
           
           <div className="w-full pt-2">
-            <div className="grid grid-cols-[auto_repeat(12,_1fr)] gap-x-1 md:gap-x-1.5 gap-y-1 md:gap-y-1.5 w-full">
+            <div className="grid grid-cols-[auto_repeat(12,_minmax(0,_1fr))] gap-x-1 md:gap-x-1.5 gap-y-1 md:gap-y-1.5 w-full">
               {/* Row 0: Month Labels */}
               <div></div>
               {calendarWeeks.map((week, wi) => (
