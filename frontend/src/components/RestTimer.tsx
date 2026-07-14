@@ -41,7 +41,7 @@ export default function RestTimer({ duration, nextExercise, onDone }: RestTimerP
   const strokeDashoffset = circumference * (1 - progress);
 
   return (
-    <div className="fixed inset-0 z-50 bg-slate-950/98 backdrop-blur-xl flex flex-col items-center justify-between py-16 px-6">
+    <div className="fixed inset-0 z-[100] bg-slate-950/98 backdrop-blur-xl flex flex-col items-center justify-between py-16 px-6">
       {/* Quote */}
       <div className="text-center">
         <p className="text-slate-400 text-sm uppercase tracking-widest mb-2 font-medium">Đang nghỉ</p>

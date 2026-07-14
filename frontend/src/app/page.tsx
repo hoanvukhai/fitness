@@ -56,6 +56,18 @@ function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
       ? (tier1Map[ex.name] || tier1Map[ex.nameEn] || 0)
       : (settings.accessoryWeights?.[ex.id] || 0);
 
+    // Tính toán RIR dựa trên Tier và Tuần
+    let computedRIR = '';
+    if (ex.tier === 'tier1' || ex.tier === 'main') {
+      const weekInMonth = ((settings.currentWeek - 1) % 4) + 1;
+      if (weekInMonth === 1) computedRIR = '2-3';
+      else if (weekInMonth === 2) computedRIR = '2';
+      else if (weekInMonth === 3) computedRIR = '1-2';
+      else if (weekInMonth === 4) computedRIR = '1';
+    } else if (ex.tier === 'accessory') {
+      computedRIR = '1-2'; // Phụ thường đẩy đến gần thất bại
+    }
+
     return {
       exerciseId: ex.id,
       name: ex.name,
@@ -65,6 +77,7 @@ function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
       targetReps: ex.repsDisplay || '',
       targetSets: ex.sets,
       rest: ex.rest || '90 giây',
+      RIR: computedRIR || ex.rir,
       sets: Array.from({ length: ex.sets }, (_, i) => ({
         setNumber: i + 1,
         weight: targetWeight,
@@ -78,12 +91,12 @@ function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
 }
 
 const DAY_OPTIONS = [
-  { day: 'push', session: 'A' as const, label: '🔵 Push A – Sức mạnh' },
-  { day: 'pull', session: 'A' as const, label: '🔴 Pull A – Sức mạnh' },
-  { day: 'legs', session: 'A' as const, label: '🟢 Legs A – Sức mạnh' },
-  { day: 'push', session: 'B' as const, label: '🔵 Push B – Phì đại' },
-  { day: 'pull', session: 'B' as const, label: '🔴 Pull B – Phì đại' },
-  { day: 'legs', session: 'B' as const, label: '🟢 Legs B – Phì đại' },
+  { day: 'push', session: 'A' as const, label: 'Push A – Sức mạnh', color: 'bg-blue-500' },
+  { day: 'pull', session: 'A' as const, label: 'Pull A – Sức mạnh', color: 'bg-rose-500' },
+  { day: 'legs', session: 'A' as const, label: 'Legs A – Sức mạnh', color: 'bg-emerald-500' },
+  { day: 'push', session: 'B' as const, label: 'Push B – Phì đại', color: 'bg-blue-500' },
+  { day: 'pull', session: 'B' as const, label: 'Pull B – Phì đại', color: 'bg-rose-500' },
+  { day: 'legs', session: 'B' as const, label: 'Legs B – Phì đại', color: 'bg-emerald-500' },
 ];
 
 export default function TodayPage() {
@@ -95,6 +108,9 @@ export default function TodayPage() {
   const [finished, setFinished] = useState(false);
   const [showDayPicker, setShowDayPicker] = useState(false);
   
+  // Focused Workout State
+  const [activeStep, setActiveStep] = useState<'warmup' | number | 'cooldown'>('warmup');
+
   const todayDate = formatDate();
   const [confirmDate, setConfirmDate] = useState(todayDate);
   const [showDateConfirm, setShowDateConfirm] = useState(false);
@@ -388,12 +404,13 @@ export default function TodayPage() {
               <button
                 key={`${opt.day}-${opt.session}`}
                 onClick={() => { setOverrideDay(opt); setShowDayPicker(false); setSession(null); }}
-                className={`w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
                   todaySlot.day === opt.day && todaySlot.session === opt.session
-                    ? 'bg-blue-600/20 text-blue-300 border border-blue-600/30'
-                    : 'text-slate-400 hover:bg-slate-800'
+                    ? 'bg-slate-800 text-white border border-slate-700'
+                    : 'text-slate-400 hover:bg-slate-800 border border-transparent'
                 }`}
               >
+                <div className={`w-3 h-3 rounded-full ${opt.color} shadow-sm`} />
                 {opt.label}
               </button>
             ))}
@@ -459,32 +476,78 @@ export default function TodayPage() {
           </div>
         )}
 
-        {/* Warmup */}
-        {warmupItems.length > 0 && (
-          <WarmupCooldown title="Khởi động" emoji="🔥" items={warmupItems} color="orange" />
-        )}
-
-        {/* Exercises */}
+        {/* Workout Flow (Focused Mode) */}
         {loadingSession ? (
           <div className="text-center text-slate-500 py-10 text-sm animate-pulse">Đang tải bài tập...</div>
-        ) : (
+        ) : session?.status === 'in_progress' ? (
           <div className="space-y-4">
-            {session?.exercises.map((ex, i) => (
-              <ExerciseCard
-                key={ex.exerciseId}
-                exercise={ex}
-                index={i}
-                nextExerciseName={session.exercises[i + 1]?.name}
-                onChange={updated => updateExercise(i, updated)}
-              />
-            ))}
-          </div>
-        )}
+            {/* Step Navigation */}
+            <div className="flex items-center justify-between text-slate-400 text-xs font-medium bg-slate-900 border border-slate-800 rounded-2xl p-2">
+              <button 
+                disabled={activeStep === 'warmup'}
+                onClick={() => {
+                  if (activeStep === 'cooldown') setActiveStep(session.exercises.length - 1);
+                  else if (typeof activeStep === 'number') {
+                    setActiveStep(activeStep === 0 ? 'warmup' : activeStep - 1);
+                  }
+                }}
+                className="px-3 py-2 disabled:opacity-30 active:scale-95 transition-all bg-slate-800 rounded-xl"
+              >
+                Trước
+              </button>
+              
+              <span className="text-slate-200">
+                {activeStep === 'warmup' ? 'Khởi động' : activeStep === 'cooldown' ? 'Giãn cơ' : `Bài ${activeStep + 1} / ${session.exercises.length}`}
+              </span>
 
-        {/* Cooldown */}
-        {cooldownItems.length > 0 && (
-          <WarmupCooldown title="Giãn cơ" emoji="🧘" items={cooldownItems} color="teal" />
-        )}
+              <button 
+                disabled={activeStep === 'cooldown'}
+                onClick={() => {
+                  if (activeStep === 'warmup') setActiveStep(0);
+                  else if (typeof activeStep === 'number') {
+                    setActiveStep(activeStep === session.exercises.length - 1 ? 'cooldown' : activeStep + 1);
+                  }
+                }}
+                className="px-3 py-2 disabled:opacity-30 active:scale-95 transition-all bg-slate-800 rounded-xl"
+              >
+                Tiếp
+              </button>
+            </div>
+
+            {activeStep === 'warmup' && warmupItems.length > 0 && (
+              <div className="space-y-4">
+                <WarmupCooldown title="Khởi động" emoji="🔥" items={warmupItems} color="orange" onComplete={() => setActiveStep(0)} />
+                <button 
+                  onClick={() => setActiveStep(0)}
+                  className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white text-base active:scale-95 transition-all shadow-lg"
+                >
+                  Vào Bài Tập Chính
+                </button>
+              </div>
+            )}
+
+            {typeof activeStep === 'number' && session.exercises[activeStep] && (
+              <ExerciseCard
+                exercise={session.exercises[activeStep]}
+                index={activeStep}
+                nextExerciseName={session.exercises[activeStep + 1]?.name || 'Giãn cơ'}
+                onChange={updated => updateExercise(activeStep, updated)}
+                onFinishAllSets={() => {
+                  // Tự động nhảy bài nếu xong
+                  setTimeout(() => {
+                    setActiveStep(activeStep === session.exercises.length - 1 ? 'cooldown' : activeStep + 1);
+                  }, 1500);
+                }}
+              />
+            )}
+
+            {activeStep === 'cooldown' && cooldownItems.length > 0 && (
+              <div className="space-y-4">
+                <WarmupCooldown title="Giãn cơ" emoji="🧘" items={cooldownItems} color="teal" />
+              </div>
+            )}
+          </div>
+        ) : null}
 
         {/* Actions (Pause/Resume/Finish) */}
         {(session?.status === 'in_progress' || session?.status === 'paused') && (

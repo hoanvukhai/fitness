@@ -20,8 +20,10 @@ export interface ExerciseLog {
   targetSets: number;
   sets: SetLog[];
   checked: boolean;
-  notes: string;
+  notes?: string;
   rest: string;
+  RIR?: string;
+  selectedAlternative?: string;
 }
 
 export interface WarmupLog {

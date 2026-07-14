@@ -14,6 +14,7 @@ interface ExerciseCardProps {
   lastPerformance?: { weight: number; reps: number; date: string } | null;
   suggestion?: string | null;
   onChange: (updated: ExerciseLog) => void;
+  onFinishAllSets?: () => void;
 }
 
 export default function ExerciseCard({
@@ -23,6 +24,7 @@ export default function ExerciseCard({
   lastPerformance,
   suggestion,
   onChange,
+  onFinishAllSets,
 }: ExerciseCardProps) {
   const [expanded, setExpanded] = useState(true);
   const [showTimer, setShowTimer] = useState(false);
@@ -96,11 +98,10 @@ export default function ExerciseCard({
       i === setIdx ? { ...s, completed: true } : s
     );
     onChange({ ...exercise, sets: newSets });
-    // Auto-start timer (not for last set)
-    if (setIdx < exercise.sets.length - 1) {
-      setActiveRestSet(setIdx);
-      setShowTimer(true);
-    }
+    
+    // Auto-start timer
+    setActiveRestSet(setIdx);
+    setShowTimer(true);
   };
 
   const markAllDone = () => {
@@ -130,7 +131,14 @@ export default function ExerciseCard({
         <RestTimer
           duration={restSeconds}
           nextExercise={nextExerciseName}
-          onDone={() => { setShowTimer(false); setActiveRestSet(null); }}
+          onDone={() => { 
+            setShowTimer(false); 
+            setActiveRestSet(null); 
+            // Nếu đây là hiệp cuối cùng thì chuyển bài
+            if (activeRestSet === exercise.sets.length - 1 || exercise.sets.every(s => s.completed)) {
+              onFinishAllSets?.();
+            }
+          }}
         />
       )}
 
@@ -167,6 +175,11 @@ export default function ExerciseCard({
                   {exercise.tier === 'tier1' && <Lock size={8} className="inline mr-0.5" />}
                   {tierLabels[exercise.tier]}
                 </span>
+                {exercise.RIR && (
+                  <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border bg-amber-500/15 text-amber-400 border-amber-500/30">
+                    RIR: {exercise.RIR}
+                  </span>
+                )}
                 {guide && (
                   <button
                     onClick={e => { e.stopPropagation(); setShowGuide(true); }}
@@ -174,6 +187,24 @@ export default function ExerciseCard({
                   >
                     <Info size={12} />
                   </button>
+                )}
+                {guide?.alternatives && guide.alternatives.length > 0 && (
+                  <select
+                    onClick={e => e.stopPropagation()}
+                    onChange={e => {
+                      const newName = e.target.value;
+                      if (newName !== exercise.nameEn) {
+                        onChange({ ...exercise, name: newName, nameEn: newName, selectedAlternative: newName, targetWeight: 0 }); // Reset weight for new exercise
+                      }
+                    }}
+                    className="ml-auto bg-slate-800/50 text-[10px] text-slate-400 border border-slate-700 rounded px-2 py-0.5 max-w-[100px] outline-none"
+                    value={exercise.nameEn}
+                  >
+                    <option value={exercise.nameEn}>Đổi bài...</option>
+                    {guide.alternatives.map((alt: string) => (
+                      <option key={alt} value={alt}>{alt}</option>
+                    ))}
+                  </select>
                 )}
               </div>
               <h3 className="font-bold text-slate-100 text-base leading-tight">{exercise.name}</h3>
