@@ -8,8 +8,8 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { TrendingUp, Flame, Calendar, Clock, Target, ChevronDown, ChevronRight, Pencil, Trash2 } from 'lucide-react';
-import EditSessionSheet from '@/components/EditSessionSheet';
+import { TrendingUp, Flame, Calendar, Clock, Target, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 // A1: Luôn dùng múi giờ Việt Nam (UTC+7)
 function todayVN(): string {
@@ -118,20 +118,7 @@ export default function ProgressPage() {
   const [activeLines, setActiveLines] = useState<Set<string>>(
     new Set(TIER1_EXERCISES.map(e => e.label))
   );
-  const [expandedSession, setExpandedSession] = useState<string | null>(null);
-  const [editingId, setEditingId] = useState<string | null>(null);
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Bạn có chắc chắn muốn xóa buổi tập này khỏi lịch sử?')) return;
-    await deleteWorkout(id);
-    setWorkouts(prev => prev.filter(w => w.id !== id));
-  };
-
-  const handleSaveEdit = async (updated: WorkoutSession) => {
-    await saveWorkoutSession(updated);
-    setWorkouts(prev => prev.map(w => w.id === updated.id ? updated : w));
-    setEditingId(null);
-  };
+  const [showAllHistory, setShowAllHistory] = useState(false);
 
   useEffect(() => {
     getAllWorkouts().then(data => {
@@ -303,11 +290,11 @@ export default function ProgressPage() {
             </h3>
           </div>
           <div className="divide-y divide-slate-800">
-            {[...completed].sort((a, b) => b.date.localeCompare(a.date)).map(w => (
+            {[...completed].sort((a, b) => b.date.localeCompare(a.date)).slice(0, showAllHistory ? undefined : 5).map(w => (
               <div key={w.id}>
-                <div
-                  onClick={() => setExpandedSession(expandedSession === w.id ? null : w.id)}
-                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-800/50 transition-colors cursor-pointer"
+                <Link
+                  href={`/progress/${w.id}`}
+                  className="w-full flex items-center justify-between px-5 py-4 hover:bg-slate-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
                     <div className="text-left">
@@ -321,67 +308,25 @@ export default function ProgressPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div className="text-right hidden sm:block">
-                      <div className="text-xs text-slate-400 font-mono">{(w.totalVolume / 1000).toFixed(1)}T</div>
+                      <div className="text-xs text-slate-400 font-mono">Tuần {w.week}</div>
                       <div className="text-xs text-slate-600">{Math.floor(w.durationSeconds / 60)}m</div>
                     </div>
-                    
-                    <div className="flex items-center gap-1 mr-2">
-                      <button
-                        onClick={e => { e.stopPropagation(); setEditingId(w.id); }}
-                        className="p-1.5 text-slate-500 hover:text-blue-400 hover:bg-blue-400/10 rounded-lg transition-colors cursor-pointer"
-                        title="Sửa buổi tập"
-                      >
-                        <Pencil size={15} />
-                      </button>
-                      <button
-                        onClick={e => { e.stopPropagation(); handleDelete(w.id); }}
-                        className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors cursor-pointer"
-                        title="Xóa buổi tập"
-                      >
-                        <Trash2 size={15} />
-                      </button>
-                    </div>
-
-                    {expandedSession === w.id
-                      ? <ChevronDown size={16} className="text-slate-500" />
-                      : <ChevronRight size={16} className="text-slate-500" />
-                    }
+                    <ChevronRight size={16} className="text-slate-500" />
                   </div>
-                </div>
-                {expandedSession === w.id && (
-                  <div className="px-5 pb-5 space-y-2">
-                    {w.exercises.map(ex => {
-                      const doneSets = ex.sets.filter(s => s.completed);
-                      const maxW = doneSets.length ? Math.max(...doneSets.map(s => s.weight)) : 0;
-                      return (
-                        <div key={ex.exerciseId} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
-                          <div>
-                            <div className="text-sm font-medium text-slate-300">{ex.name}</div>
-                            <div className="text-xs text-slate-500">{doneSets.length}/{ex.targetSets} hiệp</div>
-                          </div>
-                          {maxW > 0 && (
-                            <div className="font-mono text-sm font-bold text-slate-400">
-                              {maxW}kg × {Math.round(doneSets.reduce((s, h) => s + h.reps, 0) / (doneSets.length || 1))}r
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                </Link>
               </div>
             ))}
           </div>
+          {!showAllHistory && completed.length > 5 && (
+            <button 
+              onClick={() => setShowAllHistory(true)}
+              className="w-full py-4 text-sm font-semibold text-blue-400 hover:text-blue-300 hover:bg-slate-800/30 transition-colors text-center border-t border-slate-800"
+            >
+              Xem tất cả ({completed.length})
+            </button>
+          )}
         </div>
       </div>
-      
-      {editingId && (
-        <EditSessionSheet 
-          session={workouts.find(w => w.id === editingId)!} 
-          onSave={handleSaveEdit} 
-          onClose={() => setEditingId(null)} 
-        />
-      )}
     </div>
   );
 }
