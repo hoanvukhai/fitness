@@ -154,17 +154,22 @@ export default function ProgressPage() {
   const totalTime = completed.reduce((s, w) => s + w.durationSeconds, 0);
   const totalSessions = completed.length;
 
-  const monthLabels = useMemo(() => {
-    const labels: { label: string; colIndex: number }[] = [];
+  // Tính toán nhãn tháng cho mỗi cột
+  const weekMonthLabels = useMemo(() => {
+    const labels = new Array(calendarWeeks.length).fill(null);
     let currentMonth = -1;
+    let lastPushedCol = -5;
+    
     calendarWeeks.forEach((week, index) => {
-      const firstDayOfMonth = week.find(d => d.month !== currentMonth);
-      if (firstDayOfMonth) {
-        currentMonth = firstDayOfMonth.month;
-        labels.push({
-          label: `Th ${currentMonth + 1}`,
-          colIndex: index
-        });
+      // Lấy tháng của ngày Thứ 5 (giữa tuần) làm chuẩn cho tuần đó
+      const thursdayMonth = week[3]?.month ?? week[0].month;
+      if (thursdayMonth !== currentMonth) {
+        currentMonth = thursdayMonth;
+        // Đảm bảo các nhãn tháng cách nhau ít nhất 3 cột để không bị đè chữ
+        if (index - lastPushedCol >= 3) {
+          labels[index] = `Th ${currentMonth + 1}`;
+          lastPushedCol = index;
+        }
       }
     });
     return labels;
@@ -232,59 +237,51 @@ export default function ProgressPage() {
           </div>
           <div className="flex gap-2">
             {/* Row labels */}
-            <div className="flex flex-col gap-1 pt-5 justify-between">
+            <div className="flex flex-col gap-1 md:gap-1.5 pt-5 justify-between">
               {['T2','T3','T4','T5','T6','T7','CN'].map((d, i) => (
-                <div key={d} className={`h-3 flex items-center text-[10px] text-slate-500 w-4 ${(i%2===1) ? 'opacity-0' : ''}`}>{d}</div>
+                <div key={d} className={`h-4 md:h-5 flex items-center text-[10px] text-slate-500 w-5 ${(i%2===1) ? 'opacity-0' : ''}`}>{d}</div>
               ))}
             </div>
             {/* Grid: cột = tuần */}
             <div className="flex-1 overflow-x-auto scrollbar-none pb-2">
-              <div className="min-w-max relative pt-5">
-                {/* Month Labels */}
-                {monthLabels.map((m, i) => (
-                  <div 
-                    key={i} 
-                    className="absolute top-0 text-[10px] text-slate-400"
-                    style={{ left: `${m.colIndex * 16}px` }} 
-                  >
-                    {m.label}
+              <div className="min-w-max relative flex gap-1 md:gap-1.5">
+                {calendarWeeks.map((week, wi) => (
+                  <div key={wi} className="flex flex-col gap-1 md:gap-1.5">
+                    {/* Inline Month Label */}
+                    <div className="h-4 text-[10px] text-slate-400 whitespace-nowrap overflow-visible">
+                      {weekMonthLabels[wi] || ''}
+                    </div>
+                    {/* Days */}
+                    {week.map((cell, di) => {
+                      const dayColors: Record<string, string> = {
+                        push: 'bg-sky-500',
+                        pull: 'bg-indigo-500',
+                        legs: 'bg-emerald-500',
+                      };
+                      const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
+                      
+                      let opacityClass = 'opacity-100';
+                      if (cell.session) {
+                        const mins = Math.floor(cell.session.durationSeconds / 60);
+                        if (mins < 45) opacityClass = 'opacity-40';
+                        else if (mins <= 60) opacityClass = 'opacity-70';
+                        else opacityClass = 'opacity-100';
+                      }
+
+                      const title = cell.session
+                        ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
+                        : new Date(cell.date).toLocaleDateString('vi-VN');
+                      
+                      return (
+                        <div
+                          key={di}
+                          title={title}
+                          className={`w-4 h-4 md:w-5 md:h-5 rounded-[3px] transition-colors ${color} ${opacityClass}`}
+                        />
+                      );
+                    })}
                   </div>
                 ))}
-                
-                <div className="flex gap-1">
-                  {calendarWeeks.map((week, wi) => (
-                    <div key={wi} className="flex flex-col gap-1">
-                      {week.map((cell, di) => {
-                        const dayColors: Record<string, string> = {
-                          push: 'bg-sky-500',
-                          pull: 'bg-indigo-500',
-                          legs: 'bg-emerald-500',
-                        };
-                        const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
-                        
-                        let opacityClass = 'opacity-100';
-                        if (cell.session) {
-                          const mins = Math.floor(cell.session.durationSeconds / 60);
-                          if (mins < 45) opacityClass = 'opacity-40';
-                          else if (mins <= 60) opacityClass = 'opacity-70';
-                          else opacityClass = 'opacity-100';
-                        }
-
-                        const title = cell.session
-                          ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
-                          : new Date(cell.date).toLocaleDateString('vi-VN');
-                        
-                        return (
-                          <div
-                            key={di}
-                            title={title}
-                            className={`w-3 h-3 rounded-[2px] transition-colors ${color} ${opacityClass}`}
-                          />
-                        );
-                      })}
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>
