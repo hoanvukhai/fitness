@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Check, Info } from 'lucide-react';
+import ExerciseDetailSheet from './ExerciseDetailSheet';
+import dbData from '../../data/db.json';
 
 interface ChecklistItem {
   name: string;
@@ -23,6 +25,20 @@ interface WarmupCooldownProps {
 export default function WarmupCooldown({ title, emoji, items, color, onComplete }: WarmupCooldownProps) {
   const [checked, setChecked] = useState<boolean[]>(new Array(items.length).fill(false));
   const [done, setDone] = useState(false);
+  const [selectedGuide, setSelectedGuide] = useState<any>(null);
+
+  const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const getGuide = (item: ChecklistItem) => {
+    return dbData.exercises.find((e: any) => {
+      const eName = normalize(e.name);
+      const exNameEn = normalize(item.nameEn);
+      const exName = normalize(item.name);
+      if (eName === exNameEn || eName === exName) return true;
+      if (exNameEn && eName.includes(exNameEn)) return true;
+      if (exName && eName.includes(exName)) return true;
+      return false;
+    });
+  };
 
   const toggle = (i: number) => {
     const next = [...checked];
@@ -74,11 +90,21 @@ export default function WarmupCooldown({ title, emoji, items, color, onComplete 
             }`}>
               {checked[i] && <Check size={10} strokeWidth={3} className="text-white" />}
             </div>
-            <div className="flex-1 min-w-0">
-              <div className={`text-sm font-medium ${checked[i] ? 'line-through text-slate-500' : 'text-slate-200'}`}>
-                {item.name}
+            <div className="flex-1 min-w-0 flex items-center gap-2">
+              <div>
+                <div className={`text-sm font-medium ${checked[i] ? 'line-through text-slate-500' : 'text-slate-200'}`}>
+                  {item.name}
+                </div>
+                <div className="text-xs text-slate-500">{item.nameEn}</div>
               </div>
-              <div className="text-xs text-slate-500">{item.nameEn}</div>
+              {getGuide(item) && (
+                <button
+                  onClick={(e) => { e.stopPropagation(); setSelectedGuide(getGuide(item)); }}
+                  className="p-1 text-slate-500 hover:text-blue-400 bg-slate-800/50 rounded-full transition-colors"
+                >
+                  <Info size={14} />
+                </button>
+              )}
             </div>
             <div className={`text-xs font-mono font-bold px-2 py-0.5 rounded-md border ${accent}`}>
               {item.sets && item.reps
@@ -91,6 +117,10 @@ export default function WarmupCooldown({ title, emoji, items, color, onComplete 
           </button>
         ))}
       </div>
+
+      {selectedGuide && (
+        <ExerciseDetailSheet ex={selectedGuide} onClose={() => setSelectedGuide(null)} />
+      )}
     </div>
   );
 }

@@ -886,6 +886,252 @@
       "mediaUrls": [
         "https://musclewiki.com/media/child_pose.mp4"
       ]
+    },
+    {
+      "name": "Chest Wall Stretch",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "chest",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Đứng cạnh tường hoặc cột. 2. Đặt một cánh tay lên tường ở góc 90 độ. 3. Xoay thân người ra xa bức tường cho đến khi cảm thấy ngực căng. 4. Giữ tư thế và hít thở đều.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/chest_stretch.mp4"
+      ]
+    },
+    {
+      "name": "Overhead Tricep Stretch",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "triceps",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Đứng thẳng, đưa một tay lên trời rồi gập khuỷu tay ra sau đầu. 2. Dùng tay kia nắm lấy cùi chỏ và kéo nhẹ sang ngang. 3. Giữ thẳng lưng, cảm nhận căng ở bắp tay sau.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/tricep_stretch.mp4"
+      ]
+    },
+    {
+      "name": "Cross-body Shoulder Stretch",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "shoulders",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Đưa một cánh tay chéo qua ngực. 2. Dùng cánh tay kia ôm lấy cùi chỏ và kéo sát vào ngực. 3. Cảm nhận độ căng ở vai ngoài và vai sau.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/shoulder_stretch.mp4"
+      ]
+    },
+    {
+      "name": "Diaphragm Breathing",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "core",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Nằm ngửa hoặc ngồi thư giãn. 2. Đặt một tay lên bụng. 3. Hít vào sâu qua mũi để bụng phình lên. 4. Thở ra chậm qua miệng, bụng xẹp xuống. Giúp hạ nhịp tim.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/diaphragm_breathing.jpg"
+      ]
+    },
+    {
+      "name": "Dead Hang",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "back",
+      "equipment": "BODYWEIGHT",
+      "environment": "GYM",
+      "instructions": "1. Nắm lấy thanh xà với hai tay rộng bằng vai. 2. Treo người tự do, thư giãn toàn thân. 3. Để trọng lực kéo giãn cột sống và cơ xô.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/dead_hang.mp4"
+      ]
+    },
+    {
+      "name": "Bicep Wall Stretch",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "biceps",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Đứng quay lưng lại với tường. 2. Giương thẳng một cánh tay ra sau, úp lòng bàn tay vào tường. 3. Xoay người về phía trước để cảm nhận căng ở tay trước và vai.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/bicep_stretch.mp4"
+      ]
+    },
+    {
+      "name": "Standing Forward Fold",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "back",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Đứng thẳng, hai chân sát nhau. 2. Từ từ gập người về phía trước, giữ chân thẳng (hoặc hơi chùng gối). 3. Để tay chạm sàn hoặc ôm lấy cổ chân. Cảm nhận căng ở đùi sau và lưng dưới.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/forward_fold.mp4"
+      ]
+    },
+    {
+      "name": "Prone Hip Flexor Stretch",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "legs",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Nằm sấp, chống một tay cẩn thận. 2. Co một chân lên vòng ra sau mông. 3. Dùng tay nắm lấy cổ chân kéo sát về mông. 4. Cảm nhận căng ở mặt trước đùi (cơ tứ đầu/gập háng).",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/prone_quad_stretch.mp4"
+      ]
+    },
+    {
+      "name": "Standing Hamstring Stretch",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "legs",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Đứng và gác một gót chân lên bục hoặc ghế thấp. 2. Giữ chân thẳng, mũi chân hướng lên. 3. Gập người về phía trước, giữ lưng thẳng, cho đến khi cảm thấy căng ở đùi sau.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/hamstring_stretch.mp4"
+      ]
+    },
+    {
+      "name": "Pigeon Pose",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "legs",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Bắt đầu ở tư thế chống đẩy. 2. Đưa một đầu gối lên phía trước, đặt sát cổ tay. 3. Duỗi thẳng chân sau ra. 4. Hạ thấp trọng tâm hoặc gập người xuống sàn để căng cơ mông đùi.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/pigeon_pose.mp4"
+      ]
+    },
+    {
+      "name": "Supine Knee Hug",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "legs",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Nằm ngửa trên thảm. 2. Co cả hai đầu gối kéo sát vào ngực. 3. Vòng tay ôm lấy cẳng chân và kéo chặt. 4. Có thể lăn nhẹ qua lại để mát xa lưng dưới.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/knee_hug.mp4"
+      ]
+    },
+    {
+      "name": "Band Pull-Aparts",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "WARMUP",
+      "targetMuscle": "shoulders",
+      "equipment": "CABLE",
+      "environment": "ANY",
+      "instructions": "1. Hai tay cầm dây kháng lực dang rộng ra trước ngực. 2. Kéo dây tách ra hai bên, ép chặt bả vai lại. 3. Kiểm soát thả dây về vị trí ban đầu.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/band_pull_apart.mp4"
+      ]
+    },
+    {
+      "name": "Light Push-up",
+      "tier": "TIER_2_SECONDARY",
+      "pattern": "WARMUP",
+      "targetMuscle": "chest",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Chống đẩy ở cường độ nhẹ (có thể quỳ gối nếu cần). 2. Khởi động các khớp khuỷu tay, vai, ngực trước bài tập đẩy nặng.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/pushup.mp4"
+      ]
+    },
+    {
+      "name": "Light DB Press",
+      "tier": "TIER_2_SECONDARY",
+      "pattern": "WARMUP",
+      "targetMuscle": "shoulders",
+      "equipment": "DUMBBELL",
+      "environment": "GYM",
+      "instructions": "1. Chọn mức tạ đơn nhẹ (khoảng 50%). 2. Đẩy khởi động vai trước khi vào hiệp chính thức.",
+      "alternatives": [],
+      "mediaUrls": []
+    },
+    {
+      "name": "Thoracic Rotation",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "WARMUP",
+      "targetMuscle": "core",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Quỳ bốn chân. 2. Đặt một tay sau gáy. 3. Xoay cùi chỏ lên trên trần nhà, mở rộng lồng ngực. 4. Xoay trở xuống.",
+      "alternatives": [],
+      "mediaUrls": []
+    },
+    {
+      "name": "Light Row",
+      "tier": "TIER_2_SECONDARY",
+      "pattern": "WARMUP",
+      "targetMuscle": "back",
+      "equipment": "DUMBBELL",
+      "environment": "GYM",
+      "instructions": "1. Chọn tạ nhẹ (50%). 2. Thực hiện động tác kéo để bơm máu vào xô/lưng, chuẩn bị khởi động.",
+      "alternatives": [],
+      "mediaUrls": []
+    },
+    {
+      "name": "Hip Circles",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "WARMUP",
+      "targetMuscle": "legs",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Đứng thẳng, tay chống hông. 2. Xoay hông thành vòng tròn rộng. 3. Xoay theo cả hai chiều để làm nóng khớp háng.",
+      "alternatives": [],
+      "mediaUrls": []
+    },
+    {
+      "name": "Bodyweight Squat",
+      "tier": "TIER_2_SECONDARY",
+      "pattern": "WARMUP",
+      "targetMuscle": "legs",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Đứng rộng bằng vai. 2. Ngồi xổm không tạ. 3. Giữ lưng thẳng, cảm nhận khớp háng và gối mượt mà.",
+      "alternatives": [],
+      "mediaUrls": []
+    },
+    {
+      "name": "Hip Flexor Stretch",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "STATIC_STRETCH",
+      "targetMuscle": "legs",
+      "equipment": "BODYWEIGHT",
+      "environment": "ANY",
+      "instructions": "1. Quỳ một chân vuông góc. 2. Đẩy hông về phía trước. 3. Cảm nhận độ căng ở mặt trước đùi chân quỳ phía sau.",
+      "alternatives": [],
+      "mediaUrls": []
+    },
+    {
+      "name": "Light Goblet Squat",
+      "tier": "TIER_2_SECONDARY",
+      "pattern": "WARMUP",
+      "targetMuscle": "legs",
+      "equipment": "DUMBBELL",
+      "environment": "GYM",
+      "instructions": "1. Ôm tạ nhẹ (50%) ở trước ngực. 2. Squat xuống chậm rãi để khởi động cột sống và đùi trước hiệp chính.",
+      "alternatives": [],
+      "mediaUrls": []
     }
   ],
   "templates": [],
