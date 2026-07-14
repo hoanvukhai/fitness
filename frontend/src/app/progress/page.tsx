@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Fragment } from 'react';
 import { getAllWorkouts, deleteWorkout, saveWorkoutSession } from '@/lib/firestore';
 import { WorkoutSession } from '@/lib/types';
 import { getDayLabel, getSessionLabel } from '@/lib/workout-engine';
@@ -238,7 +238,7 @@ export default function ProgressPage() {
 
               {/* Rows 1-7: Days */}
               {[0, 1, 2, 3, 4, 5, 6].map(dayIndex => (
-                <React.Fragment key={dayIndex}>
+                <Fragment key={dayIndex}>
                   {/* Row Label */}
                   <div className={`flex items-center justify-end pr-2 text-[10px] text-slate-500 ${(dayIndex%2===1) ? 'opacity-0' : ''}`}>
                     {['T2','T3','T4','T5','T6','T7','CN'][dayIndex]}
@@ -273,7 +273,7 @@ export default function ProgressPage() {
                       />
                     );
                   })}
-                </React.Fragment>
+                </Fragment>
               ))}
             </div>
           </div>
