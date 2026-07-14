@@ -132,7 +132,7 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
             </h3>
             <div className="space-y-6">
               {edited.exercises.map((ex, eIdx) => {
-                const isTimeBased = ex.tier === 'core' || ex.targetReps.includes('giây') || ex.targetReps.includes('s');
+                const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
                 
                 return (
                   <div key={eIdx} className="bg-slate-800/30 rounded-2xl p-3 border border-slate-700/30">

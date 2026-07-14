@@ -76,7 +76,7 @@ export default function ExerciseCard({
 
   const restSeconds = parseRestSeconds(exercise.rest);
   // Bài tính thời gian (Core như Plank, Ab...)
-  const isTimeBased = exercise.tier === 'core' || exercise.targetReps.includes('giây') || exercise.targetReps.includes('s');
+  const isTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
 
   const updateSet = (setIdx: number, field: 'weight' | 'reps', value: number) => {
     let newSets = exercise.sets.map((s, i) =>
@@ -97,7 +97,8 @@ export default function ExerciseCard({
     const newSets = exercise.sets.map((s, i) =>
       i === setIdx ? { ...s, completed: true } : s
     );
-    onChange({ ...exercise, sets: newSets });
+    const allDone = newSets.every(s => s.completed);
+    onChange({ ...exercise, sets: newSets, checked: allDone });
     
     // Auto-start timer
     setActiveRestSet(setIdx);

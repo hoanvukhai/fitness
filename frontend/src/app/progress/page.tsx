@@ -393,7 +393,7 @@ export default function ProgressPage() {
                       const doneSets = ex.sets.filter(s => s.completed);
                       if (doneSets.length === 0) return null;
                       const maxW = Math.max(...doneSets.map(s => s.weight));
-                      const isTimeBased = ex.tier === 'core' || ex.targetReps.includes('giây') || ex.targetReps.includes('s');
+                      const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
                       
                       return (
                         <div key={ex.exerciseId} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
