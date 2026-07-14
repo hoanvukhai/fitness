@@ -283,14 +283,19 @@ export default function ProgressPage() {
 
         {/* Session History */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-800">
+          <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
             <h3 className="font-bold text-slate-200 flex items-center gap-2">
               <Clock size={18} className="text-slate-500" />
               Lịch sử buổi tập
             </h3>
+            {completed.length > 5 && (
+              <Link href="/progress/history" className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors">
+                Xem tất cả
+              </Link>
+            )}
           </div>
           <div className="divide-y divide-slate-800">
-            {[...completed].sort((a, b) => b.date.localeCompare(a.date)).slice(0, showAllHistory ? undefined : 5).map(w => (
+            {[...completed].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 5).map(w => (
               <div key={w.id}>
                 <Link
                   href={`/progress/${w.id}`}
@@ -317,14 +322,6 @@ export default function ProgressPage() {
               </div>
             ))}
           </div>
-          {!showAllHistory && completed.length > 5 && (
-            <button 
-              onClick={() => setShowAllHistory(true)}
-              className="w-full py-4 text-sm font-semibold text-blue-400 hover:text-blue-300 hover:bg-slate-800/30 transition-colors text-center border-t border-slate-800"
-            >
-              Xem tất cả ({completed.length})
-            </button>
-          )}
         </div>
       </div>
     </div>
