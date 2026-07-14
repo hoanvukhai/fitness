@@ -112,8 +112,10 @@ export default function WarmupCooldown({ title, emoji, items, color, onComplete 
             <div className={`text-xs font-mono font-bold px-2 py-0.5 rounded-md border ${accent}`}>
               {item.sets && item.reps
                 ? `${item.sets}×${item.reps}`
+                : item.reps
+                ? `${item.reps}`
                 : item.duration
-                ? `${item.duration}s`
+                ? `${item.duration}`
                 : ''}
               {' '}{item.unit}
             </div>
