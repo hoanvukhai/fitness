@@ -14,7 +14,7 @@ export interface Exercise {
   targetMuscle: string;
   equipment: string;
   environment: string;
-  mediaUrl?: string;
+  mediaUrls?: string[];
   instructions: string;
   alternatives: string[];
 }

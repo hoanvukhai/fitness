@@ -114,6 +114,43 @@ function ExModal({ ex, onClose }: { ex: Exercise; onClose: () => void }) {
         </div>
 
         <div className="px-5 pb-8 pt-4 space-y-6">
+          {/* Media */}
+          {ex.mediaUrls && ex.mediaUrls.length > 0 && (
+            <div className="flex gap-4 overflow-x-auto snap-x scrollbar-none pb-2 w-full">
+              {ex.mediaUrls.map((url, i) => {
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                  const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
+                  return (
+                    <div key={i} className="shrink-0 w-[90%] sm:w-full aspect-video rounded-2xl overflow-hidden bg-slate-800 snap-center first:ml-0">
+                      <iframe 
+                        width="100%" 
+                        height="100%" 
+                        src={`https://www.youtube.com/embed/${videoId}?autoplay=0&mute=1`}
+                        title="YouTube video player" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowFullScreen
+                        className="border-none"
+                      />
+                    </div>
+                  );
+                }
+                if (url.endsWith('.mp4') || url.endsWith('.webm')) {
+                  return (
+                    <div key={i} className="shrink-0 w-[90%] sm:w-full aspect-video rounded-2xl overflow-hidden bg-slate-800 snap-center first:ml-0">
+                      <video src={url} controls loop muted playsInline className="w-full h-full object-cover" />
+                    </div>
+                  );
+                }
+                return (
+                  <div key={i} className="shrink-0 w-[90%] sm:w-full aspect-video rounded-2xl overflow-hidden bg-slate-800 snap-center first:ml-0 flex items-center justify-center">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={url} alt={ex.name} className="max-w-full max-h-full object-contain" />
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
           {/* Instructions */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3 flex items-center gap-1.5">

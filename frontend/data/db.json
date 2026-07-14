@@ -7,11 +7,13 @@
       "targetMuscle": "chest",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/bench_press.mp4",
       "instructions": "1. Nằm phẳng, siết bả vai. 2. Hạ tạ chạm ngực dưới. 3. Đẩy tạ lên mạnh mẽ.",
       "alternatives": [
         "Dumbbell Bench Press",
         "Machine Chest Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/bench_press.mp4"
       ]
     },
     {
@@ -21,11 +23,13 @@
       "targetMuscle": "chest",
       "equipment": "DUMBBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/db_bench.mp4",
       "instructions": "1. Nằm phẳng. 2. Hạ 2 tạ đơn xuống sâu hơn thanh đòn. 3. Đẩy lên và ép ngực.",
       "alternatives": [
         "Barbell Bench Press",
         "Push-up"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/db_bench.mp4"
       ]
     },
     {
@@ -35,10 +39,12 @@
       "targetMuscle": "chest",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/incline_bench.mp4",
       "instructions": "1. Ghế dốc 30-45 độ. 2. Hạ tạ chạm ngực trên. 3. Đẩy lên thẳng tay.",
       "alternatives": [
         "Incline Dumbbell Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/incline_bench.mp4"
       ]
     },
     {
@@ -48,10 +54,12 @@
       "targetMuscle": "chest",
       "equipment": "DUMBBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/incline_db_bench.mp4",
       "instructions": "1. Ghế dốc. 2. Tập trung ép phần ngực trên khi đẩy tạ lên.",
       "alternatives": [
         "Incline Barbell Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/incline_db_bench.mp4"
       ]
     },
     {
@@ -61,10 +69,12 @@
       "targetMuscle": "chest",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/machine_chest_press.mp4",
       "instructions": "1. Chỉnh ghế sao cho tay cầm ngang ngực. 2. Đẩy ra phía trước.",
       "alternatives": [
         "Barbell Bench Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/machine_chest_press.mp4"
       ]
     },
     {
@@ -74,10 +84,12 @@
       "targetMuscle": "chest",
       "equipment": "DUMBBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/db_flyes.mp4",
       "instructions": "1. Nằm phẳng, tay hơi cong. 2. Dang rộng 2 tay sang ngang. 3. Ép ngực lại.",
       "alternatives": [
         "Cable Crossover"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/db_flyes.mp4"
       ]
     },
     {
@@ -87,10 +99,12 @@
       "targetMuscle": "chest",
       "equipment": "CABLE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/cable_crossover.mp4",
       "instructions": "1. Đứng giữa 2 ròng rọc. 2. Kéo cáp chéo qua nhau trước ngực.",
       "alternatives": [
         "Dumbbell Flyes"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/cable_crossover.mp4"
       ]
     },
     {
@@ -100,10 +114,12 @@
       "targetMuscle": "chest",
       "equipment": "BODYWEIGHT",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/pushup.mp4",
       "instructions": "1. Gồng chặt core. 2. Hạ người đến khi ngực cách đất 3cm.",
       "alternatives": [
         "Dumbbell Bench Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/pushup.mp4"
       ]
     },
     {
@@ -113,10 +129,12 @@
       "targetMuscle": "shoulders",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/ohp.mp4",
       "instructions": "1. Gồng bụng bảo vệ lưng. 2. Đẩy tạ qua đầu thẳng tay.",
       "alternatives": [
         "Seated Dumbbell Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/ohp.mp4"
       ]
     },
     {
@@ -126,11 +144,13 @@
       "targetMuscle": "shoulders",
       "equipment": "DUMBBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/db_shoulder.mp4",
       "instructions": "1. Ngồi tựa lưng 75 độ. 2. Đẩy tạ lên không chạm nhau ở đỉnh.",
       "alternatives": [
         "Barbell Overhead Press",
         "Machine Shoulder Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/db_shoulder.mp4"
       ]
     },
     {
@@ -140,10 +160,12 @@
       "targetMuscle": "shoulders",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/machine_shoulder.mp4",
       "instructions": "1. Ngồi sát lưng. 2. Đẩy máy lên phía trên đầu.",
       "alternatives": [
         "Seated Dumbbell Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/machine_shoulder.mp4"
       ]
     },
     {
@@ -153,10 +175,12 @@
       "targetMuscle": "shoulders",
       "equipment": "DUMBBELL",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/lateral_raise.mp4",
       "instructions": "1. Hơi chúi người. 2. Nâng tạ sang hai bên, không vung quá vai.",
       "alternatives": [
         "Cable Lateral Raise"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/lateral_raise.mp4"
       ]
     },
     {
@@ -166,10 +190,12 @@
       "targetMuscle": "shoulders",
       "equipment": "CABLE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/cable_lateral.mp4",
       "instructions": "1. Đứng cạnh máy cáp. 2. Kéo cáp từ dưới ngang sang bên.",
       "alternatives": [
         "Dumbbell Lateral Raise"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/cable_lateral.mp4"
       ]
     },
     {
@@ -179,9 +205,11 @@
       "targetMuscle": "shoulders",
       "equipment": "DUMBBELL",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/front_raise.mp4",
       "instructions": "1. Đứng thẳng. 2. Nâng tạ đơn thẳng về phía trước mặt.",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/front_raise.mp4"
+      ]
     },
     {
       "name": "Reverse Pec Deck",
@@ -190,10 +218,12 @@
       "targetMuscle": "shoulders",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/reverse_pec_deck.mp4",
       "instructions": "1. Ngồi úp ngực vào ghế. 2. Ép tay ra phía sau để tập vai sau.",
       "alternatives": [
         "Face Pull"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/reverse_pec_deck.mp4"
       ]
     },
     {
@@ -203,10 +233,12 @@
       "targetMuscle": "back",
       "equipment": "BODYWEIGHT",
       "environment": "OUTDOOR",
-      "mediaUrl": "https://musclewiki.com/media/pullup.mp4",
       "instructions": "1. Nắm xà rộng hơn vai. 2. Kéo ngực chạm xà.",
       "alternatives": [
         "Lat Pulldown"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/pullup.mp4"
       ]
     },
     {
@@ -216,10 +248,12 @@
       "targetMuscle": "back",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/lat_pulldown.mp4",
       "instructions": "1. Ngồi cố định đùi. 2. Kéo thanh xà xuống ngực trên.",
       "alternatives": [
         "Pull-up"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/lat_pulldown.mp4"
       ]
     },
     {
@@ -229,11 +263,13 @@
       "targetMuscle": "back",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/barbell_row.mp4",
       "instructions": "1. Cúi người 45 độ, lưng thẳng. 2. Kéo tạ chạm rốn.",
       "alternatives": [
         "Dumbbell Row",
         "T-Bar Row"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/barbell_row.mp4"
       ]
     },
     {
@@ -243,11 +279,13 @@
       "targetMuscle": "back",
       "equipment": "DUMBBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/db_row.mp4",
       "instructions": "1. Tựa tay và gối lên ghế. 2. Kéo tạ đơn ép sát sườn.",
       "alternatives": [
         "Barbell Row",
         "Seated Cable Row"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/db_row.mp4"
       ]
     },
     {
@@ -257,10 +295,12 @@
       "targetMuscle": "back",
       "equipment": "CABLE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/cable_row.mp4",
       "instructions": "1. Ngồi thẳng lưng. 2. Kéo cáp về phía bụng dưới, ép bả vai.",
       "alternatives": [
         "Dumbbell Row"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/cable_row.mp4"
       ]
     },
     {
@@ -270,10 +310,12 @@
       "targetMuscle": "back",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/tbar_row.mp4",
       "instructions": "1. Đứng dang rộng chân, cúi người. 2. Kéo đầu tạ đòn vào ngực.",
       "alternatives": [
         "Barbell Row"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/tbar_row.mp4"
       ]
     },
     {
@@ -283,9 +325,11 @@
       "targetMuscle": "back",
       "equipment": "CABLE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/straight_arm_pulldown.mp4",
       "instructions": "1. Đứng thẳng, hơi cúi. 2. Giữ tay thẳng, kéo cáp xuống đùi.",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/straight_arm_pulldown.mp4"
+      ]
     },
     {
       "name": "Face Pull",
@@ -294,10 +338,12 @@
       "targetMuscle": "back",
       "equipment": "CABLE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/face_pull.mp4",
       "instructions": "1. Dùng dây thừng. 2. Kéo cáp hướng về phía mặt, ép vai sau.",
       "alternatives": [
         "Reverse Pec Deck"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/face_pull.mp4"
       ]
     },
     {
@@ -307,11 +353,13 @@
       "targetMuscle": "legs",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/squat.mp4",
       "instructions": "1. Gánh tạ trên cầu vai. 2. Ngồi xuống đến khi đùi song song mặt đất.",
       "alternatives": [
         "Front Squat",
         "Leg Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/squat.mp4"
       ]
     },
     {
@@ -321,10 +369,12 @@
       "targetMuscle": "legs",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/front_squat.mp4",
       "instructions": "1. Đặt tạ đòn phía trước vai. 2. Giữ lưng thật thẳng khi Squat.",
       "alternatives": [
         "Barbell Squat"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/front_squat.mp4"
       ]
     },
     {
@@ -334,11 +384,13 @@
       "targetMuscle": "legs",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/leg_press.mp4",
       "instructions": "1. Đặt chân giữa bàn đạp. 2. Hạ tạ từ từ, không khóa khớp gối.",
       "alternatives": [
         "Barbell Squat",
         "Dumbbell Lunge"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_press.mp4"
       ]
     },
     {
@@ -348,10 +400,12 @@
       "targetMuscle": "legs",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/rdl.mp4",
       "instructions": "1. Giữ lưng thẳng, đẩy mông ra sau. 2. Cảm nhận căng đùi sau.",
       "alternatives": [
         "Dumbbell RDL"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/rdl.mp4"
       ]
     },
     {
@@ -361,10 +415,12 @@
       "targetMuscle": "legs",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/deadlift.mp4",
       "instructions": "1. Kéo tạ từ mặt đất. 2. Dùng lực chân đẩy đất ra xa.",
       "alternatives": [
         "Romanian Deadlift (RDL)"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/deadlift.mp4"
       ]
     },
     {
@@ -374,10 +430,12 @@
       "targetMuscle": "legs",
       "equipment": "DUMBBELL",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/db_rdl.mp4",
       "instructions": "1. Cầm 2 tạ đơn. 2. Đẩy mông ra sau giữ lưng thẳng.",
       "alternatives": [
         "Romanian Deadlift (RDL)"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/db_rdl.mp4"
       ]
     },
     {
@@ -387,10 +445,12 @@
       "targetMuscle": "legs",
       "equipment": "DUMBBELL",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/lunge.mp4",
       "instructions": "1. Cầm tạ hai bên. 2. Bước tới hạ thấp trọng tâm 90 độ.",
       "alternatives": [
         "Bulgarian Split Squat"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/lunge.mp4"
       ]
     },
     {
@@ -400,10 +460,12 @@
       "targetMuscle": "legs",
       "equipment": "DUMBBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/bulgarian.mp4",
       "instructions": "1. Đặt 1 chân lên ghế phía sau. 2. Hạ trọng tâm trên chân trước.",
       "alternatives": [
         "Dumbbell Lunge"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/bulgarian.mp4"
       ]
     },
     {
@@ -413,9 +475,11 @@
       "targetMuscle": "legs",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/leg_extension.mp4",
       "instructions": "1. Ngồi vào máy. 2. Đá chân lên để cô lập đùi trước.",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_extension.mp4"
+      ]
     },
     {
       "name": "Leg Curl",
@@ -424,9 +488,11 @@
       "targetMuscle": "legs",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/leg_curl.mp4",
       "instructions": "1. Nằm hoặc ngồi. 2. Cuốn chân về sau để cô lập đùi sau.",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_curl.mp4"
+      ]
     },
     {
       "name": "Standing Calf Raise",
@@ -435,10 +501,12 @@
       "targetMuscle": "legs",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/calf_raise.mp4",
       "instructions": "1. Đứng mũi chân trên bục. 2. Nhón gót lên cao nhất.",
       "alternatives": [
         "Seated Calf Raise"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/calf_raise.mp4"
       ]
     },
     {
@@ -448,10 +516,12 @@
       "targetMuscle": "legs",
       "equipment": "MACHINE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/seated_calf.mp4",
       "instructions": "1. Ngồi vào máy. 2. Nhón gót để tập nhóm cơ bắp chân dưới.",
       "alternatives": [
         "Standing Calf Raise"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/seated_calf.mp4"
       ]
     },
     {
@@ -461,10 +531,12 @@
       "targetMuscle": "triceps",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/close_grip.mp4",
       "instructions": "1. Cầm thanh đòn hẹp bằng vai. 2. Khép cùi chỏ sát sườn khi đẩy.",
       "alternatives": [
         "Dips"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/close_grip.mp4"
       ]
     },
     {
@@ -474,10 +546,12 @@
       "targetMuscle": "triceps",
       "equipment": "BODYWEIGHT",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/dips.mp4",
       "instructions": "1. Chống tay lên xà kép. 2. Hạ người thẳng xuống để ăn vào tay sau.",
       "alternatives": [
         "Close-Grip Bench Press"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/dips.mp4"
       ]
     },
     {
@@ -487,10 +561,12 @@
       "targetMuscle": "triceps",
       "equipment": "CABLE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/tricep_pushdown.mp4",
       "instructions": "1. Đứng cạnh máy cáp. 2. Kéo dây thừng xuống, khóa cùi chỏ.",
       "alternatives": [
         "Overhead Tricep Extension"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/tricep_pushdown.mp4"
       ]
     },
     {
@@ -500,10 +576,12 @@
       "targetMuscle": "triceps",
       "equipment": "DUMBBELL",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/overhead_tricep.mp4",
       "instructions": "1. Cầm 1 tạ đơn đưa qua đầu. 2. Gập cùi chỏ hạ tạ ra sau gáy.",
       "alternatives": [
         "Tricep Pushdown"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/overhead_tricep.mp4"
       ]
     },
     {
@@ -513,10 +591,12 @@
       "targetMuscle": "triceps",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/skull_crushers.mp4",
       "instructions": "1. Nằm trên ghế. 2. Hạ thanh đòn EZ sát trán rồi đẩy lên.",
       "alternatives": [
         "Tricep Pushdown"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/skull_crushers.mp4"
       ]
     },
     {
@@ -526,11 +606,13 @@
       "targetMuscle": "biceps",
       "equipment": "BARBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/barbell_curl.mp4",
       "instructions": "1. Đứng thẳng. 2. Cuốn thanh đòn lên không đung đưa lưng.",
       "alternatives": [
         "Dumbbell Curl",
         "Cable Curl"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/barbell_curl.mp4"
       ]
     },
     {
@@ -540,10 +622,12 @@
       "targetMuscle": "biceps",
       "equipment": "DUMBBELL",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/db_curl.mp4",
       "instructions": "1. Cầm tạ đơn ngửa lòng bàn tay. 2. Cuốn lên luân phiên.",
       "alternatives": [
         "Barbell Curl"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/db_curl.mp4"
       ]
     },
     {
@@ -553,10 +637,12 @@
       "targetMuscle": "biceps",
       "equipment": "DUMBBELL",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/hammer_curl.mp4",
       "instructions": "1. Cầm tạ dọc như búa. 2. Cuốn lên để phát triển độ dày tay.",
       "alternatives": [
         "Dumbbell Curl"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/hammer_curl.mp4"
       ]
     },
     {
@@ -566,10 +652,12 @@
       "targetMuscle": "biceps",
       "equipment": "DUMBBELL",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/incline_curl.mp4",
       "instructions": "1. Ngồi ghế dốc. 2. Thả tay sâu ra sau để kéo dài cơ tay trước.",
       "alternatives": [
         "Dumbbell Curl"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/incline_curl.mp4"
       ]
     },
     {
@@ -579,10 +667,12 @@
       "targetMuscle": "biceps",
       "equipment": "CABLE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/cable_curl.mp4",
       "instructions": "1. Dùng ròng rọc thấp. 2. Cuốn cáp lên giữ áp lực liên tục.",
       "alternatives": [
         "Barbell Curl"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/cable_curl.mp4"
       ]
     },
     {
@@ -592,10 +682,12 @@
       "targetMuscle": "core",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/plank.mp4",
       "instructions": "1. Chống cùi chỏ. 2. Siết bụng, lưng thẳng như tấm ván.",
       "alternatives": [
         "Ab Roller"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/plank.mp4"
       ]
     },
     {
@@ -605,11 +697,13 @@
       "targetMuscle": "core",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/ab_roller.mp4",
       "instructions": "1. Quỳ gối. 2. Lăn bánh xe tới trước và gồng bụng kéo về.",
       "alternatives": [
         "Cable Crunch",
         "Plank"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/ab_roller.mp4"
       ]
     },
     {
@@ -619,10 +713,12 @@
       "targetMuscle": "core",
       "equipment": "CABLE",
       "environment": "GYM",
-      "mediaUrl": "https://musclewiki.com/media/cable_crunch.mp4",
       "instructions": "1. Quỳ gối quay lưng vào máy. 2. Dùng bụng gập người xuống.",
       "alternatives": [
         "Ab Roller"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/cable_crunch.mp4"
       ]
     },
     {
@@ -632,10 +728,12 @@
       "targetMuscle": "core",
       "equipment": "BODYWEIGHT",
       "environment": "OUTDOOR",
-      "mediaUrl": "https://musclewiki.com/media/leg_raise.mp4",
       "instructions": "1. Treo người trên xà. 2. Nhấc thẳng chân lên vuông góc.",
       "alternatives": [
         "Lying Leg Raise"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_raise.mp4"
       ]
     },
     {
@@ -645,10 +743,12 @@
       "targetMuscle": "core",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/lying_raise.mp4",
       "instructions": "1. Nằm ngửa. 2. Nhấc 2 chân lên hạ xuống không chạm đất.",
       "alternatives": [
         "Hanging Leg Raise"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/lying_raise.mp4"
       ]
     },
     {
@@ -658,9 +758,11 @@
       "targetMuscle": "core",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/russian_twist.mp4",
       "instructions": "1. Ngồi ngả sau. 2. Xoay người sang 2 bên để tập liên sườn.",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/russian_twist.mp4"
+      ]
     },
     {
       "name": "Bicycle Crunch",
@@ -669,10 +771,12 @@
       "targetMuscle": "core",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/bicycle_crunch.mp4",
       "instructions": "1. Nằm ngửa. 2. Đạp chân như đạp xe kết hợp gập bụng chéo.",
       "alternatives": [
         "Russian Twist"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/bicycle_crunch.mp4"
       ]
     },
     {
@@ -682,10 +786,12 @@
       "targetMuscle": "fullbody",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/jumping_jacks.mp4",
       "instructions": "1. Nhảy dang rộng tay chân. (Dùng để khởi động tăng nhịp tim)",
       "alternatives": [
         "High Knees"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/jumping_jacks.mp4"
       ]
     },
     {
@@ -695,10 +801,12 @@
       "targetMuscle": "fullbody",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/high_knees.mp4",
       "instructions": "1. Chạy tại chỗ, nâng cao đùi ngang hông. (Khởi động)",
       "alternatives": [
         "Jumping Jacks"
+      ],
+      "mediaUrls": [
+        "https://musclewiki.com/media/high_knees.mp4"
       ]
     },
     {
@@ -708,9 +816,11 @@
       "targetMuscle": "fullbody",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/burpee.mp4",
       "instructions": "1. Hít đất, bật dậy và nhảy cao. (Bài HIIT cuối buổi đốt mỡ)",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/burpee.mp4"
+      ]
     },
     {
       "name": "Arm Circles",
@@ -719,9 +829,11 @@
       "targetMuscle": "shoulders",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/arm_circles.mp4",
       "instructions": "1. Dang tay. 2. Xoay tròn khớp vai từ nhỏ đến lớn. (Khởi động vai)",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/arm_circles.mp4"
+      ]
     },
     {
       "name": "Cat-Cow Stretch",
@@ -730,9 +842,11 @@
       "targetMuscle": "core",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/cat_cow.mp4",
       "instructions": "1. Quỳ 4 điểm. 2. Uốn cong và võng lưng nhịp nhàng. (Giãn cơ lưng)",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/cat_cow.mp4"
+      ]
     },
     {
       "name": "Downward Dog",
@@ -741,9 +855,11 @@
       "targetMuscle": "fullbody",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/downward_dog.mp4",
       "instructions": "1. Chống chữ V ngược. 2. Ép gót chân chạm đất. (Giãn cơ đùi sau/lưng)",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/downward_dog.mp4"
+      ]
     },
     {
       "name": "Lying Quad Stretch",
@@ -752,9 +868,11 @@
       "targetMuscle": "legs",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/quad_stretch.mp4",
       "instructions": "1. Nằm sấp. 2. Kéo 1 gót chân chạm mông. (Giãn cơ đùi trước)",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/quad_stretch.mp4"
+      ]
     },
     {
       "name": "Child's Pose",
@@ -763,9 +881,11 @@
       "targetMuscle": "back",
       "equipment": "NONE",
       "environment": "HOME",
-      "mediaUrl": "https://musclewiki.com/media/child_pose.mp4",
       "instructions": "1. Quỳ gối, gập người sát đất, với tay ra xa. (Giãn cơ xô/lưng dưới)",
-      "alternatives": []
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/child_pose.mp4"
+      ]
     }
   ],
   "templates": [],
