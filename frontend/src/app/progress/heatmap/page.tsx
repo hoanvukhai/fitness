@@ -146,7 +146,7 @@ export default function HeatmapPage() {
             <div className="flex gap-2">
               <div className="flex flex-col gap-1 pt-5 justify-between">
                 {['T2','T3','T4','T5','T6','T7','CN'].map((d, i) => (
-                  <div key={d} className={`h-4 flex items-center text-[10px] text-slate-500 w-4 ${(i%2===1) ? 'opacity-0' : ''}`}>{d}</div>
+                  <div key={d} className={`h-3 flex items-center text-[10px] text-slate-500 w-4 ${(i%2===1) ? 'opacity-0' : ''}`}>{d}</div>
                 ))}
               </div>
               
@@ -157,7 +157,7 @@ export default function HeatmapPage() {
                     <div 
                       key={i} 
                       className="absolute top-0 text-[10px] text-slate-400"
-                      style={{ left: `${m.colIndex * 20}px` }} 
+                      style={{ left: `${m.colIndex * 16}px` }} 
                     >
                       {m.label}
                     </div>
@@ -169,7 +169,7 @@ export default function HeatmapPage() {
                         {week.map((cell, di) => {
                           const isOutsideYear = new Date(cell.date).getFullYear() !== selectedYear;
                           if (isOutsideYear) {
-                            return <div key={di} className="w-4 h-4 rounded-[3px] bg-transparent" />;
+                            return <div key={di} className="w-3 h-3 rounded-[2px] bg-transparent" />;
                           }
 
                           const dayColors: Record<string, string> = {
@@ -195,7 +195,7 @@ export default function HeatmapPage() {
                             <div
                               key={di}
                               title={title}
-                              className={`w-4 h-4 rounded-[3px] transition-colors ${color} ${opacityClass}`}
+                              className={`w-3 h-3 rounded-[2px] transition-colors ${color} ${opacityClass}`}
                             />
                           );
                         })}
