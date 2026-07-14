@@ -47,7 +47,7 @@ function buildChartData(workouts: WorkoutSession[]) {
     });
 }
 
-// A2: Calendar data — 4 tuần, bắt đầu từ T2
+// A2: Calendar data — 24 tuần (6 tháng), bắt đầu từ T2
 function buildCalendarData(workouts: WorkoutSession[]) {
   const done = new Map<string, WorkoutSession>();
   workouts.filter(w => w.status === 'completed').forEach(w => done.set(w.date, w));
@@ -61,13 +61,14 @@ function buildCalendarData(workouts: WorkoutSession[]) {
   const thisMonday = new Date(today);
   thisMonday.setDate(today.getDate() - daysFromMon);
 
-  // 4 tuần = 28 ngày, từ T2 cách đây 3 tuần
+  // 24 tuần = 168 ngày, từ T2 cách đây 23 tuần
+  const WEEKS = 24;
   const startMonday = new Date(thisMonday);
-  startMonday.setDate(thisMonday.getDate() - 21);
+  startMonday.setDate(thisMonday.getDate() - ((WEEKS - 1) * 7));
 
-  // weeks[col][row] where col=week(0-3), row=day(0=T2..6=CN)
+  // weeks[col][row] where col=week, row=day(0=T2..6=CN)
   const weeks: { date: string; session?: WorkoutSession }[][] = [];
-  for (let w = 0; w < 4; w++) {
+  for (let w = 0; w < WEEKS; w++) {
     const week: { date: string; session?: WorkoutSession }[] = [];
     for (let d = 0; d < 7; d++) {
       const dt = new Date(startMonday);
@@ -207,48 +208,71 @@ export default function ProgressPage() {
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
           <h3 className="font-bold text-slate-200 mb-4 flex items-center gap-2">
             <Calendar size={18} className="text-slate-500" />
-            4 tuần gần đây
+            6 tháng gần đây
           </h3>
           <div className="flex gap-2">
             {/* Row labels */}
-            <div className="flex flex-col gap-1.5 pt-0.5">
+            <div className="flex flex-col gap-1 pt-0.5 justify-between">
               {['T2','T3','T4','T5','T6','T7','CN'].map(d => (
-                <div key={d} className="h-8 flex items-center text-[10px] text-slate-600 w-4">{d}</div>
+                <div key={d} className="h-4 flex items-center text-[10px] text-slate-500 w-4">{d}</div>
               ))}
             </div>
             {/* Grid: cột = tuần */}
-            <div className="flex gap-1.5 flex-1">
-              {calendarWeeks.map((week, wi) => (
-                <div key={wi} className="flex flex-col gap-1.5 flex-1">
-                  {week.map((cell, di) => {
-                    const dayColors: Record<string, string> = {
-                      push: 'bg-blue-500',
-                      pull: 'bg-red-500',
-                      legs: 'bg-emerald-500',
-                    };
-                    const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800';
-                    const title = cell.session
-                      ? `${cell.date}: ${getDayLabel(cell.session.day)} ${cell.session.session}`
-                      : cell.date;
-                    return (
-                      <div
-                        key={di}
-                        title={title}
-                        className={`h-8 rounded-md transition-colors ${color} ${cell.session ? 'opacity-90' : 'opacity-100'}`}
-                      />
-                    );
-                  })}
+            <div className="flex-1 overflow-x-auto scrollbar-none pb-2 flex justify-end">
+              <div className="flex gap-1 min-w-max">
+                {calendarWeeks.map((week, wi) => (
+                  <div key={wi} className="flex flex-col gap-1">
+                    {week.map((cell, di) => {
+                      const dayColors: Record<string, string> = {
+                        push: 'bg-sky-500',
+                        pull: 'bg-indigo-500',
+                        legs: 'bg-emerald-500',
+                      };
+                      const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
+                      
+                      let opacityClass = 'opacity-100';
+                      if (cell.session) {
+                        const mins = Math.floor(cell.session.durationSeconds / 60);
+                        if (mins < 45) opacityClass = 'opacity-40';
+                        else if (mins <= 60) opacityClass = 'opacity-70';
+                        else opacityClass = 'opacity-100';
+                      }
+
+                      const title = cell.session
+                        ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
+                        : new Date(cell.date).toLocaleDateString('vi-VN');
+                      
+                      return (
+                        <div
+                          key={di}
+                          title={title}
+                          className={`w-4 h-4 rounded-[3px] transition-colors ${color} ${opacityClass}`}
+                        />
+                      );
+                    })}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-3 gap-3 border-t border-slate-800 pt-3">
+            <div className="flex flex-wrap items-center gap-3">
+              {[{c:'bg-sky-500',l:'Push'},{c:'bg-indigo-500',l:'Pull'},{c:'bg-emerald-500',l:'Legs'},{c:'bg-slate-800/40',l:'Nghỉ'}].map(({c,l})=>(
+                <div key={l} className="flex items-center gap-1.5">
+                  <div className={`w-3 h-3 rounded-[2px] ${c}`} />
+                  <span className="text-[10px] text-slate-500 font-medium">{l}</span>
                 </div>
               ))}
             </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-3 mt-3">
-            {[{c:'bg-blue-500',l:'Push'},{c:'bg-red-500',l:'Pull'},{c:'bg-emerald-500',l:'Legs'},{c:'bg-slate-800',l:'Nghỉ'}].map(({c,l})=>(
-              <div key={l} className="flex items-center gap-1.5">
-                <div className={`w-3 h-3 rounded ${c}`} />
-                <span className="text-[10px] text-slate-500">{l}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-slate-500 font-medium">Nhẹ</span>
+              <div className="flex gap-1">
+                <div className="w-3 h-3 rounded-[2px] bg-slate-400 opacity-40" />
+                <div className="w-3 h-3 rounded-[2px] bg-slate-400 opacity-70" />
+                <div className="w-3 h-3 rounded-[2px] bg-slate-400 opacity-100" />
               </div>
-            ))}
+              <span className="text-[10px] text-slate-500 font-medium">Nặng</span>
+            </div>
           </div>
         </div>
 
