@@ -3,12 +3,20 @@
 import { useState, useEffect } from 'react';
 import { getAllWorkouts } from '@/lib/firestore';
 import { WorkoutSession } from '@/lib/types';
-import { getDayLabel, getSessionLabel, formatDate } from '@/lib/workout-engine';
+import { getDayLabel, getSessionLabel } from '@/lib/workout-engine';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Legend
+  ResponsiveContainer,
 } from 'recharts';
-import { TrendingUp, Flame, Calendar, Clock, Weight, ChevronDown, ChevronRight } from 'lucide-react';
+import { TrendingUp, Flame, Calendar, Clock, Target, ChevronDown, ChevronRight } from 'lucide-react';
+
+// A1: Luôn dùng múi giờ Việt Nam (UTC+7)
+function todayVN(): string {
+  return new Date().toLocaleDateString('sv', { timeZone: 'Asia/Ho_Chi_Minh' });
+}
+function dateVN(d: Date): string {
+  return d.toLocaleDateString('sv', { timeZone: 'Asia/Ho_Chi_Minh' });
+}
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
@@ -38,31 +46,48 @@ function buildChartData(workouts: WorkoutSession[]) {
     });
 }
 
-function buildStreakData(workouts: WorkoutSession[]) {
-  const done = new Set(workouts.filter(w => w.status === 'completed').map(w => w.date));
-  const today = new Date();
-  const days: { date: string; active: boolean; label: string }[] = [];
-  for (let i = 27; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    const iso = formatDate(d);
-    days.push({
-      date: iso,
-      active: done.has(iso),
-      label: d.toLocaleDateString('vi-VN', { weekday: 'short', day: 'numeric', month: 'numeric' }),
-    });
+// A2: Calendar data — 4 tuần, bắt đầu từ T2
+function buildCalendarData(workouts: WorkoutSession[]) {
+  const done = new Map<string, WorkoutSession>();
+  workouts.filter(w => w.status === 'completed').forEach(w => done.set(w.date, w));
+
+  // Tìm T2 gần nhất (hoặc hôm nay nếu là T2) để làm anchor
+  const todayStr = todayVN();
+  const today = new Date(todayStr);
+  const dayOfWeek = today.getDay(); // 0=CN, 1=T2...
+  // Lùi về T2 của tuần hiện tại
+  const daysFromMon = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+  const thisMonday = new Date(today);
+  thisMonday.setDate(today.getDate() - daysFromMon);
+
+  // 4 tuần = 28 ngày, từ T2 cách đây 3 tuần
+  const startMonday = new Date(thisMonday);
+  startMonday.setDate(thisMonday.getDate() - 21);
+
+  // weeks[col][row] where col=week(0-3), row=day(0=T2..6=CN)
+  const weeks: { date: string; session?: WorkoutSession }[][] = [];
+  for (let w = 0; w < 4; w++) {
+    const week: { date: string; session?: WorkoutSession }[] = [];
+    for (let d = 0; d < 7; d++) {
+      const dt = new Date(startMonday);
+      dt.setDate(startMonday.getDate() + w * 7 + d);
+      const iso = dateVN(dt);
+      week.push({ date: iso, session: done.get(iso) });
+    }
+    weeks.push(week);
   }
-  return days;
+  return weeks;
 }
 
+// A1: Tính streak dùng VN timezone
 function calcStreak(workouts: WorkoutSession[]): number {
   const done = new Set(workouts.filter(w => w.status === 'completed').map(w => w.date));
   let streak = 0;
-  const today = new Date();
+  const today = new Date(todayVN());
   for (let i = 0; i < 365; i++) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
-    if (done.has(formatDate(d))) streak++;
+    if (done.has(dateVN(d))) streak++;
     else break;
   }
   return streak;
@@ -103,10 +128,11 @@ export default function ProgressPage() {
 
   const completed = workouts.filter(w => w.status === 'completed');
   const chartData = buildChartData(workouts);
-  const streakDays = buildStreakData(workouts);
+  const calendarWeeks = buildCalendarData(workouts);
   const streak = calcStreak(workouts);
-  const totalVolume = completed.reduce((s, w) => s + w.totalVolume, 0);
   const totalTime = completed.reduce((s, w) => s + w.durationSeconds, 0);
+  // A3: tổng buổi thay cho tổng khối lượng
+  const totalSessions = completed.length;
 
   const toggleLine = (label: string) => {
     setActiveLines(prev => {
@@ -142,45 +168,67 @@ export default function ProgressPage() {
         {/* Header */}
         <h1 className="text-2xl font-extrabold text-white">Tiến độ</h1>
 
-        {/* Stats Row */}
+        {/* Stats Row — A3: thay tổng khối → tổng buổi */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { icon: Flame, value: `${streak}`, sub: 'ngày streak', color: 'text-orange-400' },
-            { icon: Weight, value: `${(totalVolume / 1000).toFixed(1)}T`, sub: 'tổng khối lượng', color: 'text-emerald-400' },
-            { icon: Clock, value: `${Math.floor(totalTime / 3600)}h`, sub: `${Math.floor((totalTime % 3600) / 60)}m tập`, color: 'text-blue-400' },
+            { icon: Flame,  value: `${streak}`,        sub: 'ngày streak',   color: 'text-orange-400' },
+            { icon: Target, value: `${totalSessions}`, sub: 'buổi hoàn thành', color: 'text-emerald-400' },
+            { icon: Clock,  value: `${Math.floor(totalTime / 3600)}h ${Math.floor((totalTime % 3600) / 60)}m`, sub: 'tổng thời gian', color: 'text-blue-400' },
           ].map(({ icon: Icon, value, sub, color }) => (
             <div key={sub} className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-1.5">
               <Icon size={18} className={color} />
-              <div className="font-extrabold text-white text-xl leading-none">{value}</div>
+              <div className="font-extrabold text-white text-lg leading-none text-center">{value}</div>
               <div className="text-[10px] text-slate-500 text-center">{sub}</div>
             </div>
           ))}
         </div>
 
-        {/* Streak Calendar */}
+        {/* A2: Calendar kiểu GitHub — cột=tuần, hàng=thứ */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5">
           <h3 className="font-bold text-slate-200 mb-4 flex items-center gap-2">
             <Calendar size={18} className="text-slate-500" />
-            28 ngày gần đây
+            4 tuần gần đây
           </h3>
-          <div className="grid grid-cols-7 gap-1.5">
-            {streakDays.map(day => (
-              <div
-                key={day.date}
-                title={day.label}
-                className={`aspect-square rounded-lg transition-colors ${
-                  day.active
-                    ? 'bg-emerald-500 shadow-sm shadow-emerald-500/30'
-                    : 'bg-slate-800'
-                }`}
-              />
-            ))}
+          <div className="flex gap-2">
+            {/* Row labels */}
+            <div className="flex flex-col gap-1.5 pt-0.5">
+              {['T2','T3','T4','T5','T6','T7','CN'].map(d => (
+                <div key={d} className="h-8 flex items-center text-[10px] text-slate-600 w-4">{d}</div>
+              ))}
+            </div>
+            {/* Grid: cột = tuần */}
+            <div className="flex gap-1.5 flex-1">
+              {calendarWeeks.map((week, wi) => (
+                <div key={wi} className="flex flex-col gap-1.5 flex-1">
+                  {week.map((cell, di) => {
+                    const dayColors: Record<string, string> = {
+                      push: 'bg-blue-500',
+                      pull: 'bg-red-500',
+                      legs: 'bg-emerald-500',
+                    };
+                    const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800';
+                    const title = cell.session
+                      ? `${cell.date}: ${getDayLabel(cell.session.day)} ${cell.session.session}`
+                      : cell.date;
+                    return (
+                      <div
+                        key={di}
+                        title={title}
+                        className={`h-8 rounded-md transition-colors ${color} ${cell.session ? 'opacity-90' : 'opacity-100'}`}
+                      />
+                    );
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="flex items-center gap-2 mt-3">
-            <div className="w-3 h-3 rounded bg-emerald-500" />
-            <span className="text-xs text-slate-500">Ngày đã tập</span>
-            <div className="w-3 h-3 rounded bg-slate-800 ml-2" />
-            <span className="text-xs text-slate-500">Nghỉ</span>
+          <div className="flex flex-wrap items-center gap-3 mt-3">
+            {[{c:'bg-blue-500',l:'Push'},{c:'bg-red-500',l:'Pull'},{c:'bg-emerald-500',l:'Legs'},{c:'bg-slate-800',l:'Nghỉ'}].map(({c,l})=>(
+              <div key={l} className="flex items-center gap-1.5">
+                <div className={`w-3 h-3 rounded ${c}`} />
+                <span className="text-[10px] text-slate-500">{l}</span>
+              </div>
+            ))}
           </div>
         </div>
 
