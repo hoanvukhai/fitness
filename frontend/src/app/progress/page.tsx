@@ -9,7 +9,7 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer,
 } from 'recharts';
-import { TrendingUp, Flame, Calendar, Clock, Target, ChevronRight, ChevronDown } from 'lucide-react';
+import { TrendingUp, Flame, Calendar, CalendarDays, Clock, Target, ChevronRight, ChevronDown } from 'lucide-react';
 import Link from 'next/link';
 
 // A1: Luôn dùng múi giờ Việt Nam (UTC+7)
