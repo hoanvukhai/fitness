@@ -78,10 +78,13 @@ export default function WarmupCooldown({ title, emoji, items, color, onComplete 
 
       <div className="space-y-2">
         {items.map((item, i) => (
-          <button
+          <div
             key={i}
+            role="button"
+            tabIndex={0}
             onClick={() => toggle(i)}
-            className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(i); } }}
+            className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all cursor-pointer select-none ${
               checked[i] ? 'bg-emerald-950/20 opacity-60' : 'bg-slate-800/50 hover:bg-slate-800'
             }`}
           >
@@ -114,7 +117,7 @@ export default function WarmupCooldown({ title, emoji, items, color, onComplete 
                 : ''}
               {' '}{item.unit}
             </div>
-          </button>
+          </div>
         ))}
       </div>
 
