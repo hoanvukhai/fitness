@@ -40,11 +40,20 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
   const updateExerciseName = (exerciseIndex: number, newName: string) => {
     setEdited(prev => {
       const newExercises = [...prev.exercises];
+      const ex = newExercises[exerciseIndex];
+      const isNewTimeBased = newName.toLowerCase().includes('plank');
+      const isOldTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
+      let newTargetReps = ex.targetReps;
+      
+      if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
+      else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
+
       newExercises[exerciseIndex] = { 
-        ...newExercises[exerciseIndex], 
+        ...ex, 
         name: newName, 
         nameEn: newName, 
-        selectedAlternative: newName 
+        selectedAlternative: newName,
+        targetReps: newTargetReps
       };
       return { ...prev, exercises: newExercises };
     });
@@ -149,10 +158,10 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
                 const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
                 
                 const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-                const guide = dbData.exercises.find((e: any) => {
+                const originalGuide = dbData.exercises.find((e: any) => {
                   const eName = normalize(e.name);
-                  const exNameEn = normalize(ex.nameEn);
-                  const exName = normalize(ex.name);
+                  const exNameEn = normalize(ex.originalNameEn || ex.nameEn);
+                  const exName = normalize(ex.originalName || ex.name);
                   if (eName === exNameEn || eName === exName) return true;
                   const manualMap: Record<string, string> = {
                     'benchpress': 'barbellbenchpress',
@@ -175,14 +184,25 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
                   };
                   if (exNameEn && manualMap[exNameEn] === eName) return true;
                   if (exName && manualMap[exName] === eName) return true;
+                  if (exNameEn && eName.includes(exNameEn)) return true;
+                  if (exName && eName.includes(exName)) return true;
                   return false;
                 });
+
+                let displayAlternatives = originalGuide?.alternatives ? [...originalGuide.alternatives] : [];
+                if (ex.selectedAlternative) {
+                  const origEn = ex.originalNameEn || '';
+                  if (origEn && !displayAlternatives.includes(origEn) && origEn !== ex.nameEn) {
+                    displayAlternatives.unshift(origEn);
+                  }
+                }
+                displayAlternatives = displayAlternatives.filter(a => normalize(a) !== normalize(ex.nameEn) && normalize(a) !== normalize(ex.name));
 
                 return (
                   <div key={eIdx} className="bg-slate-800/30 rounded-2xl p-3 border border-slate-700/30">
                     <div className="flex items-center justify-between mb-3 px-1">
                       <div className="font-semibold text-slate-200 text-sm">{ex.name}</div>
-                      {guide?.alternatives && guide.alternatives.length > 0 && (
+                      {displayAlternatives.length > 0 && (
                         <select
                           onChange={e => {
                             const newName = e.target.value;
@@ -194,7 +214,7 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
                           value={ex.nameEn}
                         >
                           <option value={ex.nameEn}>Đổi bài...</option>
-                          {guide.alternatives.map((alt: string) => (
+                          {displayAlternatives.map((alt: string) => (
                             <option key={alt} value={alt}>{alt}</option>
                           ))}
                         </select>

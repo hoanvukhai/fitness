@@ -97,9 +97,9 @@ export default function ExerciseCard({
 
   let displayAlternatives = originalGuide?.alternatives ? [...originalGuide.alternatives] : [];
   if (exercise.selectedAlternative) {
-    const orig = exercise.originalNameEn || exercise.originalName || '';
-    if (orig && !displayAlternatives.includes(orig) && orig !== exercise.nameEn && orig !== exercise.name) {
-      displayAlternatives.unshift(orig);
+    const origEn = exercise.originalNameEn || '';
+    if (origEn && !displayAlternatives.includes(origEn) && origEn !== exercise.nameEn) {
+      displayAlternatives.unshift(origEn);
     }
   }
   displayAlternatives = displayAlternatives.filter(a => normalize(a) !== normalize(exercise.nameEn) && normalize(a) !== normalize(exercise.name));
@@ -115,9 +115,8 @@ export default function ExerciseCard({
   };
 
   const restSeconds = parseRestSeconds(exercise.rest);
-  const isTimeBased = exercise.targetReps.toLowerCase().includes('giây') || 
-                      exercise.targetReps.toLowerCase().includes('s') || 
-                      normalize(exercise.name).includes('plank');
+  // Bài tính thời gian (Core như Plank, Ab...)
+  const isTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
 
   const updateSet = (setIdx: number, field: 'weight' | 'reps', value: number) => {
     let newSets = exercise.sets.map((s, i) =>
@@ -140,7 +139,7 @@ export default function ExerciseCard({
     );
     const allDone = newSets.every(s => s.completed);
     onChange({ ...exercise, sets: newSets, checked: allDone });
-    
+
     // Auto-start timer
     setActiveRestSet(setIdx);
     setShowTimer(true);
@@ -173,9 +172,9 @@ export default function ExerciseCard({
         <RestTimer
           duration={restSeconds}
           nextExercise={nextExerciseName}
-          onDone={() => { 
-            setShowTimer(false); 
-            setActiveRestSet(null); 
+          onDone={() => {
+            setShowTimer(false);
+            setActiveRestSet(null);
             // Nếu đây là hiệp cuối cùng thì chuyển bài
             if (activeRestSet === exercise.sets.length - 1 || exercise.sets.every(s => s.completed)) {
               onFinishAllSets?.();
@@ -188,11 +187,10 @@ export default function ExerciseCard({
         <ExerciseDetailSheet ex={guide as any} onClose={() => setShowGuide(false)} />
       )}
 
-      <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
-        exercise.checked
+      <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${exercise.checked
           ? 'bg-slate-900/40 border-slate-800/40 opacity-70'
           : 'bg-slate-900 border-slate-800'
-      }`}>
+        }`}>
         {/* Card Header */}
         <div
           className="flex items-start justify-between p-4 cursor-pointer"
@@ -202,11 +200,10 @@ export default function ExerciseCard({
             {/* Checkbox */}
             <button
               onClick={e => { e.stopPropagation(); markAllDone(); }}
-              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all ${
-                exercise.checked
+              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all ${exercise.checked
                   ? 'bg-emerald-500 border-emerald-500'
                   : 'border-slate-600 hover:border-slate-400'
-              }`}
+                }`}
             >
               {exercise.checked && <Check size={12} strokeWidth={3} className="text-white" />}
             </button>
@@ -239,15 +236,15 @@ export default function ExerciseCard({
                         const isNewTimeBased = newName.toLowerCase().includes('plank');
                         const isOldTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
                         let newTargetReps = exercise.targetReps;
-                        
+
                         if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
                         else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
 
-                        onChange({ 
-                          ...exercise, 
-                          name: newName, 
-                          nameEn: newName, 
-                          selectedAlternative: newName, 
+                        onChange({
+                          ...exercise,
+                          name: newName,
+                          nameEn: newName,
+                          selectedAlternative: newName,
                           targetWeight: 0,
                           targetReps: newTargetReps
                         });
@@ -310,9 +307,8 @@ export default function ExerciseCard({
               {exercise.sets.map((set, i) => (
                 <div
                   key={i}
-                  className={`grid items-center gap-1 py-2 px-1 rounded-xl transition-colors ${isTimeBased ? 'grid-cols-8' : 'grid-cols-12'} ${
-                    set.completed ? 'bg-emerald-950/20' : 'bg-slate-800/40'
-                  }`}
+                  className={`grid items-center gap-1 py-2 px-1 rounded-xl transition-colors ${isTimeBased ? 'grid-cols-8' : 'grid-cols-12'} ${set.completed ? 'bg-emerald-950/20' : 'bg-slate-800/40'
+                    }`}
                 >
                   <div className="col-span-2 text-center text-slate-500 font-mono font-medium text-sm">
                     {i + 1}
@@ -342,11 +338,10 @@ export default function ExerciseCard({
                   <div className="col-span-2 flex justify-center">
                     <button
                       onClick={() => completeSet(i)}
-                      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all active:scale-95 ${
-                        set.completed
+                      className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all active:scale-95 ${set.completed
                           ? 'bg-emerald-500 border-emerald-500'
                           : 'border-slate-600 hover:border-emerald-500'
-                      }`}
+                        }`}
                     >
                       {set.completed && <Check size={14} strokeWidth={3} className="text-white" />}
                     </button>
