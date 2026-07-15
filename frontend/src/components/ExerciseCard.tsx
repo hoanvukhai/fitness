@@ -235,7 +235,21 @@ export default function ExerciseCard({
                     onChange={e => {
                       const newName = e.target.value;
                       if (newName !== exercise.nameEn) {
-                        onChange({ ...exercise, name: newName, nameEn: newName, selectedAlternative: newName, targetWeight: 0 }); // Reset weight for new exercise
+                        const isNewTimeBased = newName.toLowerCase().includes('plank');
+                        const isOldTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
+                        let newTargetReps = exercise.targetReps;
+                        
+                        if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
+                        else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
+
+                        onChange({ 
+                          ...exercise, 
+                          name: newName, 
+                          nameEn: newName, 
+                          selectedAlternative: newName, 
+                          targetWeight: 0,
+                          targetReps: newTargetReps
+                        });
                       }
                     }}
                     className="ml-auto bg-slate-800/50 text-[10px] text-slate-400 border border-slate-700 rounded px-2 py-0.5 max-w-[100px] outline-none"

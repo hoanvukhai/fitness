@@ -547,11 +547,21 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                           key={altNameEn}
                           onClick={() => {
                             const newExercises = [...session.exercises];
+                            const currentEx = newExercises[itemIndex];
+                            
+                            const isNewTimeBased = altName.toLowerCase().includes('plank');
+                            const isOldTimeBased = currentEx.targetReps.toLowerCase().includes('giây') || currentEx.targetReps.toLowerCase().includes('s');
+                            let newTargetReps = currentEx.targetReps;
+                            
+                            if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
+                            else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
+
                             newExercises[itemIndex] = {
-                              ...newExercises[itemIndex],
+                              ...currentEx,
                               name: altName,
                               nameEn: altNameEn,
-                              selectedAlternative: altName
+                              selectedAlternative: altName,
+                              targetReps: newTargetReps
                             };
                             onUpdate({ ...session, exercises: newExercises });
                             setShowSwap(false);

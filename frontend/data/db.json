@@ -1245,6 +1245,21 @@
         "Plank"
       ],
       "mediaUrls": []
+    },
+    {
+      "name": "Cable Woodchopper",
+      "nameEn": "Cable Woodchopper",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "CORE",
+      "targetMuscle": "core",
+      "equipment": "CABLE",
+      "environment": "GYM",
+      "instructions": "Kéo cáp chéo từ trên xuống dưới hoặc ngược lại, giữ hông ổn định.",
+      "alternatives": [
+        "Pallof Press",
+        "Plank"
+      ],
+      "mediaUrls": []
     }
   ],
   "templates": [],
