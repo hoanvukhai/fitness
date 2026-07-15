@@ -1244,7 +1244,9 @@
         "Cable Woodchopper",
         "Plank"
       ],
-      "mediaUrls": []
+      "mediaUrls": [
+        "https://musclewiki.com/media/pallof_press.mp4"
+      ]
     },
     {
       "name": "Cable Woodchopper",
@@ -1259,7 +1261,9 @@
         "Pallof Press",
         "Plank"
       ],
-      "mediaUrls": []
+      "mediaUrls": [
+        "https://musclewiki.com/media/woodchopper.mp4"
+      ]
     }
   ],
   "templates": [],

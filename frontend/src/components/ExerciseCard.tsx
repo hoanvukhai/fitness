@@ -228,7 +228,7 @@ export default function ExerciseCard({
                     <Info size={12} />
                   </button>
                 )}
-                {exercise.tier !== 'tier1' && displayAlternatives.length > 0 && (
+                {displayAlternatives.length > 0 && exercise.tier !== 'tier1' && (
                   <div className="relative">
                     <button
                       onClick={e => {
