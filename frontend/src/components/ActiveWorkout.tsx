@@ -27,25 +27,24 @@ const SetInputRow = ({ s, index, isCurrent, onComplete, onUndo }: { s: SetLog, i
   }, [s.weight]);
 
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-xl transition-colors ${s.completed ? 'bg-slate-900/50 opacity-60' : isCurrent ? 'bg-slate-800 border-l-4 border-blue-500 shadow-lg' : 'bg-slate-900/80'}`}>
-      <div className="w-8 text-center font-bold text-slate-500 text-sm">{index + 1}</div>
-      <div className="flex-1 flex gap-2">
+    <div className={`flex items-center gap-3 p-4 rounded-2xl transition-colors ${s.completed ? 'bg-slate-900/50 opacity-60' : isCurrent ? 'bg-slate-800 border border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)]' : 'bg-slate-900 border border-slate-800'}`}>
+      <div className="flex-1 flex gap-3">
         <div className="relative flex-1">
-          <input type="number" value={w} onChange={e => setW(e.target.value)} disabled={s.completed} className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2.5 px-3 text-center text-white font-bold disabled:opacity-50" />
-          <span className="absolute right-2 top-3 text-[10px] text-slate-500 uppercase">kg</span>
+          <input type="number" value={w} onChange={e => setW(e.target.value)} disabled={s.completed} className="w-full bg-slate-950 border border-slate-700 rounded-xl py-3 px-3 text-center text-white font-bold text-lg disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+          <span className="absolute right-3 top-3.5 text-xs text-slate-500 font-bold uppercase">kg</span>
         </div>
         <div className="relative flex-1">
-          <input type="number" value={r} onChange={e => setR(e.target.value)} disabled={s.completed} className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2.5 px-3 text-center text-white font-bold disabled:opacity-50" />
-          <span className="absolute right-2 top-3 text-[10px] text-slate-500 uppercase">reps</span>
+          <input type="number" value={r} onChange={e => setR(e.target.value)} disabled={s.completed} className="w-full bg-slate-950 border border-slate-700 rounded-xl py-3 px-3 text-center text-white font-bold text-lg disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
+          <span className="absolute right-3 top-3.5 text-xs text-slate-500 font-bold uppercase">reps</span>
         </div>
       </div>
       {!s.completed ? (
-        <button onClick={() => onComplete(parseFloat(w) || 0, parseInt(r) || 0)} className="w-12 h-11 flex items-center justify-center bg-blue-600 hover:bg-blue-500 rounded-lg text-white shadow-md">
-          <CheckCircle2 size={20} />
+        <button onClick={() => onComplete(parseFloat(w) || 0, parseInt(r) || 0)} className="w-14 h-14 flex items-center justify-center bg-blue-600 hover:bg-blue-500 rounded-xl text-white shadow-lg active:scale-95 transition-all shrink-0">
+          <CheckCircle2 size={24} />
         </button>
       ) : (
-        <button onClick={onUndo} className="w-12 h-11 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-400">
-          <RotateCcw size={16} />
+        <button onClick={onUndo} className="w-14 h-14 flex items-center justify-center bg-slate-800 hover:bg-slate-700 rounded-xl text-slate-400 active:scale-95 transition-all shrink-0">
+          <RotateCcw size={20} />
         </button>
       )}
     </div>
@@ -64,6 +63,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
 
   const [infoExercise, setInfoExercise] = useState<any | null>(null);
   const [showSwap, setShowSwap] = useState(false);
+  const [viewedSetIndex, setViewedSetIndex] = useState(0);
 
   const warmups = appConfig.warmup[session.day as keyof typeof appConfig.warmup] || [];
   const cooldowns = appConfig.cooldown[session.day as keyof typeof appConfig.cooldown] || [];
@@ -71,8 +71,10 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   // Lock body scroll when active
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, []);
 
@@ -169,11 +171,15 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
       exercises: session.exercises.map((e, i) => i === itemIndex ? { ...e, sets: newSets, checked: allDone } : e)
     });
 
-    const restSeconds = parseInt(ex.rest) || 90;
-    if (allDone) {
-      startRest(restSeconds);
-    } else {
-      startRest(restSeconds);
+    let restSeconds = parseInt(ex.rest) || 90;
+    if (ex.rest.toLowerCase().includes('phút')) restSeconds *= 60;
+    
+    startRest(restSeconds);
+    
+    // Automatically advance viewed set tab to the next uncompleted one
+    const nextUncompleted = newSets.findIndex(s => !s.completed);
+    if (nextUncompleted !== -1) {
+      setViewedSetIndex(nextUncompleted);
     }
   };
 
@@ -250,15 +256,17 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
               </button>
             )}
           </div>
-          {guide && (
-            <div className="space-y-4">
-              {guide.mediaUrls?.[0] ? (
-                 <video src={guide.mediaUrls[0]} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
-              ) : (
-                <div className="w-full h-48 bg-slate-800 rounded-2xl flex items-center justify-center border border-slate-700/50 shadow-lg">
-                  <ImageIcon className="text-slate-600" size={32} />
+          {guide && guide.mediaUrls && guide.mediaUrls.length > 0 && (
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 hide-scrollbar pb-2">
+              {guide.mediaUrls.map((url: string) => (
+                <div key={url} className="w-full shrink-0 snap-center">
+                  {url.endsWith('.mp4') ? (
+                     <video src={url} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
+                  ) : (
+                     <img src={url} alt="Guide" className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
+                  )}
                 </div>
-              )}
+              ))}
             </div>
           )}
         </div>
@@ -323,7 +331,10 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
               </button>
               <button 
                 onClick={() => {
-                  const dbEx = dbData.exercises.find(e => e.name === ex.nameEn);
+                  const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+                  const exNameEnNorm = normalize(ex.nameEn);
+                  const exNameNorm = normalize(ex.name);
+                  const dbEx = dbData.exercises.find(e => normalize(e.name) === exNameEnNorm || normalize(e.name) === exNameNorm);
                   if (dbEx) setInfoExercise(dbEx);
                 }}
                 className="p-2.5 bg-slate-800 rounded-full text-blue-400 hover:text-white"
@@ -346,45 +357,56 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
              )}
           </div>
 
-          {guide && (
-            <div className="space-y-4">
-              {guide.mediaUrls?.[0] ? (
-                 <video src={guide.mediaUrls[0]} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 border border-slate-700/30 shadow-lg" />
-              ) : (
-                <div className="w-full h-48 bg-slate-800 rounded-2xl flex items-center justify-center border border-slate-700/50">
-                  <ImageIcon className="text-slate-600" size={32} />
+          {guide && guide.mediaUrls && guide.mediaUrls.length > 0 && (
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 hide-scrollbar pb-2 mt-4">
+              {guide.mediaUrls.map((url: string) => (
+                <div key={url} className="w-full shrink-0 snap-center">
+                  {url.endsWith('.mp4') ? (
+                     <video src={url} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 border border-slate-700/30 shadow-lg" />
+                  ) : (
+                     <img src={url} alt="Guide" className="w-full h-48 object-cover rounded-2xl bg-slate-800 border border-slate-700/30 shadow-lg" />
+                  )}
                 </div>
-              )}
+              ))}
             </div>
           )}
         </div>
 
         {/* Lower half: Set Inputs */}
-        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-10">
-          <div className="max-h-[40vh] overflow-y-auto space-y-2 pb-6 px-2">
-            <div className="flex text-xs font-bold text-slate-500 uppercase tracking-wider px-3 mb-2">
-              <div className="w-8 text-center">Hiệp</div>
-              <div className="flex-1 text-center">Tạ (kg)</div>
-              <div className="flex-1 text-center">Reps</div>
-              <div className="w-12"></div>
+        <div className="bg-slate-950 p-6 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0">
+          <div className="max-w-md mx-auto w-full">
+            {/* Set Tabs */}
+            <div className="flex gap-2 mb-4 overflow-x-auto hide-scrollbar pb-2 snap-x">
+              {ex.sets.map((s, i) => {
+                const isActive = viewedSetIndex === i;
+                const isCurrentUncompleted = i === currentSetIndex;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setViewedSetIndex(i)}
+                    className={`flex-1 min-w-[3.5rem] py-2.5 rounded-xl text-sm font-bold border transition-all snap-center ${s.completed ? 'bg-blue-600/10 text-blue-400 border-blue-600/30' : isActive ? 'bg-slate-700 text-white border-slate-500 shadow-md transform scale-105' : isCurrentUncompleted ? 'bg-blue-600/20 text-blue-300 border-blue-500/50' : 'bg-slate-900 text-slate-500 border-slate-800 hover:bg-slate-800'}`}
+                  >
+                    {s.completed ? <CheckCircle2 size={16} className="mx-auto" /> : i + 1}
+                  </button>
+                );
+              })}
             </div>
-            {ex.sets.map((s, i) => (
-              <SetInputRow 
-                key={i} 
-                s={s} 
-                index={i} 
-                isCurrent={i === currentSetIndex} 
-                onComplete={(w, r) => handleCompleteSet(i, w, r)}
-                onUndo={() => {
-                  const newSets = ex.sets.map((set, setIdx) => setIdx === i ? { ...set, completed: false } : set);
-                  onUpdate({ ...session, exercises: session.exercises.map((e, exIdx) => exIdx === itemIndex ? { ...e, sets: newSets, checked: false } : e) });
-                }}
-              />
-            ))}
+            
+            <SetInputRow 
+              key={viewedSetIndex} 
+              s={ex.sets[viewedSetIndex]} 
+              index={viewedSetIndex} 
+              isCurrent={viewedSetIndex === currentSetIndex} 
+              onComplete={(w, r) => handleCompleteSet(viewedSetIndex, w, r)}
+              onUndo={() => {
+                const newSets = ex.sets.map((set, setIdx) => setIdx === viewedSetIndex ? { ...set, completed: false } : set);
+                onUpdate({ ...session, exercises: session.exercises.map((e, exIdx) => exIdx === itemIndex ? { ...e, sets: newSets, checked: false } : e) });
+              }}
+            />
             
             {ex.sets.every(s => s.completed) && (
-               <button onClick={advance} className="w-full mt-4 py-4 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white shadow-lg flex items-center justify-center gap-2">
-                 Bài tập tiếp theo <FastForward size={18} />
+               <button onClick={advance} className="w-full mt-6 py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-bold text-white shadow-[0_0_30px_rgba(5,150,105,0.3)] flex items-center justify-center gap-2 active:scale-95 transition-transform text-lg">
+                 Bài tập tiếp theo <FastForward size={20} />
                </button>
             )}
           </div>
@@ -488,7 +510,10 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
               <p className="text-sm text-slate-400">Chọn một bài tập thay thế tương đương cho <strong>{session.exercises[itemIndex]?.name}</strong>:</p>
               {(() => {
                 const currentExLog = session.exercises[itemIndex];
-                const dbEx = dbData.exercises.find(e => e.name === currentExLog.nameEn);
+                const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+                const currNameEnNorm = normalize(currentExLog.nameEn);
+                const currNameNorm = normalize(currentExLog.name);
+                const dbEx = dbData.exercises.find(e => normalize(e.name) === currNameEnNorm || normalize(e.name) === currNameNorm);
                 const alts = dbEx?.alternatives || [];
                 
                 if (alts.length === 0) {
@@ -498,7 +523,8 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                 return (
                   <div className="space-y-2">
                     {alts.map(altNameEn => {
-                      const altDbEx = dbData.exercises.find(e => e.name === altNameEn);
+                      const altNameEnNorm = normalize(altNameEn);
+                      const altDbEx = dbData.exercises.find(e => normalize(e.name) === altNameEnNorm);
                       const altName = altDbEx ? altDbEx.name : altNameEn;
                       return (
                         <button 

@@ -347,7 +347,7 @@
       ]
     },
     {
-      "name": "Barbell Squat",
+      "name": "Back Squat",
       "tier": "TIER_1_PRIMARY",
       "pattern": "SQUAT_PATTERN",
       "targetMuscle": "legs",
@@ -371,7 +371,7 @@
       "environment": "GYM",
       "instructions": "1. Đặt tạ đòn phía trước vai. 2. Giữ lưng thật thẳng khi Squat.",
       "alternatives": [
-        "Barbell Squat"
+        "Back Squat"
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/front_squat.mp4"
@@ -386,7 +386,7 @@
       "environment": "GYM",
       "instructions": "1. Đặt chân giữa bàn đạp. 2. Hạ tạ từ từ, không khóa khớp gối.",
       "alternatives": [
-        "Barbell Squat",
+        "Back Squat",
         "Dumbbell Lunge"
       ],
       "mediaUrls": [
