@@ -183,6 +183,14 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
     }
   };
 
+  // Reset viewed set when changing exercise
+  useEffect(() => {
+    if (phase === 'main' && session.exercises[itemIndex]) {
+      const nextUncompleted = session.exercises[itemIndex].sets.findIndex(s => !s.completed);
+      setViewedSetIndex(nextUncompleted !== -1 ? nextUncompleted : 0);
+    }
+  }, [phase, itemIndex]);
+
   // Setup initial timer when moving to a time-based item
   useEffect(() => {
     if (phase === 'warmup') {
@@ -392,17 +400,19 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
               })}
             </div>
             
-            <SetInputRow 
-              key={viewedSetIndex} 
-              s={ex.sets[viewedSetIndex]} 
-              index={viewedSetIndex} 
-              isCurrent={viewedSetIndex === currentSetIndex} 
-              onComplete={(w, r) => handleCompleteSet(viewedSetIndex, w, r)}
-              onUndo={() => {
-                const newSets = ex.sets.map((set, setIdx) => setIdx === viewedSetIndex ? { ...set, completed: false } : set);
-                onUpdate({ ...session, exercises: session.exercises.map((e, exIdx) => exIdx === itemIndex ? { ...e, sets: newSets, checked: false } : e) });
-              }}
-            />
+            {ex.sets[viewedSetIndex] && (
+              <SetInputRow 
+                key={viewedSetIndex} 
+                s={ex.sets[viewedSetIndex]} 
+                index={viewedSetIndex} 
+                isCurrent={viewedSetIndex === currentSetIndex} 
+                onComplete={(w, r) => handleCompleteSet(viewedSetIndex, w, r)}
+                onUndo={() => {
+                  const newSets = ex.sets.map((set, setIdx) => setIdx === viewedSetIndex ? { ...set, completed: false } : set);
+                  onUpdate({ ...session, exercises: session.exercises.map((e, exIdx) => exIdx === itemIndex ? { ...e, sets: newSets, checked: false } : e) });
+                }}
+              />
+            )}
             
             {ex.sets.every(s => s.completed) && (
                <button onClick={advance} className="w-full mt-6 py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-bold text-white shadow-[0_0_30px_rgba(5,150,105,0.3)] flex items-center justify-center gap-2 active:scale-95 transition-transform text-lg">
