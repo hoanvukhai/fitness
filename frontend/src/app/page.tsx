@@ -446,8 +446,14 @@ export default function TodayPage() {
 
         {/* Date Confirm Mini Dialog */}
         {showDateConfirm && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-[100] p-4">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl">
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-[100] p-4"
+            onClick={() => setShowDateConfirm(false)}
+          >
+            <div 
+              className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl"
+              onClick={e => e.stopPropagation()}
+            >
               <div>
                 <p className="font-bold text-white text-lg">Xác nhận ngày tập</p>
                 <p className="text-slate-400 text-sm mt-1">Sẽ dùng làm ngày lưu vào lịch sử.</p>
