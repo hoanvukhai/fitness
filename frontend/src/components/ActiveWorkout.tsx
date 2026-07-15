@@ -195,7 +195,9 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
       else setTimerLeft(0);
     } else {
       const ex = session.exercises[itemIndex];
-      const isTimeBased = ex?.targetReps.toLowerCase().includes('giây') || ex?.targetReps.toLowerCase().includes('s');
+      const isTimeBased = ex?.targetReps.toLowerCase().includes('giây') || 
+                          ex?.targetReps.toLowerCase().includes('s') || 
+                          (ex?.name && normalize(ex.name).includes('plank'));
       if (isTimeBased) {
         const d = parseInt(ex.targetReps) || 60;
         setTimerLeft(d);
@@ -299,7 +301,9 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   const renderMainExercise = () => {
     const ex = session.exercises[itemIndex];
     const guide = getGuide(ex.nameEn, ex.name);
-    const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
+    const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || 
+                        ex.targetReps.toLowerCase().includes('s') || 
+                        normalize(ex.name).includes('plank');
 
     if (isTimeBased) {
       return renderTimerView(ex.name, ex.nameEn, `${ex.targetSets} hiệp • ${ex.targetReps}`, 'text-blue-400', guide);
@@ -523,9 +527,9 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                 
                 // If it's already swapped, add the original back as an alternative so they can revert
                 if (currentExLog.selectedAlternative) {
-                  const originalEn = currentExLog.originalNameEn || '';
-                  if (originalEn && !alts.includes(originalEn) && originalEn !== currentExLog.nameEn) {
-                    alts.unshift(originalEn);
+                  const orig = currentExLog.originalNameEn || currentExLog.originalName || '';
+                  if (orig && !alts.includes(orig) && orig !== currentExLog.nameEn && orig !== currentExLog.name) {
+                    alts.unshift(orig);
                   }
                 }
                 

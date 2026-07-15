@@ -97,9 +97,9 @@ export default function ExerciseCard({
 
   let displayAlternatives = originalGuide?.alternatives ? [...originalGuide.alternatives] : [];
   if (exercise.selectedAlternative) {
-    const origEn = exercise.originalNameEn || '';
-    if (origEn && !displayAlternatives.includes(origEn) && origEn !== exercise.nameEn) {
-      displayAlternatives.unshift(origEn);
+    const orig = exercise.originalNameEn || exercise.originalName || '';
+    if (orig && !displayAlternatives.includes(orig) && orig !== exercise.nameEn && orig !== exercise.name) {
+      displayAlternatives.unshift(orig);
     }
   }
   displayAlternatives = displayAlternatives.filter(a => normalize(a) !== normalize(exercise.nameEn) && normalize(a) !== normalize(exercise.name));
@@ -115,8 +115,9 @@ export default function ExerciseCard({
   };
 
   const restSeconds = parseRestSeconds(exercise.rest);
-  // Bài tính thời gian (Core như Plank, Ab...)
-  const isTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
+  const isTimeBased = exercise.targetReps.toLowerCase().includes('giây') || 
+                      exercise.targetReps.toLowerCase().includes('s') || 
+                      normalize(exercise.name).includes('plank');
 
   const updateSet = (setIdx: number, field: 'weight' | 'reps', value: number) => {
     let newSets = exercise.sets.map((s, i) =>
