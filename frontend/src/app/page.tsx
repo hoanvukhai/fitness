@@ -94,11 +94,11 @@ function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
 }
 
 const DAY_OPTIONS = [
-  { day: 'push', session: 'A' as const, label: 'Push A – Sức mạnh', color: 'bg-blue-500' },
-  { day: 'pull', session: 'A' as const, label: 'Pull A – Sức mạnh', color: 'bg-rose-500' },
+  { day: 'push', session: 'A' as const, label: 'Push A – Sức mạnh', color: 'bg-sky-500' },
+  { day: 'pull', session: 'A' as const, label: 'Pull A – Sức mạnh', color: 'bg-indigo-500' },
   { day: 'legs', session: 'A' as const, label: 'Legs A – Sức mạnh', color: 'bg-emerald-500' },
-  { day: 'push', session: 'B' as const, label: 'Push B – Phì đại', color: 'bg-blue-500' },
-  { day: 'pull', session: 'B' as const, label: 'Pull B – Phì đại', color: 'bg-rose-500' },
+  { day: 'push', session: 'B' as const, label: 'Push B – Phì đại', color: 'bg-sky-500' },
+  { day: 'pull', session: 'B' as const, label: 'Pull B – Phì đại', color: 'bg-indigo-500' },
   { day: 'legs', session: 'B' as const, label: 'Legs B – Phì đại', color: 'bg-emerald-500' },
 ];
 

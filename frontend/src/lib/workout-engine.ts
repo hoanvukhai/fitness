@@ -149,7 +149,7 @@ export function calcTotalVolume(exercises: ExerciseLog[]): number {
 export function getDayLabel(day: string): string {
   const labels: Record<string, string> = {
     push: '🔵 PUSH',
-    pull: '🔴 PULL',
+    pull: '🟣 PULL',
     legs: '🟢 LEGS',
   };
   return labels[day] || day.toUpperCase();

@@ -489,7 +489,11 @@
       "equipment": "MACHINE",
       "environment": "GYM",
       "instructions": "1. Nằm hoặc ngồi. 2. Cuốn chân về sau để cô lập đùi sau.",
-      "alternatives": [],
+      "alternatives": [
+        "Seated Leg Curl",
+        "Lying Leg Curl",
+        "Standing Leg Curl"
+      ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
       ]
@@ -1141,7 +1145,10 @@
       "equipment": "MACHINE",
       "environment": "GYM",
       "instructions": "Cuốn chân.",
-      "alternatives": [],
+      "alternatives": [
+        "Lying Leg Curl",
+        "Standing Leg Curl"
+      ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
       ]
@@ -1154,7 +1161,10 @@
       "equipment": "MACHINE",
       "environment": "GYM",
       "instructions": "Cuốn chân.",
-      "alternatives": [],
+      "alternatives": [
+        "Seated Leg Curl",
+        "Lying Leg Curl"
+      ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
       ]
@@ -1167,7 +1177,10 @@
       "equipment": "MACHINE",
       "environment": "GYM",
       "instructions": "Cuốn chân.",
-      "alternatives": [],
+      "alternatives": [
+        "Seated Leg Curl",
+        "Standing Leg Curl"
+      ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
       ]
@@ -1193,7 +1206,11 @@
       "equipment": "MACHINE",
       "environment": "GYM",
       "instructions": "Cuốn chân.",
-      "alternatives": [],
+      "alternatives": [
+        "Seated Leg Curl",
+        "Lying Leg Curl",
+        "Standing Leg Curl"
+      ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
       ]
@@ -1206,7 +1223,11 @@
       "equipment": "MACHINE",
       "environment": "GYM",
       "instructions": "Cuốn chân.",
-      "alternatives": [],
+      "alternatives": [
+        "Seated Leg Curl",
+        "Lying Leg Curl",
+        "Standing Leg Curl"
+      ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
       ]
@@ -1219,7 +1240,10 @@
       "equipment": "CABLE",
       "environment": "GYM",
       "instructions": "Kéo cáp, giữ tư thế chống xoay.",
-      "alternatives": [],
+      "alternatives": [
+        "Cable Woodchopper",
+        "Plank"
+      ],
       "mediaUrls": []
     }
   ],
