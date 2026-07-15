@@ -14,6 +14,7 @@ interface EditSessionSheetProps {
 
 export default function EditSessionSheet({ session, onSave, onClose }: EditSessionSheetProps) {
   const [edited, setEdited] = useState<WorkoutSession>(JSON.parse(JSON.stringify(session)));
+  const [openDropdownIdx, setOpenDropdownIdx] = useState<number | null>(null);
 
   const handleDateChange = (dateStr: string) => {
     setEdited(prev => ({ ...prev, date: dateStr }));
@@ -77,7 +78,10 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
+        onClick={() => {
+          if (openDropdownIdx !== null) setOpenDropdownIdx(null);
+          else onClose();
+        }}
       />
 
       {/* Sheet Content */}
@@ -208,21 +212,44 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
                     <div className="flex items-center justify-between mb-3 px-1">
                       <div className="font-semibold text-slate-200 text-sm">{ex.name}</div>
                       {displayAlternatives.length > 0 && (
-                        <select
-                          onChange={e => {
-                            const newName = e.target.value;
-                            if (newName !== ex.nameEn) {
-                              updateExerciseName(eIdx, newName);
-                            }
-                          }}
-                          className="bg-slate-800/80 text-[10px] text-slate-400 border border-slate-700 rounded px-2 py-0.5 outline-none max-w-[120px]"
-                          value={ex.nameEn}
-                        >
-                          <option value={ex.nameEn}>Đổi bài...</option>
-                          {displayAlternatives.map((alt: string) => (
-                            <option key={alt} value={alt}>{alt}</option>
-                          ))}
-                        </select>
+                        <div className="relative">
+                          <button
+                            onClick={e => {
+                              e.stopPropagation();
+                              setOpenDropdownIdx(openDropdownIdx === eIdx ? null : eIdx);
+                            }}
+                            className="ml-auto bg-slate-800/80 hover:bg-slate-700/80 text-[10px] text-slate-300 border border-slate-700/80 rounded-md px-2.5 py-1 max-w-[120px] outline-none flex items-center gap-1.5 transition-colors shadow-sm"
+                          >
+                            <span className="truncate">Đổi bài...</span>
+                            <ChevronDown size={10} className={`transition-transform duration-200 ${openDropdownIdx === eIdx ? 'rotate-180' : ''}`} />
+                          </button>
+
+                          {openDropdownIdx === eIdx && (
+                            <>
+                              <div 
+                                className="fixed inset-0 z-40" 
+                                onClick={(e) => { e.stopPropagation(); setOpenDropdownIdx(null); }} 
+                              />
+                              <div className="absolute right-0 top-full mt-1.5 w-44 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+                                {displayAlternatives.map((alt: string) => (
+                                  <button
+                                    key={alt}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setOpenDropdownIdx(null);
+                                      if (alt !== ex.nameEn) {
+                                        updateExerciseName(eIdx, alt);
+                                      }
+                                    }}
+                                    className={`w-full text-left px-3 py-2 text-xs transition-colors ${alt === ex.nameEn ? 'bg-blue-600 text-white font-medium' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}`}
+                                  >
+                                    {alt}
+                                  </button>
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
                       )}
                     </div>
                     

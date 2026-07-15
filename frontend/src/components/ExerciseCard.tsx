@@ -31,6 +31,7 @@ export default function ExerciseCard({
   const [activeRestSet, setActiveRestSet] = useState<number | null>(null);
   const [note, setNote] = useState(exercise.notes || '');
   const [showGuide, setShowGuide] = useState(false);
+  const [showSwapDropdown, setShowSwapDropdown] = useState(false);
 
   const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const guide = dbData.exercises.find((e: any) => {
@@ -228,41 +229,63 @@ export default function ExerciseCard({
                   </button>
                 )}
                 {displayAlternatives.length > 0 && (
-                  <select
-                    onClick={e => e.stopPropagation()}
-                    onChange={e => {
-                      const newName = e.target.value;
-                      if (newName !== exercise.nameEn) {
-                        const isNewTimeBased = newName.toLowerCase().includes('plank');
-                        const isOldTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
-                        let newTargetReps = exercise.targetReps;
+                  <div className="relative">
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        setShowSwapDropdown(!showSwapDropdown);
+                      }}
+                      className="ml-auto bg-slate-800/80 hover:bg-slate-700/80 text-[10px] text-slate-300 border border-slate-700/80 rounded-md px-2.5 py-1 max-w-[120px] outline-none flex items-center gap-1.5 transition-colors shadow-sm"
+                    >
+                      <span className="truncate">Đổi bài...</span>
+                      <ChevronDown size={10} className={`transition-transform duration-200 ${showSwapDropdown ? 'rotate-180' : ''}`} />
+                    </button>
 
-                        if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
-                        else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
+                    {showSwapDropdown && (
+                      <>
+                        <div 
+                          className="fixed inset-0 z-40" 
+                          onClick={(e) => { e.stopPropagation(); setShowSwapDropdown(false); }} 
+                        />
+                        <div className="absolute right-0 top-full mt-1.5 w-44 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
+                          {displayAlternatives.map((alt: string) => (
+                            <button
+                              key={alt}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setShowSwapDropdown(false);
+                                if (alt !== exercise.nameEn) {
+                                  const isNewTimeBased = alt.toLowerCase().includes('plank');
+                                  const isOldTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
+                                  let newTargetReps = exercise.targetReps;
 
-                        const originalNameEn = exercise.originalNameEn || exercise.nameEn;
-                        const originalName = exercise.originalName || exercise.name;
+                                  if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
+                                  else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
 
-                        onChange({ 
-                          ...exercise, 
-                          originalNameEn,
-                          originalName,
-                          name: newName, 
-                          nameEn: newName, 
-                          selectedAlternative: newName, 
-                          targetWeight: 0,
-                          targetReps: newTargetReps
-                        });
-                      }
-                    }}
-                    className="ml-auto bg-slate-800/50 text-[10px] text-slate-400 border border-slate-700 rounded px-2 py-0.5 max-w-[100px] outline-none"
-                    value={exercise.nameEn}
-                  >
-                    <option value={exercise.nameEn}>Đổi bài...</option>
-                    {displayAlternatives.map((alt: string) => (
-                      <option key={alt} value={alt}>{alt}</option>
-                    ))}
-                  </select>
+                                  const originalNameEn = exercise.originalNameEn || exercise.nameEn;
+                                  const originalName = exercise.originalName || exercise.name;
+
+                                  onChange({ 
+                                    ...exercise, 
+                                    originalNameEn,
+                                    originalName,
+                                    name: alt, 
+                                    nameEn: alt, 
+                                    selectedAlternative: alt, 
+                                    targetWeight: 0,
+                                    targetReps: newTargetReps
+                                  });
+                                }
+                              }}
+                              className={`w-full text-left px-3 py-2 text-xs transition-colors ${alt === exercise.nameEn ? 'bg-blue-600 text-white font-medium' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}`}
+                            >
+                              {alt}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
                 )}
               </div>
               <h3 className="font-bold text-slate-100 text-base leading-tight">{exercise.name}</h3>
