@@ -64,6 +64,46 @@ export default function ExerciseCard({
     return false;
   });
 
+  const originalGuide = dbData.exercises.find((e: any) => {
+    const eName = normalize(e.name);
+    const exNameEn = normalize(exercise.originalNameEn || exercise.nameEn);
+    const exName = normalize(exercise.originalName || exercise.name);
+    if (eName === exNameEn || eName === exName) return true;
+    const manualMap: Record<string, string> = {
+      'benchpress': 'barbellbenchpress',
+      'inclinebenchpress': 'inclinebarbellpress',
+      'flatdbpress': 'dumbbellbenchpress',
+      'pecdeckmachinefly': 'reversepecdeck',
+      'chestsupporteddbrow': 'dumbbellrow',
+      'pulluplatpulldown': 'latpulldown',
+      'widegriplatpulldown': 'latpulldown',
+      'dbpreacherconcentrationcurl': 'dumbbellcurl',
+      'ezbarcurl': 'barbellcurl',
+      'backsquat': 'barbellsquat',
+      'romaniandeadlift': 'romaniandeadliftrdl',
+      'seatedlegcurl': 'legcurl',
+      'standinglegcurl': 'legcurl',
+      'gobletsquat': 'frontsquat',
+      'dbcalfraise': 'standingcalfraise',
+      'cablereversefly': 'reversepecdeck',
+      'dbtricepkickback': 'overheadtricepextension'
+    };
+    if (exNameEn && manualMap[exNameEn] === eName) return true;
+    if (exName && manualMap[exName] === eName) return true;
+    if (exNameEn && eName.includes(exNameEn)) return true;
+    if (exName && eName.includes(exName)) return true;
+    return false;
+  });
+
+  let displayAlternatives = originalGuide?.alternatives ? [...originalGuide.alternatives] : [];
+  if (exercise.selectedAlternative) {
+    const origEn = exercise.originalNameEn || '';
+    if (origEn && !displayAlternatives.includes(origEn) && origEn !== exercise.nameEn) {
+      displayAlternatives.unshift(origEn);
+    }
+  }
+  displayAlternatives = displayAlternatives.filter(a => normalize(a) !== normalize(exercise.nameEn) && normalize(a) !== normalize(exercise.name));
+
   // Parse thời gian nghỉ từ string sang giây
   const parseRestSeconds = (restStr: string): number => {
     if (restStr.includes('3 phút')) return 180;
@@ -189,7 +229,7 @@ export default function ExerciseCard({
                     <Info size={12} />
                   </button>
                 )}
-                {guide?.alternatives && guide.alternatives.length > 0 && (
+                {displayAlternatives.length > 0 && (
                   <select
                     onClick={e => e.stopPropagation()}
                     onChange={e => {
@@ -202,7 +242,7 @@ export default function ExerciseCard({
                     value={exercise.nameEn}
                   >
                     <option value={exercise.nameEn}>Đổi bài...</option>
-                    {guide.alternatives.map((alt: string) => (
+                    {displayAlternatives.map((alt: string) => (
                       <option key={alt} value={alt}>{alt}</option>
                     ))}
                   </select>
