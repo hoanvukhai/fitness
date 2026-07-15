@@ -73,6 +73,8 @@ function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
       exerciseId: ex.id,
       name: ex.name,
       nameEn: ex.nameEn || '',
+      originalName: ex.name,
+      originalNameEn: ex.nameEn || '',
       tier: ex.tier,
       targetWeight,
       targetReps: ex.repsDisplay || '',

@@ -373,7 +373,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
         </div>
 
         {/* Lower half: Set Inputs */}
-        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0">
+        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[55vh] overflow-y-auto hide-scrollbar">
           <div className="max-w-md mx-auto w-full">
             {/* Set Tabs */}
             <div className="flex gap-2 mb-3 overflow-x-auto hide-scrollbar pb-1 snap-x">
@@ -513,10 +513,24 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
               {(() => {
                 const currentExLog = session.exercises[itemIndex];
                 const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-                const currNameEnNorm = normalize(currentExLog.nameEn);
-                const currNameNorm = normalize(currentExLog.name);
-                const dbEx = dbData.exercises.find(e => normalize(e.name) === currNameEnNorm || normalize(e.name) === currNameNorm);
-                const alts = dbEx?.alternatives || [];
+                
+                // Always base alternatives on the ORIGINAL exercise
+                const baseNameEnNorm = normalize(currentExLog.originalNameEn || currentExLog.nameEn);
+                const baseNameNorm = normalize(currentExLog.originalName || currentExLog.name);
+                const dbEx = dbData.exercises.find(e => normalize(e.name) === baseNameEnNorm || normalize(e.name) === baseNameNorm);
+                
+                let alts = dbEx?.alternatives ? [...dbEx.alternatives] : [];
+                
+                // If it's already swapped, add the original back as an alternative so they can revert
+                if (currentExLog.selectedAlternative) {
+                  const originalEn = currentExLog.originalNameEn || '';
+                  if (originalEn && !alts.includes(originalEn) && originalEn !== currentExLog.nameEn) {
+                    alts.unshift(originalEn);
+                  }
+                }
+                
+                // Remove the currently displayed exercise from the alternatives list
+                alts = alts.filter(a => normalize(a) !== normalize(currentExLog.nameEn) && normalize(a) !== normalize(currentExLog.name));
                 
                 if (alts.length === 0) {
                   return <p className="text-center text-slate-500 py-8">Không có bài tập thay thế được đề xuất.</p>;

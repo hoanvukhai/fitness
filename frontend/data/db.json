@@ -1132,6 +1132,95 @@
       "instructions": "1. Ôm tạ nhẹ (50%) ở trước ngực. 2. Squat xuống chậm rãi để khởi động cột sống và đùi trước hiệp chính.",
       "alternatives": [],
       "mediaUrls": []
+    },
+    {
+      "name": "Seated Leg Curl",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "HINGE_PATTERN",
+      "targetMuscle": "legs",
+      "equipment": "MACHINE",
+      "environment": "GYM",
+      "instructions": "Cuốn chân.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_curl.mp4"
+      ]
+    },
+    {
+      "name": "Standing Leg Curl",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "HINGE_PATTERN",
+      "targetMuscle": "legs",
+      "equipment": "MACHINE",
+      "environment": "GYM",
+      "instructions": "Cuốn chân.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_curl.mp4"
+      ]
+    },
+    {
+      "name": "Lying Leg Curl",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "HINGE_PATTERN",
+      "targetMuscle": "legs",
+      "equipment": "MACHINE",
+      "environment": "GYM",
+      "instructions": "Cuốn chân.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_curl.mp4"
+      ]
+    },
+    {
+      "name": "Single Leg Standing Curl",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "HINGE_PATTERN",
+      "targetMuscle": "legs",
+      "equipment": "MACHINE",
+      "environment": "GYM",
+      "instructions": "Cuốn chân.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_curl.mp4"
+      ]
+    },
+    {
+      "name": "Single Leg Curl",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "HINGE_PATTERN",
+      "targetMuscle": "legs",
+      "equipment": "MACHINE",
+      "environment": "GYM",
+      "instructions": "Cuốn chân.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_curl.mp4"
+      ]
+    },
+    {
+      "name": "Single Lying Leg Curl",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "HINGE_PATTERN",
+      "targetMuscle": "legs",
+      "equipment": "MACHINE",
+      "environment": "GYM",
+      "instructions": "Cuốn chân.",
+      "alternatives": [],
+      "mediaUrls": [
+        "https://musclewiki.com/media/leg_curl.mp4"
+      ]
+    },
+    {
+      "name": "Pallof Press",
+      "tier": "TIER_3_ISOLATION",
+      "pattern": "CORE",
+      "targetMuscle": "core",
+      "equipment": "CABLE",
+      "environment": "GYM",
+      "instructions": "Kéo cáp, giữ tư thế chống xoay.",
+      "alternatives": [],
+      "mediaUrls": []
     }
   ],
   "templates": [],

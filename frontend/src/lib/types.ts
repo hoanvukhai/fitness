@@ -14,6 +14,8 @@ export interface ExerciseLog {
   exerciseId: string;
   name: string;
   nameEn: string;
+  originalName?: string;
+  originalNameEn?: string;
   tier: 'tier1' | 'main' | 'accessory' | 'core';
   targetWeight: number;
   targetReps: string;
