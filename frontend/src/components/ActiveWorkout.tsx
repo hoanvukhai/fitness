@@ -327,7 +327,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
               <p className="text-slate-400 text-sm">{ex.nameEn}</p>
             </div>
             <div className="flex items-center gap-2 shrink-0 mt-1">
-              {ex.tier !== 'tier1' && (
+              {ex.tier !== 'tier1' && ex.tier !== 'main' && (
                 <button 
                   onClick={() => setShowSwap(true)}
                   className="p-2.5 bg-slate-800 rounded-full text-slate-400 hover:text-white"

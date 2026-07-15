@@ -212,7 +212,7 @@ export default function ExerciseCard({
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-1">
                 <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded border ${tierColors[exercise.tier]}`}>
-                  {exercise.tier === 'tier1' && <Lock size={8} className="inline mr-0.5" />}
+                  {(exercise.tier === 'tier1' || exercise.tier === 'main') && <Lock size={8} className="inline mr-0.5" />}
                   {tierLabels[exercise.tier]}
                 </span>
                 {exercise.RIR && (
@@ -228,7 +228,7 @@ export default function ExerciseCard({
                     <Info size={12} />
                   </button>
                 )}
-                {displayAlternatives.length > 0 && exercise.tier !== 'tier1' && (
+                {displayAlternatives.length > 0 && exercise.tier !== 'tier1' && exercise.tier !== 'main' && (
                   <div className="relative">
                     <button
                       onClick={e => {
