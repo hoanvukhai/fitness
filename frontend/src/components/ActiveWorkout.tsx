@@ -560,8 +560,13 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                             if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
                             else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
 
+                            const originalNameEn = currentEx.originalNameEn || currentEx.nameEn;
+                            const originalName = currentEx.originalName || currentEx.name;
+
                             newExercises[itemIndex] = {
                               ...currentEx,
+                              originalNameEn,
+                              originalName,
                               name: altName,
                               nameEn: altNameEn,
                               selectedAlternative: altName,

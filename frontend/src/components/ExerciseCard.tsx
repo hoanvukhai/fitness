@@ -240,11 +240,16 @@ export default function ExerciseCard({
                         if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
                         else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
 
-                        onChange({
-                          ...exercise,
-                          name: newName,
-                          nameEn: newName,
-                          selectedAlternative: newName,
+                        const originalNameEn = exercise.originalNameEn || exercise.nameEn;
+                        const originalName = exercise.originalName || exercise.name;
+
+                        onChange({ 
+                          ...exercise, 
+                          originalNameEn,
+                          originalName,
+                          name: newName, 
+                          nameEn: newName, 
+                          selectedAlternative: newName, 
                           targetWeight: 0,
                           targetReps: newTargetReps
                         });

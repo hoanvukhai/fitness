@@ -48,8 +48,13 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
       if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
       else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
 
+      const originalNameEn = ex.originalNameEn || ex.nameEn;
+      const originalName = ex.originalName || ex.name;
+
       newExercises[exerciseIndex] = { 
         ...ex, 
+        originalNameEn,
+        originalName,
         name: newName, 
         nameEn: newName, 
         selectedAlternative: newName,
