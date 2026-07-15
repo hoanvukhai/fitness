@@ -77,7 +77,7 @@ function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
       targetReps: ex.repsDisplay || '',
       targetSets: ex.sets,
       rest: ex.rest || '90 giây',
-      RIR: computedRIR || ex.rir,
+      RIR: computedRIR || ex.rir || '',
       sets: Array.from({ length: ex.sets }, (_, i) => ({
         setNumber: i + 1,
         weight: targetWeight,
