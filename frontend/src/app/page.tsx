@@ -11,7 +11,8 @@ import { ExerciseLog, WorkoutSession } from '@/lib/types';
 import Onboarding from '@/components/Onboarding';
 import ExerciseCard from '@/components/ExerciseCard';
 import WarmupCooldown from '@/components/WarmupCooldown';
-import { TrendingUp, Flame, Calendar, CalendarDays, Clock, Target, ChevronRight, ChevronDown, CheckCircle2, RefreshCw, Weight, Plus, Play, Pause, Dumbbell } from 'lucide-react';
+import ActiveWorkout from '@/components/ActiveWorkout';
+import { TrendingUp, Flame, Calendar, CalendarDays, Clock, Target, ChevronRight, ChevronDown, CheckCircle2, RefreshCw, Weight, Plus, Play, Pause, Dumbbell, Zap } from 'lucide-react';
 
 // Dynamic imports để tránh lỗi SSR
 let appConfig: any = null;
@@ -108,8 +109,8 @@ export default function TodayPage() {
   const [finished, setFinished] = useState(false);
   const [showDayPicker, setShowDayPicker] = useState(false);
   
-  // Focused Workout State
-  const [activeStep, setActiveStep] = useState<'warmup' | number | 'cooldown'>('warmup');
+  // Active Workout Modal State
+  const [showActiveWorkout, setShowActiveWorkout] = useState(false);
 
   const todayDate = formatDate();
   const [confirmDate, setConfirmDate] = useState(todayDate);
@@ -444,6 +445,17 @@ export default function TodayPage() {
           </button>
         )}
 
+        {/* Continue button */}
+        {(session?.status === 'in_progress' || session?.status === 'paused') && (
+          <button
+            onClick={() => setShowActiveWorkout(true)}
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-600/20"
+          >
+            <Zap size={22} fill="currentColor" />
+            Tiếp tục tập
+          </button>
+        )}
+
         {/* Date Confirm Mini Dialog */}
         {showDateConfirm && (
           <div 
@@ -482,105 +494,55 @@ export default function TodayPage() {
           </div>
         )}
 
-        {/* Workout Flow (Focused Mode) */}
+        {/* Workout Flow (Static List) */}
         {loadingSession ? (
           <div className="text-center text-slate-500 py-10 text-sm animate-pulse">Đang tải bài tập...</div>
-        ) : session?.status === 'in_progress' ? (
+        ) : (session?.status === 'in_progress' || session?.status === 'planned' || session?.status === 'paused') ? (
           <div className="space-y-4">
-            {/* Step Navigation */}
-            <div className="flex items-center justify-between text-slate-400 text-xs font-medium bg-slate-900 border border-slate-800 rounded-2xl p-2">
-              <button 
-                disabled={activeStep === 'warmup'}
-                onClick={() => {
-                  if (activeStep === 'cooldown') setActiveStep(session.exercises.length - 1);
-                  else if (typeof activeStep === 'number') {
-                    setActiveStep(activeStep === 0 ? 'warmup' : activeStep - 1);
-                  }
-                }}
-                className="px-3 py-2 disabled:opacity-30 active:scale-95 transition-all bg-slate-800 rounded-xl"
-              >
-                Trước
-              </button>
-              
-              <span className="text-slate-200">
-                {activeStep === 'warmup' ? 'Khởi động' : activeStep === 'cooldown' ? 'Giãn cơ' : `Bài ${activeStep + 1} / ${session.exercises.length}`}
-              </span>
-
-              <button 
-                disabled={activeStep === 'cooldown'}
-                onClick={() => {
-                  if (activeStep === 'warmup') setActiveStep(0);
-                  else if (typeof activeStep === 'number') {
-                    setActiveStep(activeStep === session.exercises.length - 1 ? 'cooldown' : activeStep + 1);
-                  }
-                }}
-                className="px-3 py-2 disabled:opacity-30 active:scale-95 transition-all bg-slate-800 rounded-xl"
-              >
-                Tiếp
-              </button>
-            </div>
-
-            {activeStep === 'warmup' && warmupItems.length > 0 && (
-              <div className="space-y-4">
-                <WarmupCooldown title="Khởi động" emoji="🔥" items={warmupItems} color="orange" onComplete={() => setActiveStep(0)} />
-                <button 
-                  onClick={() => setActiveStep(0)}
-                  className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white text-base active:scale-95 transition-all shadow-lg"
-                >
-                  Vào Bài Tập Chính
-                </button>
-              </div>
+            {warmupItems.length > 0 && (
+              <WarmupCooldown title="Khởi động" emoji="🔥" items={warmupItems} color="orange" />
             )}
 
-            {typeof activeStep === 'number' && session.exercises[activeStep] && (
+            {session.exercises.map((ex, idx) => (
               <ExerciseCard
-                exercise={session.exercises[activeStep]}
-                index={activeStep}
-                nextExerciseName={session.exercises[activeStep + 1]?.name || 'Giãn cơ'}
-                onChange={updated => updateExercise(activeStep, updated)}
-                onFinishAllSets={() => {
-                  // Tự động nhảy bài nếu xong
-                  setTimeout(() => {
-                    setActiveStep(activeStep === session.exercises.length - 1 ? 'cooldown' : activeStep + 1);
-                  }, 1500);
-                }}
+                key={ex.exerciseId}
+                exercise={ex}
+                index={idx}
+                onChange={updated => updateExercise(idx, updated)}
               />
-            )}
+            ))}
 
-            {activeStep === 'cooldown' && cooldownItems.length > 0 && (
-              <div className="space-y-4">
-                <WarmupCooldown title="Giãn cơ" emoji="🧘" items={cooldownItems} color="teal" />
-              </div>
+            {cooldownItems.length > 0 && (
+              <WarmupCooldown title="Giãn cơ" emoji="🧘" items={cooldownItems} color="teal" />
             )}
           </div>
         ) : null}
 
-        {/* Actions (Pause/Resume/Finish) */}
+        {/* Finish button (Always visible at bottom when in progress) */}
         {(session?.status === 'in_progress' || session?.status === 'paused') && (
-          <div className="flex items-center gap-3">
-            {session.status === 'in_progress' ? (
-              <button
-                onClick={pauseSession}
-                className="py-4 px-6 bg-slate-800 hover:bg-slate-700 rounded-2xl font-bold text-slate-300 text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg"
-              >
-                <Pause size={22} />
-              </button>
-            ) : (
-              <button
-                onClick={resumeSession}
-                className="py-4 px-6 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-600/20"
-              >
-                <Play size={22} />
-              </button>
-            )}
-            <button
-              onClick={finishSession}
-              className="flex-1 py-4 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-emerald-600/20"
-            >
-              <CheckCircle2 size={22} />
-              Kết thúc
-            </button>
-          </div>
+          <button
+            onClick={finishSession}
+            className="w-full mt-4 py-4 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-emerald-600/20"
+          >
+            <CheckCircle2 size={22} />
+            Kết thúc và Lưu
+          </button>
+        )}
+
+        {/* Active Workout Fullscreen Modal */}
+        {showActiveWorkout && session && (
+          <ActiveWorkout
+            session={session}
+            onUpdate={updated => {
+              setSession(updated);
+              saveWorkoutSession(updated).catch(console.error);
+            }}
+            onClose={() => setShowActiveWorkout(false)}
+            onFinish={() => {
+              setShowActiveWorkout(false);
+              finishSession();
+            }}
+          />
         )}
       </div>
     </div>
