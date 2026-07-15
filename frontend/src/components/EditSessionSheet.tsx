@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Save, Clock, Calendar, CheckCircle2 } from 'lucide-react';
+import { X, Save, Clock, Calendar, CheckCircle2, ChevronDown } from 'lucide-react';
 import { WorkoutSession, ExerciseLog } from '@/lib/types';
 import { calcTotalVolume } from '@/lib/workout-engine';
 import dbData from '../../data/db.json';
