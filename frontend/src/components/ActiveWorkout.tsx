@@ -92,23 +92,23 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
 
   // Timer effect
   useEffect(() => {
-    if (isResting && restLeft > 0) {
+    if (session.status !== 'paused' && isResting && restLeft > 0) {
       const t = setInterval(() => setRestLeft(r => r - 1), 1000);
       return () => clearInterval(t);
-    } else if (isResting && restLeft <= 0) {
+    } else if (session.status !== 'paused' && isResting && restLeft <= 0) {
       setIsResting(false);
     }
-  }, [isResting, restLeft]);
+  }, [isResting, restLeft, session.status]);
 
   useEffect(() => {
-    if (timerRunning && timerLeft > 0) {
+    if (session.status !== 'paused' && timerRunning && timerLeft > 0) {
       const t = setInterval(() => setTimerLeft(r => r - 1), 1000);
       return () => clearInterval(t);
-    } else if (timerRunning && timerLeft <= 0) {
+    } else if (session.status !== 'paused' && timerRunning && timerLeft <= 0) {
       setTimerRunning(false);
       handleFinishTimerExercise();
     }
-  }, [timerRunning, timerLeft]);
+  }, [timerRunning, timerLeft, session.status]);
 
   // Handle phase changes
   const advance = () => {
@@ -247,12 +247,12 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
 
   const renderTimerView = (title: string, subtitle: string, durationStr: string, colorClass: string, guide: any) => {
     return (
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col h-full">
         {/* Upper half: Info */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-900/50">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-900/50">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-white leading-tight mb-2">{title}</h2>
+              <h2 className="text-2xl font-bold text-white leading-tight mb-1">{title}</h2>
               <p className="text-slate-400 text-sm">{subtitle} • {durationStr}</p>
             </div>
             {guide && (
@@ -381,10 +381,10 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
         </div>
 
         {/* Lower half: Set Inputs */}
-        <div className="bg-slate-950 p-6 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0">
+        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0">
           <div className="max-w-md mx-auto w-full">
             {/* Set Tabs */}
-            <div className="flex gap-2 mb-4 overflow-x-auto hide-scrollbar pb-2 snap-x">
+            <div className="flex gap-2 mb-3 overflow-x-auto hide-scrollbar pb-1 snap-x">
               {ex.sets.map((s, i) => {
                 const isActive = viewedSetIndex === i;
                 const isCurrentUncompleted = i === currentSetIndex;
@@ -392,7 +392,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                   <button
                     key={i}
                     onClick={() => setViewedSetIndex(i)}
-                    className={`flex-1 min-w-[3.5rem] py-2.5 rounded-xl text-sm font-bold border transition-all snap-center ${s.completed ? 'bg-blue-600/10 text-blue-400 border-blue-600/30' : isActive ? 'bg-slate-700 text-white border-slate-500 shadow-md transform scale-105' : isCurrentUncompleted ? 'bg-blue-600/20 text-blue-300 border-blue-500/50' : 'bg-slate-900 text-slate-500 border-slate-800 hover:bg-slate-800'}`}
+                    className={`flex-1 min-w-[3.5rem] py-2 rounded-xl text-sm font-bold border transition-all snap-center ${s.completed ? 'bg-blue-600/10 text-blue-400 border-blue-600/30' : isActive ? 'bg-slate-700 text-white border-slate-500 shadow-md transform scale-105' : isCurrentUncompleted ? 'bg-blue-600/20 text-blue-300 border-blue-500/50' : 'bg-slate-900 text-slate-500 border-slate-800 hover:bg-slate-800'}`}
                   >
                     {s.completed ? <CheckCircle2 size={16} className="mx-auto" /> : i + 1}
                   </button>
@@ -415,7 +415,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
             )}
             
             {ex.sets.every(s => s.completed) && (
-               <button onClick={advance} className="w-full mt-6 py-4 bg-emerald-600 hover:bg-emerald-500 rounded-2xl font-bold text-white shadow-[0_0_30px_rgba(5,150,105,0.3)] flex items-center justify-center gap-2 active:scale-95 transition-transform text-lg">
+               <button onClick={advance} className="w-full mt-4 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white shadow-[0_0_30px_rgba(5,150,105,0.3)] flex items-center justify-center gap-2 active:scale-95 transition-transform text-lg">
                  Bài tập tiếp theo <FastForward size={20} />
                </button>
             )}

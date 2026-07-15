@@ -164,13 +164,14 @@ export default function TodayPage() {
 
   const startSession = async (date: string = confirmDate) => {
     if (!session) return;
-    const updated = { 
-      ...session, 
-      status: 'in_progress' as const, 
-      date, 
-      startedAt: new Date().toISOString() 
+    const updated: WorkoutSession = {
+      ...session,
+      status: 'in_progress',
+      date,
+      startedAt: new Date().toISOString()
     };
     setSession(updated);
+    setShowActiveWorkout(true); // Auto-open active workout
     await saveWorkoutSession(updated);
     setShowDateConfirm(false);
   };
@@ -448,10 +449,17 @@ export default function TodayPage() {
         {/* Continue button */}
         {(session?.status === 'in_progress' || session?.status === 'paused') && (
           <button
-            onClick={() => setShowActiveWorkout(true)}
-            className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-600/20"
+            onClick={() => {
+              if (session.status === 'paused') {
+                const updated = { ...session, status: 'in_progress' as const };
+                setSession(updated);
+                saveWorkoutSession(updated).catch(console.error);
+              }
+              setShowActiveWorkout(true);
+            }}
+            className="w-full py-4 bg-orange-600 hover:bg-orange-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-orange-600/20"
           >
-            <Zap size={22} fill="currentColor" />
+            <Play size={22} />
             Tiếp tục tập
           </button>
         )}
@@ -530,19 +538,28 @@ export default function TodayPage() {
         )}
 
         {/* Active Workout Fullscreen Modal */}
-        {showActiveWorkout && session && (
-          <ActiveWorkout
-            session={session}
-            onUpdate={updated => {
-              setSession(updated);
-              saveWorkoutSession(updated).catch(console.error);
-            }}
-            onClose={() => setShowActiveWorkout(false)}
-            onFinish={() => {
+        {session && (session.status === 'in_progress' || session.status === 'paused') && (
+          <div className={showActiveWorkout ? 'block' : 'hidden'}>
+            <ActiveWorkout
+              session={session}
+              onUpdate={updated => {
+                setSession(updated);
+                saveWorkoutSession(updated).catch(console.error);
+              }}
+              onClose={() => {
               setShowActiveWorkout(false);
-              finishSession();
+              if (session.status === 'in_progress') {
+                const updated = { ...session, status: 'paused' as const };
+                setSession(updated);
+                saveWorkoutSession(updated).catch(console.error);
+              }
             }}
-          />
+              onFinish={() => {
+                setShowActiveWorkout(false);
+                finishSession();
+              }}
+            />
+          </div>
         )}
       </div>
     </div>

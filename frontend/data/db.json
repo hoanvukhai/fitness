@@ -394,7 +394,7 @@
       ]
     },
     {
-      "name": "Romanian Deadlift (RDL)",
+      "name": "Romanian Deadlift",
       "tier": "TIER_1_PRIMARY",
       "pattern": "HINGE_PATTERN",
       "targetMuscle": "legs",
@@ -417,7 +417,7 @@
       "environment": "GYM",
       "instructions": "1. Kéo tạ từ mặt đất. 2. Dùng lực chân đẩy đất ra xa.",
       "alternatives": [
-        "Romanian Deadlift (RDL)"
+        "Romanian Deadlift"
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/deadlift.mp4"
@@ -432,7 +432,7 @@
       "environment": "HOME",
       "instructions": "1. Cầm 2 tạ đơn. 2. Đẩy mông ra sau giữ lưng thẳng.",
       "alternatives": [
-        "Romanian Deadlift (RDL)"
+        "Romanian Deadlift"
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/db_rdl.mp4"
