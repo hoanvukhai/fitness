@@ -456,7 +456,7 @@ export default function TodayPage() {
                 type="date" 
                 value={confirmDate}
                 onChange={e => setConfirmDate(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-blue-500 focus:outline-none" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-blue-500 focus:outline-none [color-scheme:dark]" 
               />
               <div className="flex gap-2 pt-2">
                 <button 
