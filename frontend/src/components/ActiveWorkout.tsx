@@ -68,15 +68,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   const warmups = appConfig.warmup[session.day as keyof typeof appConfig.warmup] || [];
   const cooldowns = appConfig.cooldown[session.day as keyof typeof appConfig.cooldown] || [];
 
-  // Lock body scroll when active
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
-    };
-  }, []);
+  // Scroll lock moved to page.tsx
 
   // Find exercise details from DB
   const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');

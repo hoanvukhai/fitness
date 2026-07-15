@@ -122,6 +122,20 @@ export default function TodayPage() {
     return () => clearInterval(interval);
   }, [session]);
 
+  useEffect(() => {
+    if (showActiveWorkout) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+    };
+  }, [showActiveWorkout]);
+
   const formatElapsed = (s: number) => {
     const m = Math.floor(s / 60);
     const sec = s % 60;
