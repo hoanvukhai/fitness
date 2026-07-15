@@ -211,7 +211,7 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
                   <div key={eIdx} className="bg-slate-800/30 rounded-2xl p-3 border border-slate-700/30">
                     <div className="flex items-center justify-between mb-3 px-1">
                       <div className="font-semibold text-slate-200 text-sm">{ex.name}</div>
-                      {displayAlternatives.length > 0 && (
+                      {ex.tier !== 'tier1' && displayAlternatives.length > 0 && (
                         <div className="relative">
                           <button
                             onClick={e => {
