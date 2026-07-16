@@ -14,6 +14,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/bench_press.mp4"
+      ],
+      "aliases": [
+        "Bench Press"
       ]
     },
     {
@@ -30,6 +33,11 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/db_bench.mp4"
+      ],
+      "aliases": [
+        "Flat DB Press",
+        "Decline DB Press",
+        "Close-grip DB Floor Press"
       ]
     },
     {
@@ -60,6 +68,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/incline_db_bench.mp4"
+      ],
+      "aliases": [
+        "Incline DB Press"
       ]
     },
     {
@@ -75,6 +86,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/machine_chest_press.mp4"
+      ],
+      "aliases": [
+        "Pec Deck / Machine Fly"
       ]
     },
     {
@@ -90,6 +104,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/db_flyes.mp4"
+      ],
+      "aliases": [
+        "Incline DB Fly"
       ]
     },
     {
@@ -105,6 +122,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/cable_crossover.mp4"
+      ],
+      "aliases": [
+        "Single-arm Cable Fly"
       ]
     },
     {
@@ -151,6 +171,10 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/db_shoulder.mp4"
+      ],
+      "aliases": [
+        "Seated DB Shoulder Press",
+        "Arnold Press"
       ]
     },
     {
@@ -181,6 +205,11 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/lateral_raise.mp4"
+      ],
+      "aliases": [
+        "Lateral Raise",
+        "Incline Bench Y-Raise",
+        "DB Y-Raise"
       ]
     },
     {
@@ -196,6 +225,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/cable_lateral.mp4"
+      ],
+      "aliases": [
+        "Leaning Cable Lateral Raise"
       ]
     },
     {
@@ -209,6 +241,9 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/front_raise.mp4"
+      ],
+      "aliases": [
+        "DB Front Raise"
       ]
     },
     {
@@ -224,6 +259,12 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/reverse_pec_deck.mp4"
+      ],
+      "aliases": [
+        "Cable Reverse Fly",
+        "Reverse Pec Deck Fly",
+        "Bent-over DB Reverse Fly",
+        "Cross-body Cable Reverse Fly"
       ]
     },
     {
@@ -254,6 +295,11 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/lat_pulldown.mp4"
+      ],
+      "aliases": [
+        "Pull-up / Lat Pulldown",
+        "Wide-grip Lat Pulldown",
+        "Close-grip / V-bar Pulldown"
       ]
     },
     {
@@ -286,6 +332,10 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/db_row.mp4"
+      ],
+      "aliases": [
+        "Chest-supported DB Row",
+        "Single-arm DB Row"
       ]
     },
     {
@@ -301,6 +351,10 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/cable_row.mp4"
+      ],
+      "aliases": [
+        "Standing Single-arm Cable Row",
+        "Cross-body Cable Row"
       ]
     },
     {
@@ -375,6 +429,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/front_squat.mp4"
+      ],
+      "aliases": [
+        "Goblet Squat"
       ]
     },
     {
@@ -391,6 +448,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_press.mp4"
+      ],
+      "aliases": [
+        "Hack Squat"
       ]
     },
     {
@@ -451,6 +511,10 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/lunge.mp4"
+      ],
+      "aliases": [
+        "Walking Lunge",
+        "DB Step-up"
       ]
     },
     {
@@ -479,6 +543,10 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_extension.mp4"
+      ],
+      "aliases": [
+        "Single-leg Leg Extension",
+        "Heavy Leg Extension (drop-set last set)"
       ]
     },
     {
@@ -496,6 +564,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
+      ],
+      "aliases": [
+        "Single-leg Leg Curl"
       ]
     },
     {
@@ -511,6 +582,11 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/calf_raise.mp4"
+      ],
+      "aliases": [
+        "DB Calf Raise",
+        "Single-leg DB Calf Raise",
+        "Single-leg Calf Raise"
       ]
     },
     {
@@ -526,6 +602,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/seated_calf.mp4"
+      ],
+      "aliases": [
+        "Leg Press Calf Raise"
       ]
     },
     {
@@ -571,6 +650,10 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/tricep_pushdown.mp4"
+      ],
+      "aliases": [
+        "DB Tricep Kickback",
+        "Single-arm Cable Tricep Extension"
       ]
     },
     {
@@ -601,6 +684,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/skull_crushers.mp4"
+      ],
+      "aliases": [
+        "Skullcrusher"
       ]
     },
     {
@@ -617,6 +703,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/barbell_curl.mp4"
+      ],
+      "aliases": [
+        "EZ-bar Curl"
       ]
     },
     {
@@ -632,6 +721,10 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/db_curl.mp4"
+      ],
+      "aliases": [
+        "DB Preacher/Concentration Curl",
+        "Alternating DB Curl"
       ]
     },
     {
@@ -647,6 +740,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/hammer_curl.mp4"
+      ],
+      "aliases": [
+        "DB Hammer Curl"
       ]
     },
     {
@@ -677,6 +773,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/cable_curl.mp4"
+      ],
+      "aliases": [
+        "Cable Bar Curl"
       ]
     },
     {
@@ -692,6 +791,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/plank.mp4"
+      ],
+      "aliases": [
+        "Weighted Plank"
       ]
     },
     {
@@ -738,6 +840,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_raise.mp4"
+      ],
+      "aliases": [
+        "Hanging Leg Raise (straight leg)"
       ]
     },
     {
@@ -1167,6 +1272,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
+      ],
+      "aliases": [
+        "Single-leg Standing Leg Curl"
       ]
     },
     {
@@ -1183,6 +1291,9 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
+      ],
+      "aliases": [
+        "Single-leg Lying Leg Curl"
       ]
     },
     {

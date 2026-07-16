@@ -39,27 +39,7 @@ export default function ExerciseCard({
     const exNameEn = normalize(exercise.nameEn);
     const exName = normalize(exercise.name);
     if (eName === exNameEn || eName === exName) return true;
-    const manualMap: Record<string, string> = {
-      'benchpress': 'barbellbenchpress',
-      'inclinebenchpress': 'inclinebarbellpress',
-      'flatdbpress': 'dumbbellbenchpress',
-      'pecdeckmachinefly': 'reversepecdeck',
-      'chestsupporteddbrow': 'dumbbellrow',
-      'pulluplatpulldown': 'latpulldown',
-      'widegriplatpulldown': 'latpulldown',
-      'dbpreacherconcentrationcurl': 'dumbbellcurl',
-      'ezbarcurl': 'barbellcurl',
-      'backsquat': 'barbellsquat',
-      'romaniandeadlift': 'romaniandeadliftrdl',
-      'seatedlegcurl': 'legcurl',
-      'standinglegcurl': 'legcurl',
-      'gobletsquat': 'frontsquat',
-      'dbcalfraise': 'standingcalfraise',
-      'cablereversefly': 'reversepecdeck',
-      'dbtricepkickback': 'overheadtricepextension'
-    };
-    if (exNameEn && manualMap[exNameEn] === eName) return true;
-    if (exName && manualMap[exName] === eName) return true;
+    if (e.aliases && e.aliases.some((a: string) => normalize(a) === exNameEn || normalize(a) === exName)) return true;
     if (exNameEn && eName.includes(exNameEn)) return true;
     if (exName && eName.includes(exName)) return true;
     return false;
@@ -70,27 +50,7 @@ export default function ExerciseCard({
     const exNameEn = normalize(exercise.originalNameEn || exercise.nameEn);
     const exName = normalize(exercise.originalName || exercise.name);
     if (eName === exNameEn || eName === exName) return true;
-    const manualMap: Record<string, string> = {
-      'benchpress': 'barbellbenchpress',
-      'inclinebenchpress': 'inclinebarbellpress',
-      'flatdbpress': 'dumbbellbenchpress',
-      'pecdeckmachinefly': 'reversepecdeck',
-      'chestsupporteddbrow': 'dumbbellrow',
-      'pulluplatpulldown': 'latpulldown',
-      'widegriplatpulldown': 'latpulldown',
-      'dbpreacherconcentrationcurl': 'dumbbellcurl',
-      'ezbarcurl': 'barbellcurl',
-      'backsquat': 'barbellsquat',
-      'romaniandeadlift': 'romaniandeadliftrdl',
-      'seatedlegcurl': 'legcurl',
-      'standinglegcurl': 'legcurl',
-      'gobletsquat': 'frontsquat',
-      'dbcalfraise': 'standingcalfraise',
-      'cablereversefly': 'reversepecdeck',
-      'dbtricepkickback': 'overheadtricepextension'
-    };
-    if (exNameEn && manualMap[exNameEn] === eName) return true;
-    if (exName && manualMap[exName] === eName) return true;
+    if (e.aliases && e.aliases.some((a: string) => normalize(a) === exNameEn || normalize(a) === exName)) return true;
     if (exNameEn && eName.includes(exNameEn)) return true;
     if (exName && eName.includes(exName)) return true;
     return false;

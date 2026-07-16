@@ -172,27 +172,7 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
                   const exNameEn = normalize(ex.originalNameEn || ex.nameEn);
                   const exName = normalize(ex.originalName || ex.name);
                   if (eName === exNameEn || eName === exName) return true;
-                  const manualMap: Record<string, string> = {
-                    'benchpress': 'barbellbenchpress',
-                    'inclinebenchpress': 'inclinebarbellpress',
-                    'flatdbpress': 'dumbbellbenchpress',
-                    'pecdeckmachinefly': 'reversepecdeck',
-                    'chestsupporteddbrow': 'dumbbellrow',
-                    'pulluplatpulldown': 'latpulldown',
-                    'widegriplatpulldown': 'latpulldown',
-                    'dbpreacherconcentrationcurl': 'dumbbellcurl',
-                    'ezbarcurl': 'barbellcurl',
-                    'backsquat': 'barbellsquat',
-                    'romaniandeadlift': 'romaniandeadliftrdl',
-                    'seatedlegcurl': 'legcurl',
-                    'standinglegcurl': 'legcurl',
-                    'gobletsquat': 'frontsquat',
-                    'dbcalfraise': 'standingcalfraise',
-                    'cablereversefly': 'reversepecdeck',
-                    'dbtricepkickback': 'overheadtricepextension'
-                  };
-                  if (exNameEn && manualMap[exNameEn] === eName) return true;
-                  if (exName && manualMap[exName] === eName) return true;
+                  if (e.aliases && e.aliases.some((a: string) => normalize(a) === exNameEn || normalize(a) === exName)) return true;
                   if (exNameEn && eName.includes(exNameEn)) return true;
                   if (exName && eName.includes(exName)) return true;
                   return false;
