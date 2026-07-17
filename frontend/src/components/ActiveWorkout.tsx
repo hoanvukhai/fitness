@@ -269,18 +269,43 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   const renderRestTimer = () => {
     if (!isResting) return null;
     return (
-      <div className="absolute inset-x-0 bottom-[80px] bg-slate-950/95 backdrop-blur border-t border-slate-800 p-6 z-[60] shadow-[0_-20px_40px_rgba(0,0,0,0.8)] animate-in slide-in-from-bottom-10 flex flex-col items-center justify-center space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-xl font-bold text-slate-400">Thời gian nghỉ</h2>
-          <div className="text-6xl font-mono font-bold text-blue-400 tabular-nums">
+      <div className="flex-1 flex flex-col items-center justify-center space-y-12 bg-slate-950 p-6">
+        <div className="text-center space-y-4">
+          <h2 className="text-3xl font-bold text-slate-400">Thời gian nghỉ</h2>
+          <div className="text-8xl font-mono font-bold text-blue-400 tabular-nums">
             {Math.floor(restLeft / 60)}:{(restLeft % 60).toString().padStart(2, '0')}
           </div>
         </div>
 
         <div className="flex gap-6">
           <button onClick={() => setRestLeft(r => Math.max(0, r - 15))} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Minus size={24} /></button>
+          
+          <button 
+            onClick={() => {
+              if (isResting && session.status !== 'paused') {
+                onUpdate({ ...session, status: 'paused' });
+              } else if (isResting && session.status === 'paused') {
+                onUpdate({ ...session, status: 'in_progress' });
+              }
+            }}
+            className="w-16 h-16 bg-amber-500/20 text-amber-500 rounded-full flex items-center justify-center active:scale-95 transition-transform shadow-lg"
+          >
+            {session.status === 'paused' ? <Play size={32} fill="currentColor" className="ml-1" /> : <Pause size={32} fill="currentColor" />}
+          </button>
+          
           <button onClick={() => setIsResting(false)} className="px-8 py-4 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform shadow-lg">Bỏ qua nghỉ</button>
           <button onClick={() => setRestLeft(r => r + 15)} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Plus size={24} /></button>
+        </div>
+
+        <div className="pt-12 text-center text-slate-500">
+          <p className="text-sm">Tiếp theo:</p>
+          <p className="text-lg font-bold text-slate-300 mt-1">
+            {phase === 'main' ? (
+              session.exercises[itemIndex].sets.every(s => s.completed) 
+                ? (itemIndex < session.exercises.length - 1 ? session.exercises[itemIndex + 1].name : 'Giãn cơ')
+                : `${session.exercises[itemIndex].name} - Hiệp ${session.exercises[itemIndex].sets.findIndex(s => !s.completed) + 1}`
+            ) : 'Bài tập tiếp theo'}
+          </p>
         </div>
       </div>
     );
@@ -535,40 +560,42 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
       {renderContent()}
 
       {/* Bottom Navigation Bar */}
-      <div className="bg-slate-950 border-t border-slate-900 shrink-0 p-4 pb-6 flex items-center justify-between gap-4 z-50 relative">
-        <button
-          onClick={retreat}
-          className="p-3 bg-slate-900 rounded-xl text-slate-400 hover:text-white active:scale-95 transition-transform flex items-center gap-2"
-        >
-          <RotateCcw size={20} />
-        </button>
-
-        <button 
-          onClick={() => {
-            if (session.status === 'paused') onUpdate({ ...session, status: 'in_progress' });
-            else onUpdate({ ...session, status: 'paused' });
-          }}
-          className={`w-14 h-14 rounded-full flex items-center justify-center active:scale-95 transition-transform shadow-lg shrink-0 ${session.status === 'paused' ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-800 text-slate-300'}`}
-        >
-          {session.status === 'paused' ? <Play size={24} fill="currentColor" className="ml-1" /> : <Pause size={24} fill="currentColor" />}
-        </button>
-
-        {phase === 'warmup' || phase === 'cooldown' ? (
+      {!isResting && (
+        <div className="bg-slate-950 border-t border-slate-900 shrink-0 p-4 pb-6 flex items-center justify-between gap-4 z-50 relative">
           <button
-            onClick={handleFinishTimerExercise}
-            className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(5,150,105,0.3)] active:scale-95 transition-transform"
+            onClick={retreat}
+            className="p-3 bg-slate-900 rounded-xl text-slate-400 hover:text-white active:scale-95 transition-transform flex items-center gap-2"
           >
-            Xong
+            <RotateCcw size={20} />
           </button>
-        ) : (
-          <button
-            onClick={advance}
-            className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2"
+
+          <button 
+            onClick={() => {
+              if (session.status === 'paused') onUpdate({ ...session, status: 'in_progress' });
+              else onUpdate({ ...session, status: 'paused' });
+            }}
+            className={`w-14 h-14 rounded-full flex items-center justify-center active:scale-95 transition-transform shadow-lg shrink-0 ${session.status === 'paused' ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-800 text-slate-300'}`}
           >
-            Tiếp theo <FastForward size={20} />
+            {session.status === 'paused' ? <Play size={24} fill="currentColor" className="ml-1" /> : <Pause size={24} fill="currentColor" />}
           </button>
-        )}
-      </div>
+
+          {phase === 'warmup' || phase === 'cooldown' ? (
+            <button
+              onClick={handleFinishTimerExercise}
+              className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(5,150,105,0.3)] active:scale-95 transition-transform"
+            >
+              Xong
+            </button>
+          ) : (
+            <button
+              onClick={advance}
+              className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2"
+            >
+              Tiếp theo <FastForward size={20} />
+            </button>
+          )}
+        </div>
+      )}
 
       {showOverview && (
         <WorkoutOverviewSheet
