@@ -553,9 +553,11 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
         <button onClick={onClose} className="p-2 -ml-2 text-slate-400 hover:text-white flex items-center justify-center font-medium active:scale-95 transition-transform rounded-full">
           <ChevronDown size={28} />
         </button>
-        <div className="text-center flex flex-col items-center">
-          <div className="text-sm font-bold text-white">{headerTitle}</div>
-          <div className="text-[10px] font-bold text-slate-500 tracking-wider uppercase mb-1">{headerProgress}</div>
+        <div className="text-center flex flex-col items-center gap-1.5">
+          <div className="flex items-center gap-2">
+            <div className="text-sm font-bold text-white">{headerTitle}</div>
+            <div className="text-[11px] font-bold text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full">{headerProgress}</div>
+          </div>
           <button
             onClick={() => {
               if (session.status === 'paused') onUpdate({ ...session, status: 'in_progress' });
