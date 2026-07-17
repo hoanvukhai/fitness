@@ -65,6 +65,32 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   const [showSwap, setShowSwap] = useState(false);
   const [viewedSetIndex, setViewedSetIndex] = useState(0);
 
+  // WakeLock Effect to prevent screen from sleeping
+  useEffect(() => {
+    let wakeLock: any = null;
+    const requestWakeLock = async () => {
+      try {
+        if ('wakeLock' in navigator) {
+          wakeLock = await (navigator as any).wakeLock.request('screen');
+        }
+      } catch (err) {
+        console.error('WakeLock API not supported or failed', err);
+      }
+    };
+    
+    requestWakeLock();
+    
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') requestWakeLock();
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      if (wakeLock !== null) wakeLock.release().catch(() => {});
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   const warmups = appConfig.warmup[session.day as keyof typeof appConfig.warmup] || [];
   const cooldowns = appConfig.cooldown[session.day as keyof typeof appConfig.cooldown] || [];
 
@@ -246,7 +272,21 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
         
         <div className="flex gap-4">
           <button onClick={() => setRestLeft(r => Math.max(0, r - 15))} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Minus size={20} /></button>
-          <button onClick={() => setIsResting(false)} className="px-8 py-3 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform shadow-lg">Bỏ qua nghỉ</button>
+          
+          <button 
+            onClick={() => {
+              if (isResting && session.status !== 'paused') {
+                onUpdate({ ...session, status: 'paused' });
+              } else if (isResting && session.status === 'paused') {
+                onUpdate({ ...session, status: 'in_progress' });
+              }
+            }}
+            className="w-14 h-14 bg-amber-500/20 text-amber-500 rounded-full flex items-center justify-center active:scale-95 transition-transform shadow-lg"
+          >
+            {session.status === 'paused' ? <Play size={24} fill="currentColor" className="ml-1" /> : <Pause size={24} fill="currentColor" />}
+          </button>
+          
+          <button onClick={() => setIsResting(false)} className="px-6 py-3 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform shadow-lg">Bỏ qua</button>
           <button onClick={() => setRestLeft(r => r + 15)} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Plus size={20} /></button>
         </div>
       </div>
@@ -343,10 +383,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
               )}
               <button 
                 onClick={() => {
-                  const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-                  const exNameEnNorm = normalize(ex.nameEn);
-                  const exNameNorm = normalize(ex.name);
-                  const dbEx = dbData.exercises.find(e => normalize(e.name) === exNameEnNorm || normalize(e.name) === exNameNorm);
+                  const dbEx = getGuide(ex.nameEn, ex.name);
                   if (dbEx) setInfoExercise(dbEx);
                 }}
                 className="p-2.5 bg-slate-800 rounded-full text-blue-400 hover:text-white"
@@ -368,6 +405,24 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                </div>
              )}
           </div>
+
+          {isTimeBased && (
+            <div className="p-4 bg-slate-950 rounded-2xl border border-slate-800 flex flex-col items-center justify-center space-y-4 shadow-lg mt-4">
+              <div className="text-5xl font-mono font-bold tabular-nums text-emerald-400">
+                {Math.floor(timerLeft / 60)}:{(timerLeft % 60).toString().padStart(2, '0')}
+              </div>
+              <div className="flex items-center gap-4">
+                <button onClick={() => setTimerLeft(r => Math.max(0, r - 10))} className="p-3 bg-slate-900 rounded-full text-slate-400 active:scale-95"><Minus size={16} /></button>
+                <button 
+                  onClick={() => setTimerRunning(!timerRunning)}
+                  className={`w-14 h-14 flex items-center justify-center rounded-full ${timerRunning ? 'bg-amber-500/20 text-amber-500' : 'bg-emerald-500 text-white'} shadow-lg active:scale-95 transition-transform`}
+                >
+                  {timerRunning ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" className="ml-1" />}
+                </button>
+                <button onClick={() => setTimerLeft(r => r + 10)} className="p-3 bg-slate-900 rounded-full text-slate-400 active:scale-95"><Plus size={16} /></button>
+              </div>
+            </div>
+          )}
 
           {guide && guide.mediaUrls && guide.mediaUrls.length > 0 && (
             <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 hide-scrollbar pb-2 mt-4">
@@ -477,7 +532,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
       {renderContent()}
 
       {/* Bottom Navigation Bar */}
-      <div className="bg-slate-950 border-t border-slate-900 shrink-0 p-4 pb-safe flex items-center justify-between gap-4 z-50 relative">
+      <div className="bg-slate-950 border-t border-slate-900 shrink-0 p-4 pb-6 flex items-center justify-between gap-4 z-50 relative">
         <button 
           onClick={retreat} 
           className="p-3 bg-slate-900 rounded-xl text-slate-400 hover:text-white active:scale-95 transition-transform flex items-center gap-2"
