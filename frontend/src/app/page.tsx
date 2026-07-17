@@ -558,6 +558,7 @@ export default function TodayPage() {
           <div className={showActiveWorkout ? 'block' : 'hidden'}>
             <ActiveWorkout
               session={session}
+              elapsedSeconds={elapsedSeconds}
               onUpdate={updated => {
                 setSession(updated);
                 saveWorkoutSession(updated).catch(console.error);

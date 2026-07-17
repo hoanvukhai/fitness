@@ -10,6 +10,7 @@ import ExerciseDetailSheet from './ExerciseDetailSheet';
 
 interface ActiveWorkoutProps {
   session: WorkoutSession;
+  elapsedSeconds?: number;
   onUpdate: (updated: WorkoutSession) => void;
   onClose: () => void;
   onFinish: () => void;
@@ -51,7 +52,7 @@ const SetInputRow = ({ s, index, isCurrent, isTimeBased, onComplete, onUndo }: {
   );
 };
 
-export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: ActiveWorkoutProps) {
+export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, onClose, onFinish }: ActiveWorkoutProps) {
   const [phase, setPhase] = useState<Phase>('warmup');
   const [itemIndex, setItemIndex] = useState(0);
   const [isResting, setIsResting] = useState(false);
@@ -60,6 +61,12 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerLeft, setTimerLeft] = useState(0);
+
+  const formatElapsed = (sec: number) => {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${s.toString().padStart(2, '0')}`;
+  };
 
   const [infoExercise, setInfoExercise] = useState<any | null>(null);
   const [showSwap, setShowSwap] = useState(false);
@@ -514,15 +521,25 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   }
 
   return (
-    <div className="fixed inset-0 z-[100] bg-slate-950 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 h-[100dvh] w-full z-[100] bg-slate-950 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
       {/* Header */}
       <div className="flex items-center justify-between p-4 bg-slate-950 border-b border-slate-900 z-20 shrink-0">
         <button onClick={onClose} className="p-2 -ml-2 text-slate-400 hover:text-white flex items-center justify-center font-medium active:scale-95 transition-transform rounded-full">
           <ChevronDown size={28} />
         </button>
-        <div className="text-center">
+        <div className="text-center flex flex-col items-center">
           <div className="text-sm font-bold text-white">{headerTitle}</div>
-          <div className="text-[10px] font-bold text-slate-500 tracking-wider uppercase">{headerProgress}</div>
+          <div className="text-[10px] font-bold text-slate-500 tracking-wider uppercase mb-1">{headerProgress}</div>
+          <button 
+            onClick={() => {
+              if (session.status === 'paused') onUpdate({ ...session, status: 'in_progress' });
+              else onUpdate({ ...session, status: 'paused' });
+            }}
+            className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full border transition-colors ${session.status === 'paused' ? 'border-amber-500/50 text-amber-500 bg-amber-500/10' : 'border-blue-500/30 text-blue-400 bg-blue-500/10 animate-pulse'}`}
+          >
+            ⏱ {formatElapsed(elapsedSeconds)}
+            {session.status === 'paused' ? ' (Đã dừng)' : ''}
+          </button>
         </div>
         <button onClick={() => setShowOverview(true)} className="p-2 -mr-2 text-blue-400 hover:text-blue-300 font-bold active:scale-95 transition-transform">
           Danh sách
