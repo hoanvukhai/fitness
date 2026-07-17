@@ -269,7 +269,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   const renderRestTimer = () => {
     if (!isResting) return null;
     return (
-      <div className="fixed inset-0 z-[200] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-950 to-black flex flex-col items-center justify-between p-6 animate-in fade-in zoom-in-95 duration-300">
+      <div className="fixed inset-0 z-[200] bg-slate-950 bg-gradient-to-b from-slate-900 to-slate-950 flex flex-col items-center justify-between p-6 animate-in fade-in duration-300">
         
         <div className="flex-1 flex flex-col items-center justify-center w-full max-w-sm mx-auto">
           
