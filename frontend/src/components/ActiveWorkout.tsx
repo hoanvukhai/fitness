@@ -398,14 +398,28 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
         {/* Upper half: Info */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-900/50 pb-8">
           <div className="flex items-start justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <h2 className="text-2xl font-bold text-white leading-tight">{ex.name}</h2>
-                <div className="px-2 py-1 bg-blue-500/20 text-blue-400 text-[10px] font-bold rounded uppercase tracking-wider whitespace-nowrap">{ex.tier}</div>
+            <div className="flex-1">
+              {/* Chips/Badges row */}
+              <div className="flex flex-wrap items-center gap-2 mb-2">
+                <div className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
+                  {ex.tier === 'main' ? 'Core' : ex.tier === 'accessory' ? 'Phụ trợ' : ex.tier}
+                </div>
+                {guide?.type && (
+                  <div className="px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
+                    {guide.type}
+                  </div>
+                )}
+                {guide?.muscleGroup && (
+                  <div className="px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
+                    {guide.muscleGroup}
+                  </div>
+                )}
               </div>
+              
+              <h2 className="text-xl font-bold text-white leading-tight mb-1">{ex.name}</h2>
               <p className="text-slate-400 text-sm">{ex.nameEn}</p>
             </div>
-            <div className="flex items-center gap-2 shrink-0 mt-1">
+            <div className="flex items-center gap-2 shrink-0">
               {ex.tier !== 'tier1' && ex.tier !== 'main' && (
                 <button
                   onClick={() => setShowSwap(true)}
