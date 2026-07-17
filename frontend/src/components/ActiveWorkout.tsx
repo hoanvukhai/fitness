@@ -58,7 +58,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   const [isResting, setIsResting] = useState(false);
   const [restLeft, setRestLeft] = useState(0);
   const [showOverview, setShowOverview] = useState(false);
-  
+
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerLeft, setTimerLeft] = useState(0);
 
@@ -84,16 +84,16 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
         console.error('WakeLock API not supported or failed', err);
       }
     };
-    
+
     requestWakeLock();
-    
+
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') requestWakeLock();
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      if (wakeLock !== null) wakeLock.release().catch(() => {});
+      if (wakeLock !== null) wakeLock.release().catch(() => { });
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
@@ -209,12 +209,12 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
     if (phase !== 'main') return;
     const ex = session.exercises[itemIndex];
     let newSets = ex.sets.map((s, i) => i === setIdx ? { ...s, weight, reps, completed: true } : s);
-    
+
     // Auto fill next empty sets with this weight
     newSets = newSets.map((s, i) => i > setIdx && !s.completed && s.weight === 0 ? { ...s, weight } : s);
-    
+
     const allDone = newSets.every(s => s.completed);
-    
+
     onUpdate({
       ...session,
       exercises: session.exercises.map((e, i) => i === itemIndex ? { ...e, sets: newSets, checked: allDone } : e)
@@ -222,9 +222,9 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
     let restSeconds = parseInt(ex.rest) || 90;
     if (ex.rest.toLowerCase().includes('phút')) restSeconds *= 60;
-    
+
     startRest(restSeconds);
-    
+
     // Automatically advance viewed set tab to the next uncompleted one
     const nextUncompleted = newSets.findIndex(s => !s.completed);
     if (nextUncompleted !== -1) {
@@ -252,9 +252,9 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
       else setTimerLeft(0);
     } else {
       const ex = session.exercises[itemIndex];
-      const isTimeBased = ex?.targetReps.toLowerCase().includes('giây') || 
-                          ex?.targetReps.toLowerCase().includes('s') || 
-                          (ex?.name && normalize(ex.name).includes('plank'));
+      const isTimeBased = ex?.targetReps.toLowerCase().includes('giây') ||
+        ex?.targetReps.toLowerCase().includes('s') ||
+        (ex?.name && normalize(ex.name).includes('plank'));
       if (isTimeBased) {
         const d = parseInt(ex.targetReps) || 60;
         setTimerLeft(d);
@@ -267,44 +267,20 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
   // Renderers
   const renderRestTimer = () => {
+    if (!isResting) return null;
     return (
-      <div className="flex-1 flex flex-col items-center justify-center space-y-12 bg-slate-950 p-6">
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl font-bold text-slate-400">Thời gian nghỉ</h2>
-          <div className="text-8xl font-mono font-bold text-blue-400 tabular-nums">
+      <div className="absolute inset-x-0 bottom-[80px] bg-slate-950/95 backdrop-blur border-t border-slate-800 p-6 z-[60] shadow-[0_-20px_40px_rgba(0,0,0,0.8)] animate-in slide-in-from-bottom-10 flex flex-col items-center justify-center space-y-6">
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-bold text-slate-400">Thời gian nghỉ</h2>
+          <div className="text-6xl font-mono font-bold text-blue-400 tabular-nums">
             {Math.floor(restLeft / 60)}:{(restLeft % 60).toString().padStart(2, '0')}
           </div>
         </div>
-        
+
         <div className="flex gap-6">
           <button onClick={() => setRestLeft(r => Math.max(0, r - 15))} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Minus size={24} /></button>
-          
-          <button 
-            onClick={() => {
-              if (isResting && session.status !== 'paused') {
-                onUpdate({ ...session, status: 'paused' });
-              } else if (isResting && session.status === 'paused') {
-                onUpdate({ ...session, status: 'in_progress' });
-              }
-            }}
-            className="w-16 h-16 bg-amber-500/20 text-amber-500 rounded-full flex items-center justify-center active:scale-95 transition-transform shadow-lg"
-          >
-            {session.status === 'paused' ? <Play size={32} fill="currentColor" className="ml-1" /> : <Pause size={32} fill="currentColor" />}
-          </button>
-          
-          <button onClick={() => setIsResting(false)} className="px-8 py-4 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform">Bỏ qua nghỉ</button>
+          <button onClick={() => setIsResting(false)} className="px-8 py-4 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform shadow-lg">Bỏ qua nghỉ</button>
           <button onClick={() => setRestLeft(r => r + 15)} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Plus size={24} /></button>
-        </div>
-
-        <div className="pt-12 text-center text-slate-500">
-          <p className="text-sm">Tiếp theo:</p>
-          <p className="text-lg font-bold text-slate-300 mt-1">
-            {phase === 'main' ? (
-              session.exercises[itemIndex].sets.every(s => s.completed) 
-                ? (itemIndex < session.exercises.length - 1 ? session.exercises[itemIndex + 1].name : 'Giãn cơ')
-                : `${session.exercises[itemIndex].name} - Hiệp ${session.exercises[itemIndex].sets.findIndex(s => !s.completed) + 1}`
-            ) : 'Bài tập tiếp theo'}
-          </p>
         </div>
       </div>
     );
@@ -319,7 +295,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
             <p className="text-slate-400 text-sm">{subtitle} • {durationStr}</p>
           </div>
           {guide && (
-            <button 
+            <button
               onClick={() => setInfoExercise({ ...guide, name: title, nameEn: title })}
               className="p-2.5 bg-slate-800 rounded-full text-blue-400 hover:text-white shrink-0 mt-1"
             >
@@ -327,7 +303,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
             </button>
           )}
         </div>
-        
+
         {/* Compact Timer embedded inside */}
         <div className="p-6 bg-slate-950 rounded-3xl border border-slate-800 flex flex-col items-center justify-center space-y-6 shadow-xl">
           <div className={`text-6xl font-mono font-bold tabular-nums ${colorClass}`}>
@@ -335,7 +311,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
           </div>
           <div className="flex items-center gap-6">
             <button onClick={() => setTimerLeft(r => Math.max(0, r - 10))} className="p-4 bg-slate-900 rounded-full text-slate-400 active:scale-95"><Minus size={20} /></button>
-            <button 
+            <button
               onClick={() => setTimerRunning(!timerRunning)}
               className={`w-16 h-16 flex items-center justify-center rounded-full ${timerRunning ? 'bg-amber-500/20 text-amber-500' : 'bg-emerald-500 text-white'} shadow-lg active:scale-95 transition-transform`}
             >
@@ -350,9 +326,9 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
             {guide.mediaUrls.map((url: string) => (
               <div key={url} className="w-full shrink-0 snap-center">
                 {url.endsWith('.mp4') ? (
-                   <video src={url} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
+                  <video src={url} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
                 ) : (
-                   <img src={url} alt="Guide" className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
+                  <img src={url} alt="Guide" className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
                 )}
               </div>
             ))}
@@ -367,16 +343,16 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   const renderMainExercise = () => {
     const ex = session.exercises[itemIndex];
     const guide = getGuide(ex.nameEn, ex.name);
-    
-    const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || 
-                        ex.targetReps.toLowerCase().includes('s') || 
-                        normalize(ex.name).includes('plank');
+
+    const isTimeBased = ex.targetReps.toLowerCase().includes('giây') ||
+      ex.targetReps.toLowerCase().includes('s') ||
+      normalize(ex.name).includes('plank');
 
     const currentSetIndex = ex.sets.findIndex(s => !s.completed);
-    
+
     // Automatically advance if all sets are done but we somehow returned to this view (or user un-checked a set)
     // Actually, if they are all done, we just show them all checked and a "Next Exercise" button
-    
+
     return (
       <div className="flex-1 flex flex-col min-h-0">
         {/* Upper half: Info */}
@@ -391,14 +367,14 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
             </div>
             <div className="flex items-center gap-2 shrink-0 mt-1">
               {ex.tier !== 'tier1' && ex.tier !== 'main' && (
-                <button 
+                <button
                   onClick={() => setShowSwap(true)}
                   className="p-2.5 bg-slate-800 rounded-full text-slate-400 hover:text-white"
                 >
                   <RefreshCw size={20} />
                 </button>
               )}
-              <button 
+              <button
                 onClick={() => {
                   const dbEx = getGuide(ex.nameEn, ex.name);
                   if (dbEx) setInfoExercise(dbEx);
@@ -409,18 +385,18 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
               </button>
             </div>
           </div>
-          
+
           <div className="flex gap-4 p-4 bg-slate-900 rounded-2xl border border-slate-800">
-             <div className="flex-1">
-               <div className="text-xs text-slate-500 mb-1">Mục tiêu</div>
-               <div className="font-bold text-white">{ex.targetSets} × {ex.targetReps}</div>
-             </div>
-             {ex.RIR && (
-               <div className="flex-1 border-l border-slate-800 pl-4">
-                 <div className="text-xs text-slate-500 mb-1">RIR</div>
-                 <div className="font-bold text-orange-400">{ex.RIR}</div>
-               </div>
-             )}
+            <div className="flex-1">
+              <div className="text-xs text-slate-500 mb-1">Mục tiêu</div>
+              <div className="font-bold text-white">{ex.targetSets} × {ex.targetReps}</div>
+            </div>
+            {ex.RIR && (
+              <div className="flex-1 border-l border-slate-800 pl-4">
+                <div className="text-xs text-slate-500 mb-1">RIR</div>
+                <div className="font-bold text-orange-400">{ex.RIR}</div>
+              </div>
+            )}
           </div>
 
           {isTimeBased && (
@@ -430,7 +406,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
               </div>
               <div className="flex items-center gap-4">
                 <button onClick={() => setTimerLeft(r => Math.max(0, r - 10))} className="p-3 bg-slate-900 rounded-full text-slate-400 active:scale-95"><Minus size={16} /></button>
-                <button 
+                <button
                   onClick={() => setTimerRunning(!timerRunning)}
                   className={`w-14 h-14 flex items-center justify-center rounded-full ${timerRunning ? 'bg-amber-500/20 text-amber-500' : 'bg-emerald-500 text-white'} shadow-lg active:scale-95 transition-transform`}
                 >
@@ -446,9 +422,9 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
               {guide.mediaUrls.map((url: string) => (
                 <div key={url} className="w-full shrink-0 snap-center">
                   {url.endsWith('.mp4') ? (
-                     <video src={url} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 border border-slate-700/30 shadow-lg" />
+                    <video src={url} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 border border-slate-700/30 shadow-lg" />
                   ) : (
-                     <img src={url} alt="Guide" className="w-full h-48 object-cover rounded-2xl bg-slate-800 border border-slate-700/30 shadow-lg" />
+                    <img src={url} alt="Guide" className="w-full h-48 object-cover rounded-2xl bg-slate-800 border border-slate-700/30 shadow-lg" />
                   )}
                 </div>
               ))}
@@ -457,7 +433,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
         </div>
 
         {/* Lower half: Set Inputs */}
-        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[45vh] overflow-y-auto hide-scrollbar">
+        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[45vh] overflow-y-auto hide-scrollbar pb-24">
           <div className="max-w-md mx-auto w-full">
             {/* Set Tabs */}
             <div className="flex gap-2 mb-3 overflow-x-auto hide-scrollbar pb-1 snap-x">
@@ -475,13 +451,13 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                 );
               })}
             </div>
-            
+
             {ex.sets[viewedSetIndex] && (
-              <SetInputRow 
-                key={viewedSetIndex} 
-                s={ex.sets[viewedSetIndex]} 
-                index={viewedSetIndex} 
-                isCurrent={viewedSetIndex === currentSetIndex} 
+              <SetInputRow
+                key={viewedSetIndex}
+                s={ex.sets[viewedSetIndex]}
+                index={viewedSetIndex}
+                isCurrent={viewedSetIndex === currentSetIndex}
                 isTimeBased={isTimeBased}
                 onComplete={(w, r) => handleCompleteSet(viewedSetIndex, w, r)}
                 onUndo={() => {
@@ -497,8 +473,6 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   };
 
   const renderContent = () => {
-    if (isResting) return renderRestTimer();
-
     if (phase === 'warmup') {
       const item: any = warmups[itemIndex];
       if (!item) return null;
@@ -542,7 +516,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
         <div className="text-center flex flex-col items-center">
           <div className="text-sm font-bold text-white">{headerTitle}</div>
           <div className="text-[10px] font-bold text-slate-500 tracking-wider uppercase mb-1">{headerProgress}</div>
-          <button 
+          <button
             onClick={() => {
               if (session.status === 'paused') onUpdate({ ...session, status: 'in_progress' });
               else onUpdate({ ...session, status: 'paused' });
@@ -562,35 +536,43 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
       {/* Bottom Navigation Bar */}
       <div className="bg-slate-950 border-t border-slate-900 shrink-0 p-4 pb-6 flex items-center justify-between gap-4 z-50 relative">
-        <button 
-          onClick={retreat} 
+        <button
+          onClick={retreat}
           className="p-3 bg-slate-900 rounded-xl text-slate-400 hover:text-white active:scale-95 transition-transform flex items-center gap-2"
         >
           <RotateCcw size={20} />
         </button>
-        
+
+        <button 
+          onClick={() => {
+            if (session.status === 'paused') onUpdate({ ...session, status: 'in_progress' });
+            else onUpdate({ ...session, status: 'paused' });
+          }}
+          className={`w-14 h-14 rounded-full flex items-center justify-center active:scale-95 transition-transform shadow-lg shrink-0 ${session.status === 'paused' ? 'bg-amber-500/20 text-amber-500' : 'bg-slate-800 text-slate-300'}`}
+        >
+          {session.status === 'paused' ? <Play size={24} fill="currentColor" className="ml-1" /> : <Pause size={24} fill="currentColor" />}
+        </button>
+
         {phase === 'warmup' || phase === 'cooldown' ? (
-          <button 
+          <button
             onClick={handleFinishTimerExercise}
             className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(5,150,105,0.3)] active:scale-95 transition-transform"
           >
-            Đánh dấu xong
+            Xong
           </button>
         ) : (
-          <button 
+          <button
             onClick={advance}
             className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2"
           >
-            Bài tiếp theo <FastForward size={20} />
+            Tiếp theo <FastForward size={20} />
           </button>
         )}
       </div>
 
-      {renderRestTimer()}
-
       {showOverview && (
-        <WorkoutOverviewSheet 
-          session={session} 
+        <WorkoutOverviewSheet
+          session={session}
           warmups={warmups}
           cooldowns={cooldowns}
           currentPhase={phase}
@@ -601,7 +583,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
             setIsResting(false);
             setShowOverview(false);
           }}
-          onClose={() => setShowOverview(false)} 
+          onClose={() => setShowOverview(false)}
         />
       )}
 
@@ -629,7 +611,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
               {(() => {
                 const currentExLog = session.exercises[itemIndex];
                 const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-                
+
                 // Always base alternatives on the ORIGINAL exercise
                 const baseNameEnNorm = normalize(currentExLog.originalNameEn || currentExLog.nameEn);
                 const baseNameNorm = normalize(currentExLog.originalName || currentExLog.name);
@@ -638,9 +620,9 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                   if (normalize(e.name) === baseNameEnNorm || normalize(e.name) === baseNameNorm) return true;
                   return false;
                 });
-                
+
                 let alts = dbEx?.alternatives ? [...dbEx.alternatives] : [];
-                
+
                 // If it's already swapped, add the original back as an alternative so they can revert
                 if (currentExLog.selectedAlternative) {
                   const orig = currentExLog.originalNameEn || currentExLog.originalName || '';
@@ -648,10 +630,10 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                     alts.unshift(orig);
                   }
                 }
-                
+
                 // Remove the currently displayed exercise from the alternatives list
                 alts = alts.filter(a => normalize(a) !== normalize(currentExLog.nameEn) && normalize(a) !== normalize(currentExLog.name));
-                
+
                 if (alts.length === 0) {
                   return <p className="text-center text-slate-500 py-8">Không có bài tập thay thế được đề xuất.</p>;
                 }
@@ -663,16 +645,16 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                       const altDbEx = dbData.exercises.find(e => normalize(e.name) === altNameEnNorm);
                       const altName = altDbEx ? altDbEx.name : altNameEn;
                       return (
-                        <button 
+                        <button
                           key={altNameEn}
                           onClick={() => {
                             const newExercises = [...session.exercises];
                             const currentEx = newExercises[itemIndex];
-                            
+
                             const isNewTimeBased = altName.toLowerCase().includes('plank');
                             const isOldTimeBased = currentEx.targetReps.toLowerCase().includes('giây') || currentEx.targetReps.toLowerCase().includes('s');
                             let newTargetReps = currentEx.targetReps;
-                            
+
                             if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';
                             else if (!isNewTimeBased && isOldTimeBased) newTargetReps = '15';
 
