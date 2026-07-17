@@ -17,7 +17,7 @@ interface ActiveWorkoutProps {
 
 type Phase = 'warmup' | 'main' | 'cooldown';
 
-const SetInputRow = ({ s, index, isCurrent, onComplete, onUndo }: { s: SetLog, index: number, isCurrent: boolean, onComplete: (w: number, r: number) => void, onUndo: () => void }) => {
+const SetInputRow = ({ s, index, isCurrent, isTimeBased, onComplete, onUndo }: { s: SetLog, index: number, isCurrent: boolean, isTimeBased?: boolean, onComplete: (w: number, r: number) => void, onUndo: () => void }) => {
   const [w, setW] = useState(s.weight.toString());
   const [r, setR] = useState(s.reps.toString());
 
@@ -35,7 +35,7 @@ const SetInputRow = ({ s, index, isCurrent, onComplete, onUndo }: { s: SetLog, i
         </div>
         <div className="relative flex-1">
           <input type="number" value={r} onChange={e => setR(e.target.value)} disabled={s.completed} className="w-full bg-slate-950 border border-slate-700 rounded-xl py-3 px-3 text-center text-white font-bold text-lg disabled:opacity-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />
-          <span className="absolute right-3 top-3.5 text-xs text-slate-500 font-bold uppercase">reps</span>
+          <span className="absolute right-3 top-3.5 text-xs text-slate-500 font-bold uppercase">{isTimeBased ? 'giây' : 'reps'}</span>
         </div>
       </div>
       {!s.completed ? (
@@ -302,13 +302,10 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   const renderMainExercise = () => {
     const ex = session.exercises[itemIndex];
     const guide = getGuide(ex.nameEn, ex.name);
+    
     const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || 
                         ex.targetReps.toLowerCase().includes('s') || 
                         normalize(ex.name).includes('plank');
-
-    if (isTimeBased) {
-      return renderTimerView(ex.name, ex.nameEn, `${ex.targetSets} hiệp • ${ex.targetReps}`, 'text-blue-400', guide);
-    }
 
     const currentSetIndex = ex.sets.findIndex(s => !s.completed);
     
@@ -405,6 +402,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                 s={ex.sets[viewedSetIndex]} 
                 index={viewedSetIndex} 
                 isCurrent={viewedSetIndex === currentSetIndex} 
+                isTimeBased={isTimeBased}
                 onComplete={(w, r) => handleCompleteSet(viewedSetIndex, w, r)}
                 onUndo={() => {
                   const newSets = ex.sets.map((set, setIdx) => setIdx === viewedSetIndex ? { ...set, completed: false } : set);
