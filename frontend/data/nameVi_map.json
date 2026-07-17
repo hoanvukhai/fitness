@@ -1,0 +1,160 @@
+{
+  "Barbell Bench Press": [
+    "Bench Press"
+  ],
+  "Seated Dumbbell Press": [
+    "Seated DB Shoulder Press",
+    "Đẩy vai Arnold"
+  ],
+  "Incline Dumbbell Press": [
+    "Đẩy ngực ghế dốc tạ đơn"
+  ],
+  "Dumbbell Lateral Raise": [
+    "Dang vai ngang tạ đơn",
+    "Nâng tạ đơn chữ Y ghế nghiêng",
+    "Nâng vai chữ Y tạ đơn"
+  ],
+  "Tricep Pushdown": [
+    "Kéo cáp tay sau",
+    "Đá tay sau tạ đơn",
+    "Duỗi tay sau cáp 1 tay"
+  ],
+  "Plank": [
+    "Plank",
+    "Plank (thêm tạ đĩa)"
+  ],
+  "Dumbbell Bench Press": [
+    "Đẩy ngực tạ đơn ghế phẳng",
+    "Đẩy ngực ghế dốc âm tạ đơn",
+    "Đẩy tạ đơn hẹp tay nằm sàn"
+  ],
+  "Machine Chest Press": [
+    "Ép ngực máy",
+    "Đẩy ngực máy"
+  ],
+  "Dumbbell Front Raise": [
+    "Nâng vai trước tạ đơn"
+  ],
+  "Barbell Row": [
+    "Barbell Row"
+  ],
+  "Lat Pulldown": [
+    "Pull-up / Lat Pulldown",
+    "Kéo cáp cao nắm rộng",
+    "Kéo cáp cao tay hẹp"
+  ],
+  "Seated Cable Row": [
+    "Kéo cáp ngồi",
+    "Kéo cáp 1 tay đứng",
+    "Kéo cáp đơn tay chéo người"
+  ],
+  "Face Pull": [
+    "Kéo mặt cáp"
+  ],
+  "Barbell Curl": [
+    "Cuốn tay trước tạ đòn EZ"
+  ],
+  "Hanging Leg Raise": [
+    "Nâng gối treo xà",
+    "Nâng gối treo xà (chân thẳng)"
+  ],
+  "Dumbbell Row": [
+    "Kéo tạ đơn ngực tựa ghế",
+    "Kéo tạ đơn 1 tay"
+  ],
+  "Reverse Pec Deck": [
+    "Bay vai sau cáp",
+    "Bay vai sau máy",
+    "Bay ngược tạ đơn cúi người",
+    "Bay vai sau cáp chéo người"
+  ],
+  "Dumbbell Curl": [
+    "Cuốn tay trước ghế Scott",
+    "Cuốn tay trước luân phiên"
+  ],
+  "Back Squat": [
+    "Back Squat"
+  ],
+  "Romanian Deadlift": [
+    "RDL"
+  ],
+  "Leg Press": [
+    "Đẩy đùi",
+    "Hack Squat máy"
+  ],
+  "Seated Leg Curl": [
+    "Cuốn gân kheo ngồi"
+  ],
+  "Standing Calf Raise": [
+    "Nhón gót đứng",
+    "Nhón gót tạ đơn",
+    "Nhón gót tạ đơn 1 chân",
+    "Nhón gót 1 chân"
+  ],
+  "Pallof Press": [
+    "Pallof Press"
+  ],
+  "Front Squat": [
+    "Squat tạ đơn kiểu cốc"
+  ],
+  "Standing Leg Curl": [
+    "Cuốn gân kheo đứng máy",
+    "Cuốn gân kheo đứng 1 chân"
+  ],
+  "Leg Extension": [
+    "Đá đùi trước máy",
+    "Đá đùi trước 1 chân",
+    "Đá đùi trước nặng (drop-set hiệp cuối)"
+  ],
+  "Cable Crossover": [
+    "Ép ngực cáp",
+    "Ép ngực cáp 1 tay"
+  ],
+  "Cable Lateral Raise": [
+    "Dang vai cáp",
+    "Dang vai cáp nghiêng người"
+  ],
+  "Skull Crushers": [
+    "Nằm đẩy tạ EZ"
+  ],
+  "Dumbbell Flyes": [
+    "Ép ngực tạ đơn ghế nghiêng"
+  ],
+  "Cable Curl": [
+    "Cuốn tay cáp thanh chữ V",
+    "Cuốn tay cáp"
+  ],
+  "Dumbbell Lunge": [
+    "Lunge bước tạ đơn",
+    "Bước lên bục tạ đơn"
+  ],
+  "Lying Leg Curl": [
+    "Cuốn gân kheo nằm",
+    "Cuốn gân kheo nằm 1 chân, nặng hơn"
+  ],
+  "Seated Calf Raise": [
+    "Nhón gót ngồi",
+    "Nhón gót đẩy đùi"
+  ],
+  "Dips": [
+    "Xà kép"
+  ],
+  "Overhead Tricep Extension": [
+    "Duỗi tay sau qua đầu"
+  ],
+  "Straight Arm Pulldown": [
+    "Kéo cáp thẳng tay"
+  ],
+  "T-Bar Row": [
+    "T-bar Row"
+  ],
+  "Hammer Curl": [
+    "Cuốn tay đơn kiểu búa"
+  ],
+  "Bulgarian Split Squat": [
+    "Squat Bulgaria"
+  ],
+  "Leg Curl": [
+    "Cuốn gân kheo 1 chân"
+  ]
+}

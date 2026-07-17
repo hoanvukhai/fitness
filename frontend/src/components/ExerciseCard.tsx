@@ -35,22 +35,22 @@ export default function ExerciseCard({
 
   const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const guide = dbData.exercises.find((e: any) => {
+    if (e.nameVi && e.nameVi.includes(exercise.name)) return true;
     const eName = normalize(e.name);
     const exNameEn = normalize(exercise.nameEn);
     const exName = normalize(exercise.name);
     if (eName === exNameEn || eName === exName) return true;
-    if (e.aliases && e.aliases.some((a: string) => normalize(a) === exNameEn || normalize(a) === exName)) return true;
     if (exNameEn && eName.includes(exNameEn)) return true;
     if (exName && eName.includes(exName)) return true;
     return false;
   });
 
   const originalGuide = dbData.exercises.find((e: any) => {
+    if (e.nameVi && (e.nameVi.includes(exercise.originalName) || e.nameVi.includes(exercise.name))) return true;
     const eName = normalize(e.name);
     const exNameEn = normalize(exercise.originalNameEn || exercise.nameEn);
     const exName = normalize(exercise.originalName || exercise.name);
     if (eName === exNameEn || eName === exName) return true;
-    if (e.aliases && e.aliases.some((a: string) => normalize(a) === exNameEn || normalize(a) === exName)) return true;
     if (exNameEn && eName.includes(exNameEn)) return true;
     if (exName && eName.includes(exName)) return true;
     return false;
