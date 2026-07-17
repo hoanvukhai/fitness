@@ -302,7 +302,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
   const renderTimerView = (title: string, subtitle: string, durationStr: string, colorClass: string, guide: any) => {
     return (
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-900/50 pb-32">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-900/50 pb-32 min-h-0">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-2xl font-bold text-white leading-tight mb-1">{title}</h2>
@@ -368,7 +368,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
     // Actually, if they are all done, we just show them all checked and a "Next Exercise" button
     
     return (
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-h-0">
         {/* Upper half: Info */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-900/50 pb-8">
           <div className="flex items-start justify-between gap-4">
