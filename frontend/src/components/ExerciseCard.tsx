@@ -46,7 +46,7 @@ export default function ExerciseCard({
   });
 
   const originalGuide = dbData.exercises.find((e: any) => {
-    if (e.nameVi && (e.nameVi.includes(exercise.originalName) || e.nameVi.includes(exercise.name))) return true;
+    if (e.nameVi && (e.nameVi.includes(exercise.originalName || '') || e.nameVi.includes(exercise.name))) return true;
     const eName = normalize(e.name);
     const exNameEn = normalize(exercise.originalNameEn || exercise.nameEn);
     const exName = normalize(exercise.originalName || exercise.name);

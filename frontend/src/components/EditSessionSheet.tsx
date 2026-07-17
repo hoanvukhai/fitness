@@ -168,7 +168,7 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
                 
                 const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
                 const originalGuide = dbData.exercises.find((e: any) => {
-                  if (e.nameVi && (e.nameVi.includes(ex.originalName) || e.nameVi.includes(ex.name))) return true;
+                  if (e.nameVi && (e.nameVi.includes(ex.originalName || '') || e.nameVi.includes(ex.name))) return true;
                   const eName = normalize(e.name);
                   const exNameEn = normalize(ex.originalNameEn || ex.nameEn);
                   const exName = normalize(ex.originalName || ex.name);

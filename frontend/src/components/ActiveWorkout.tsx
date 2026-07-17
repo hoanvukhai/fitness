@@ -525,7 +525,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                 const baseNameEnNorm = normalize(currentExLog.originalNameEn || currentExLog.nameEn);
                 const baseNameNorm = normalize(currentExLog.originalName || currentExLog.name);
                 const dbEx = dbData.exercises.find(e => {
-                  if (e.nameVi && (e.nameVi.includes(currentExLog.originalName) || e.nameVi.includes(currentExLog.name))) return true;
+                  if (e.nameVi && (e.nameVi.includes(currentExLog.originalName || '') || e.nameVi.includes(currentExLog.name))) return true;
                   if (normalize(e.name) === baseNameEnNorm || normalize(e.name) === baseNameNorm) return true;
                   return false;
                 });
