@@ -267,18 +267,17 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
   // Renderers
   const renderRestTimer = () => {
-    if (!isResting) return null;
     return (
-      <div className="absolute inset-x-0 bottom-[80px] bg-slate-950/95 backdrop-blur border-t border-slate-800 p-6 z-[60] shadow-[0_-20px_40px_rgba(0,0,0,0.8)] animate-in slide-in-from-bottom-10 flex flex-col items-center justify-center space-y-6">
-        <div className="text-center space-y-2">
-          <h2 className="text-xl font-bold text-slate-400">Thời gian nghỉ</h2>
-          <div className="text-6xl font-mono font-bold text-blue-400 tabular-nums">
+      <div className="flex-1 flex flex-col items-center justify-center space-y-12 bg-slate-950 p-6">
+        <div className="text-center space-y-4">
+          <h2 className="text-3xl font-bold text-slate-400">Thời gian nghỉ</h2>
+          <div className="text-8xl font-mono font-bold text-blue-400 tabular-nums">
             {Math.floor(restLeft / 60)}:{(restLeft % 60).toString().padStart(2, '0')}
           </div>
         </div>
         
-        <div className="flex gap-4">
-          <button onClick={() => setRestLeft(r => Math.max(0, r - 15))} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Minus size={20} /></button>
+        <div className="flex gap-6">
+          <button onClick={() => setRestLeft(r => Math.max(0, r - 15))} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Minus size={24} /></button>
           
           <button 
             onClick={() => {
@@ -288,13 +287,24 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                 onUpdate({ ...session, status: 'in_progress' });
               }
             }}
-            className="w-14 h-14 bg-amber-500/20 text-amber-500 rounded-full flex items-center justify-center active:scale-95 transition-transform shadow-lg"
+            className="w-16 h-16 bg-amber-500/20 text-amber-500 rounded-full flex items-center justify-center active:scale-95 transition-transform shadow-lg"
           >
-            {session.status === 'paused' ? <Play size={24} fill="currentColor" className="ml-1" /> : <Pause size={24} fill="currentColor" />}
+            {session.status === 'paused' ? <Play size={32} fill="currentColor" className="ml-1" /> : <Pause size={32} fill="currentColor" />}
           </button>
           
-          <button onClick={() => setIsResting(false)} className="px-6 py-3 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform shadow-lg">Bỏ qua</button>
-          <button onClick={() => setRestLeft(r => r + 15)} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Plus size={20} /></button>
+          <button onClick={() => setIsResting(false)} className="px-8 py-4 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform">Bỏ qua nghỉ</button>
+          <button onClick={() => setRestLeft(r => r + 15)} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Plus size={24} /></button>
+        </div>
+
+        <div className="pt-12 text-center text-slate-500">
+          <p className="text-sm">Tiếp theo:</p>
+          <p className="text-lg font-bold text-slate-300 mt-1">
+            {phase === 'main' ? (
+              session.exercises[itemIndex].sets.every(s => s.completed) 
+                ? (itemIndex < session.exercises.length - 1 ? session.exercises[itemIndex + 1].name : 'Giãn cơ')
+                : `${session.exercises[itemIndex].name} - Hiệp ${session.exercises[itemIndex].sets.findIndex(s => !s.completed) + 1}`
+            ) : 'Bài tập tiếp theo'}
+          </p>
         </div>
       </div>
     );
@@ -447,7 +457,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
         </div>
 
         {/* Lower half: Set Inputs */}
-        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[45vh] overflow-y-auto hide-scrollbar pb-24">
+        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[45vh] overflow-y-auto hide-scrollbar">
           <div className="max-w-md mx-auto w-full">
             {/* Set Tabs */}
             <div className="flex gap-2 mb-3 overflow-x-auto hide-scrollbar pb-1 snap-x">
@@ -487,6 +497,8 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   };
 
   const renderContent = () => {
+    if (isResting) return renderRestTimer();
+
     if (phase === 'warmup') {
       const item: any = warmups[itemIndex];
       if (!item) return null;
