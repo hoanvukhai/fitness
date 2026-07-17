@@ -473,7 +473,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
         </div>
 
         {/* Lower half: Set Inputs */}
-        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[45vh] overflow-y-auto hide-scrollbar pb-24">
+        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[45vh] overflow-y-auto hide-scrollbar">
           <div className="max-w-md mx-auto w-full">
             {/* Set Tabs */}
             <div className="flex gap-2 mb-3 overflow-x-auto hide-scrollbar pb-1 snap-x">
