@@ -128,6 +128,29 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
     }
   };
 
+  const retreat = () => {
+    if (phase === 'cooldown') {
+      if (itemIndex > 0) {
+        setItemIndex(itemIndex - 1);
+      } else {
+        setPhase('main');
+        setItemIndex(session.exercises.length - 1);
+      }
+    } else if (phase === 'main') {
+      if (itemIndex > 0) {
+        setItemIndex(itemIndex - 1);
+      } else {
+        setPhase('warmup');
+        setItemIndex(warmups.length - 1);
+      }
+    } else {
+      if (itemIndex > 0) {
+        setItemIndex(itemIndex - 1);
+      }
+    }
+  };
+
+
   const handleFinishTimerExercise = () => {
     // For time-based main exercises, auto-check all sets and advance
     if (phase === 'main') {
@@ -211,30 +234,20 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
 
   // Renderers
   const renderRestTimer = () => {
+    if (!isResting) return null;
     return (
-      <div className="flex-1 flex flex-col items-center justify-center space-y-12 bg-slate-950 p-6 z-50">
-        <div className="text-center space-y-4">
-          <h2 className="text-3xl font-bold text-slate-400">Thời gian nghỉ</h2>
-          <div className="text-8xl font-mono font-bold text-blue-400 tabular-nums">
+      <div className="absolute inset-x-0 bottom-[80px] bg-slate-950/95 backdrop-blur border-t border-slate-800 p-6 z-[60] shadow-[0_-20px_40px_rgba(0,0,0,0.8)] animate-in slide-in-from-bottom-10 flex flex-col items-center justify-center space-y-6">
+        <div className="text-center space-y-2">
+          <h2 className="text-xl font-bold text-slate-400">Thời gian nghỉ</h2>
+          <div className="text-6xl font-mono font-bold text-blue-400 tabular-nums">
             {Math.floor(restLeft / 60)}:{(restLeft % 60).toString().padStart(2, '0')}
           </div>
         </div>
         
-        <div className="flex gap-6">
-          <button onClick={() => setRestLeft(r => Math.max(0, r - 15))} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Minus size={24} /></button>
-          <button onClick={() => setIsResting(false)} className="px-8 py-4 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform">Bỏ qua nghỉ</button>
-          <button onClick={() => setRestLeft(r => r + 15)} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Plus size={24} /></button>
-        </div>
-
-        <div className="pt-12 text-center text-slate-500">
-          <p className="text-sm">Tiếp theo:</p>
-          <p className="text-lg font-bold text-slate-300 mt-1">
-            {phase === 'main' ? (
-              session.exercises[itemIndex].sets.every(s => s.completed) 
-                ? (itemIndex < session.exercises.length - 1 ? session.exercises[itemIndex + 1].name : 'Giãn cơ')
-                : `${session.exercises[itemIndex].name} - Hiệp ${session.exercises[itemIndex].sets.findIndex(s => !s.completed) + 1}`
-            ) : 'Bài tập tiếp theo'}
-          </p>
+        <div className="flex gap-4">
+          <button onClick={() => setRestLeft(r => Math.max(0, r - 15))} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Minus size={20} /></button>
+          <button onClick={() => setIsResting(false)} className="px-8 py-3 bg-blue-600 hover:bg-blue-700 font-bold rounded-full text-white active:scale-95 transition-transform shadow-lg">Bỏ qua nghỉ</button>
+          <button onClick={() => setRestLeft(r => r + 15)} className="p-4 bg-slate-800 rounded-full text-slate-300 active:scale-95 transition-transform"><Plus size={20} /></button>
         </div>
       </div>
     );
@@ -242,57 +255,52 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
 
   const renderTimerView = (title: string, subtitle: string, durationStr: string, colorClass: string, guide: any) => {
     return (
-      <div className="flex-1 flex flex-col h-full">
-        {/* Upper half: Info */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-900/50">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-2xl font-bold text-white leading-tight mb-1">{title}</h2>
-              <p className="text-slate-400 text-sm">{subtitle} • {durationStr}</p>
-            </div>
-            {guide && (
-              <button 
-                onClick={() => setInfoExercise({ ...guide, name: title, nameEn: title })}
-                className="p-2.5 bg-slate-800 rounded-full text-slate-400 hover:text-white shrink-0 mt-1"
-              >
-                <Info size={20} />
-              </button>
-            )}
+      <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-slate-900/50 pb-32">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-white leading-tight mb-1">{title}</h2>
+            <p className="text-slate-400 text-sm">{subtitle} • {durationStr}</p>
           </div>
-          {guide && guide.mediaUrls && guide.mediaUrls.length > 0 && (
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 hide-scrollbar pb-2">
-              {guide.mediaUrls.map((url: string) => (
-                <div key={url} className="w-full shrink-0 snap-center">
-                  {url.endsWith('.mp4') ? (
-                     <video src={url} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
-                  ) : (
-                     <img src={url} alt="Guide" className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
-                  )}
-                </div>
-              ))}
-            </div>
+          {guide && (
+            <button 
+              onClick={() => setInfoExercise({ ...guide, name: title, nameEn: title })}
+              className="p-2.5 bg-slate-800 rounded-full text-blue-400 hover:text-white shrink-0 mt-1"
+            >
+              <Info size={20} />
+            </button>
           )}
         </div>
-
-        {/* Lower half: Timer Controls */}
-        <div className="p-8 pb-12 bg-slate-950 border-t border-slate-800 flex flex-col items-center justify-center space-y-8">
-          <div className={`text-7xl font-mono font-bold tabular-nums ${colorClass}`}>
+        
+        {/* Compact Timer embedded inside */}
+        <div className="p-6 bg-slate-950 rounded-3xl border border-slate-800 flex flex-col items-center justify-center space-y-6 shadow-xl">
+          <div className={`text-6xl font-mono font-bold tabular-nums ${colorClass}`}>
             {Math.floor(timerLeft / 60)}:{(timerLeft % 60).toString().padStart(2, '0')}
           </div>
           <div className="flex items-center gap-6">
-            <button onClick={() => setTimerLeft(r => Math.max(0, r - 10))} className="p-4 bg-slate-800 rounded-full text-slate-400"><Minus size={24} /></button>
+            <button onClick={() => setTimerLeft(r => Math.max(0, r - 10))} className="p-4 bg-slate-900 rounded-full text-slate-400 active:scale-95"><Minus size={20} /></button>
             <button 
               onClick={() => setTimerRunning(!timerRunning)}
-              className={`w-20 h-20 flex items-center justify-center rounded-full ${timerRunning ? 'bg-amber-500/20 text-amber-500' : 'bg-emerald-500 text-white'} shadow-lg`}
+              className={`w-16 h-16 flex items-center justify-center rounded-full ${timerRunning ? 'bg-amber-500/20 text-amber-500' : 'bg-emerald-500 text-white'} shadow-lg active:scale-95 transition-transform`}
             >
-              {timerRunning ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-2" />}
+              {timerRunning ? <Pause size={28} fill="currentColor" /> : <Play size={28} fill="currentColor" className="ml-1" />}
             </button>
-            <button onClick={() => setTimerLeft(r => r + 10)} className="p-4 bg-slate-800 rounded-full text-slate-400"><Plus size={24} /></button>
+            <button onClick={() => setTimerLeft(r => r + 10)} className="p-4 bg-slate-900 rounded-full text-slate-400 active:scale-95"><Plus size={20} /></button>
           </div>
-          <button onClick={handleFinishTimerExercise} className="w-full py-4 font-bold text-slate-400 bg-slate-900 rounded-xl hover:text-white transition-colors">
-            Đánh dấu xong
-          </button>
         </div>
+
+        {guide && guide.mediaUrls && guide.mediaUrls.length > 0 && (
+          <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 hide-scrollbar pb-2">
+            {guide.mediaUrls.map((url: string) => (
+              <div key={url} className="w-full shrink-0 snap-center">
+                {url.endsWith('.mp4') ? (
+                   <video src={url} autoPlay loop muted playsInline className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
+                ) : (
+                   <img src={url} alt="Guide" className="w-full h-48 object-cover rounded-2xl bg-slate-800 shadow-lg" />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   };
@@ -377,7 +385,7 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
         </div>
 
         {/* Lower half: Set Inputs */}
-        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[55vh] overflow-y-auto hide-scrollbar">
+        <div className="bg-slate-950 p-4 rounded-t-3xl border-t border-slate-800 shadow-[0_-20px_40px_rgba(0,0,0,0.6)] z-10 shrink-0 max-h-[45vh] overflow-y-auto hide-scrollbar pb-24">
           <div className="max-w-md mx-auto w-full">
             {/* Set Tabs */}
             <div className="flex gap-2 mb-3 overflow-x-auto hide-scrollbar pb-1 snap-x">
@@ -410,12 +418,6 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
                 }}
               />
             )}
-            
-            {ex.sets.every(s => s.completed) && (
-               <button onClick={advance} className="w-full mt-4 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white shadow-[0_0_30px_rgba(5,150,105,0.3)] flex items-center justify-center gap-2 active:scale-95 transition-transform text-lg">
-                 Bài tập tiếp theo <FastForward size={20} />
-               </button>
-            )}
           </div>
         </div>
       </div>
@@ -423,8 +425,6 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   };
 
   const renderContent = () => {
-    if (isResting) return renderRestTimer();
-
     if (phase === 'warmup') {
       const item: any = warmups[itemIndex];
       if (!item) return null;
@@ -461,10 +461,9 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
   return (
     <div className="fixed inset-0 z-[100] bg-slate-950 flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 bg-slate-950 border-b border-slate-900 z-20">
-        <button onClick={onClose} className="p-2 -ml-2 text-slate-400 hover:text-white flex items-center gap-1 font-medium active:scale-95 transition-transform">
-          <ChevronDown size={20} />
-          Thu nhỏ
+      <div className="flex items-center justify-between p-4 bg-slate-950 border-b border-slate-900 z-20 shrink-0">
+        <button onClick={onClose} className="p-2 -ml-2 text-slate-400 hover:text-white flex items-center justify-center font-medium active:scale-95 transition-transform rounded-full">
+          <ChevronDown size={28} />
         </button>
         <div className="text-center">
           <div className="text-sm font-bold text-white">{headerTitle}</div>
@@ -476,6 +475,34 @@ export default function ActiveWorkout({ session, onUpdate, onClose, onFinish }: 
       </div>
 
       {renderContent()}
+
+      {/* Bottom Navigation Bar */}
+      <div className="bg-slate-950 border-t border-slate-900 shrink-0 p-4 pb-safe flex items-center justify-between gap-4 z-50 relative">
+        <button 
+          onClick={retreat} 
+          className="p-3 bg-slate-900 rounded-xl text-slate-400 hover:text-white active:scale-95 transition-transform flex items-center gap-2"
+        >
+          <RotateCcw size={20} />
+        </button>
+        
+        {phase === 'warmup' || phase === 'cooldown' ? (
+          <button 
+            onClick={handleFinishTimerExercise}
+            className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(5,150,105,0.3)] active:scale-95 transition-transform"
+          >
+            Đánh dấu xong
+          </button>
+        ) : (
+          <button 
+            onClick={advance}
+            className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2"
+          >
+            Bài tiếp theo <FastForward size={20} />
+          </button>
+        )}
+      </div>
+
+      {renderRestTimer()}
 
       {showOverview && (
         <WorkoutOverviewSheet 
