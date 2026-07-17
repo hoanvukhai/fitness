@@ -404,14 +404,14 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                 <div className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
                   {ex.tier === 'main' ? 'Core' : ex.tier === 'accessory' ? 'Phụ trợ' : ex.tier}
                 </div>
-                {guide?.type && (
+                {guide?.targetMuscle && (
                   <div className="px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
-                    {guide.type}
+                    {guide.targetMuscle}
                   </div>
                 )}
-                {guide?.muscleGroup && (
+                {guide?.equipment && (
                   <div className="px-2 py-0.5 bg-slate-800 text-slate-300 text-[10px] font-bold rounded-full uppercase tracking-wider whitespace-nowrap">
-                    {guide.muscleGroup}
+                    {guide.equipment}
                   </div>
                 )}
               </div>
