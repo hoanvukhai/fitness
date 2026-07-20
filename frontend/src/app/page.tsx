@@ -498,9 +498,10 @@ export default function TodayPage() {
             <div className="flex gap-3 w-full">
               <button
                 onClick={() => {
-                  const updated = { 
+                  const newStatus = session.status === 'paused' ? 'in_progress' : 'paused';
+                  const updated: WorkoutSession = { 
                      ...session, 
-                     status: session.status === 'paused' ? 'in_progress' : 'paused' as const 
+                     status: newStatus 
                   };
                   handleUpdateSession(updated);
                 }}
