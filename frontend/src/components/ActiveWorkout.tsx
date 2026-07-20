@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { WorkoutSession, ExerciseLog, SetLog } from '@/lib/types';
 import { ChevronDown, CheckCircle2, Play, Pause, FastForward, RotateCcw, Image as ImageIcon, Minus, Plus, Info, RefreshCw, X } from 'lucide-react';
 import dbData from '../../data/db.json';
+import { getSettings, saveSettings, getLastExerciseStats } from '@/lib/firestore';
 import appConfig from '../../data/app-config.json';
 import WorkoutOverviewSheet from './WorkoutOverviewSheet';
 import ExerciseDetailSheet from './ExerciseDetailSheet';
@@ -704,7 +705,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                       return (
                         <button
                           key={altNameEn}
-                          onClick={() => {
+                          onClick={async () => {
                             const newExercises = [...session.exercises];
                             const currentEx = newExercises[itemIndex];
 
@@ -718,6 +719,19 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                             const originalNameEn = currentEx.originalNameEn || currentEx.nameEn;
                             const originalName = currentEx.originalName || currentEx.name;
 
+                            // 1. Fetch old stats for the NEW exercise
+                            const lastStats = await getLastExerciseStats(currentEx.exerciseId, altNameEn);
+                            let targetWeight = currentEx.targetWeight;
+                            let lastStatsText = currentEx.lastStatsText;
+                            if (lastStats) {
+                              targetWeight = lastStats.weight;
+                              lastStatsText = `${lastStats.weight}kg x ${lastStats.reps} reps`;
+                            } else {
+                              targetWeight = 0;
+                              lastStatsText = '';
+                            }
+
+                            // 2. Update the session in memory
                             newExercises[itemIndex] = {
                               ...currentEx,
                               originalNameEn,
@@ -725,10 +739,28 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                               name: altName,
                               nameEn: altNameEn,
                               selectedAlternative: altName,
-                              targetReps: newTargetReps
+                              targetReps: newTargetReps,
+                              targetWeight: targetWeight,
+                              lastStatsText: lastStatsText,
+                              sets: currentEx.sets.map(s => ({ ...s, weight: targetWeight }))
                             };
                             onUpdate({ ...session, exercises: newExercises });
                             setShowSwap(false);
+
+                            // 3. Save memory swap to settings
+                            const settings = await getSettings();
+                            if (settings) {
+                              const alts = settings.alternatives || {};
+                              
+                              // If they swap back to original, remove from alternatives
+                              if (altNameEn === originalNameEn) {
+                                delete alts[originalNameEn];
+                              } else {
+                                alts[originalNameEn] = altNameEn;
+                              }
+                              
+                              await saveSettings({ ...settings, alternatives: alts });
+                            }
                           }}
                           className="w-full p-4 rounded-xl border border-slate-800 bg-slate-950 flex items-center justify-between hover:bg-slate-800 transition-colors text-left"
                         >

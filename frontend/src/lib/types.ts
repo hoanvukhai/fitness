@@ -75,6 +75,7 @@ export interface AppSettings {
     rdl: number;
   };
   accessoryWeights: Record<string, number>; // exerciseId -> kg
+  alternatives?: Record<string, string>; // originalNameEn -> swappedNameEn
   isOnboarded: boolean;
 }
 

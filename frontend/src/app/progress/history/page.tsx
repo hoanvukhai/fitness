@@ -86,8 +86,8 @@ export default function HistoryPage() {
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right hidden sm:block">
-                        <div className="text-xs text-slate-400 font-mono">Tuần {w.week}</div>
-                        <div className="text-xs text-slate-600">{Math.floor(w.durationSeconds / 60)}m</div>
+                        <div className="text-[11px] text-slate-400 font-mono font-bold tracking-wider">THÁNG {w.month || 1} · TUẦN {w.week}</div>
+                        <div className="text-xs text-slate-600 mt-0.5">{Math.floor(w.durationSeconds / 60)}m</div>
                       </div>
                       
                       <div className="flex items-center gap-1 mr-2">

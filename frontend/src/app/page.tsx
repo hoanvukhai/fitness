@@ -12,6 +12,7 @@ import Onboarding from '@/components/Onboarding';
 import ExerciseCard from '@/components/ExerciseCard';
 import WarmupCooldown from '@/components/WarmupCooldown';
 import ActiveWorkout from '@/components/ActiveWorkout';
+import dbData from '../../data/db.json';
 import { TrendingUp, Flame, Calendar, CalendarDays, Clock, Target, ChevronRight, ChevronDown, CheckCircle2, RefreshCw, Weight, Plus, Play, Pause, Dumbbell, Zap } from 'lucide-react';
 
 // Dynamic imports để tránh lỗi SSR
@@ -74,8 +75,45 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
       computedRIR = '1-2';
     }
 
-    // Get last exercise stats
-    const lastStats = await getLastExerciseStats(ex.id);
+    // --- XỬ LÝ ĐỔI BÀI TẬP (SMART SWAP) ---
+    const originalNameEn = ex.nameEn || '';
+    const originalName = ex.name;
+    let finalNameEn = originalNameEn;
+    let finalName = originalName;
+    let selectedAlternative = '';
+
+    // Kiểm tra xem có bài tập nào được ghi nhớ không (theo originalNameEn)
+    if (settings.alternatives && originalNameEn && settings.alternatives[originalNameEn]) {
+      const swappedNameEn = settings.alternatives[originalNameEn];
+      const altDbEx = dbData.exercises.find((e: any) => e.name === swappedNameEn);
+      
+      if (altDbEx) {
+        finalNameEn = swappedNameEn;
+        finalName = altDbEx.name;
+        selectedAlternative = altDbEx.name;
+        
+        // Điều chỉnh lại reps nếu đổi từ tính giây sang đếm reps và ngược lại
+        const isNewTimeBased = finalName.toLowerCase().includes('plank');
+        const isOldTimeBased = targetReps.toLowerCase().includes('giây') || targetReps.toLowerCase().includes('s');
+        
+        if (isNewTimeBased && !isOldTimeBased) targetReps = '60 giây';
+        else if (!isNewTimeBased && isOldTimeBased) targetReps = '15';
+      }
+    }
+    // ------------------------------------
+
+    // Get last exercise stats (Sử dụng finalNameEn để lấy đúng lịch sử của bài mới)
+    // Firestore id for stats is usually the exercise id, but wait, getLastExerciseStats uses exerciseId
+    // If it's a swapped exercise, its ID in history is the swapped one, BUT we track by exerciseId.
+    // wait! getExerciseStats queries by exerciseId. If we swap, we need to query by the swapped name if the ID doesn't change?
+    // In ActiveWorkout.tsx swap logic, it didn't change the exerciseId!
+    // This means history is currently bound to the exerciseId (e.g. 'm1-push-a-2'). 
+    // BUT getLastExerciseStats checks `e.nameEn === finalNameEn`! Let's just use finalNameEn if needed.
+    // Wait, getExerciseStats checks exerciseId? Let's fix that.
+    
+    // For now, we pass ex.id. But if they swapped, maybe the last history has the new name.
+    const lastStats = await getLastExerciseStats(ex.id, finalNameEn);
+    
     let previousWeight = 0;
     let previousReps = 0;
     if (lastStats) {
@@ -86,10 +124,11 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
 
     logs.push({
       exerciseId: ex.id,
-      name: ex.name,
-      nameEn: ex.nameEn || '',
-      originalName: ex.name,
-      originalNameEn: ex.nameEn || '',
+      name: finalName,
+      nameEn: finalNameEn,
+      originalName: originalName,
+      originalNameEn: originalNameEn,
+      selectedAlternative: selectedAlternative,
       tier: ex.tier,
       targetWeight,
       targetReps,
@@ -104,7 +143,6 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
       })),
       checked: false,
       notes: '',
-      // Add a custom field to store last stats text
       lastStatsText: lastStats ? `${previousWeight}kg x ${previousReps} reps` : ''
     });
   }

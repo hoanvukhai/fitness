@@ -98,7 +98,7 @@ export async function getCompletedSessionCount(day: string, session: string): Pr
   return snap.size;
 }
 
-export async function getLastExerciseStats(exerciseId: string): Promise<{ weight: number, reps: number } | null> {
+export async function getLastExerciseStats(exerciseId: string, searchNameEn?: string): Promise<{ weight: number, reps: number } | null> {
   const q = query(
     collection(db, 'workouts'),
     where('status', '==', 'completed'),
@@ -108,7 +108,10 @@ export async function getLastExerciseStats(exerciseId: string): Promise<{ weight
   const snap = await getDocs(q);
   for (const document of snap.docs) {
     const data = document.data() as WorkoutSession;
-    const ex = data.exercises.find(e => e.exerciseId === exerciseId || e.originalNameEn === exerciseId || e.nameEn === exerciseId);
+    const ex = data.exercises.find(e => 
+      (searchNameEn && e.nameEn === searchNameEn) || 
+      (!searchNameEn && (e.exerciseId === exerciseId || e.originalNameEn === exerciseId || e.nameEn === exerciseId))
+    );
     if (ex && ex.sets && ex.sets.length > 0) {
       const completedSets = ex.sets.filter(s => s.completed);
       if (completedSets.length > 0) {

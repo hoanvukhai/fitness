@@ -377,10 +377,10 @@ export default function ProgressPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                    <div className="text-right hidden sm:block">
-                      <div className="text-xs text-slate-400 font-mono">Tuần {w.week}</div>
-                      <div className="text-xs text-slate-600">{Math.floor(w.durationSeconds / 60)}m</div>
-                    </div>
+                      <div className="text-right hidden sm:block">
+                        <div className="text-[11px] text-slate-400 font-mono font-bold tracking-wider">THÁNG {w.month || 1} · TUẦN {w.week}</div>
+                        <div className="text-xs text-slate-600 mt-0.5">{Math.floor(w.durationSeconds / 60)}m</div>
+                      </div>
                     {expandedSession === w.id
                       ? <ChevronDown size={16} className="text-slate-500" />
                       : <ChevronRight size={16} className="text-slate-500" />

@@ -32,6 +32,7 @@ export default function Onboarding({ onComplete }: OnboardingProps) {
         rdl: 0,
       },
       accessoryWeights: {},
+      alternatives: {},
       isOnboarded: true,
     };
     await saveSettings(settings);
