@@ -68,7 +68,11 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
   const handleSave = () => {
     const updated = {
       ...edited,
-      totalVolume: calcTotalVolume(edited.exercises)
+      totalVolume: calcTotalVolume(edited.exercises),
+      exercises: edited.exercises.map(ex => ({
+        ...ex,
+        checked: ex.sets.length > 0 && ex.sets.every(s => s.completed)
+      }))
     };
     onSave(updated);
   };

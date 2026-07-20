@@ -614,7 +614,12 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
         ) : (
           <button
             onClick={advance}
-            className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2"
+            disabled={phase === 'main' && !session.exercises[itemIndex]?.sets.every((s: any) => s.completed)}
+            className={`flex-1 py-3 rounded-xl font-bold text-white transition-transform flex items-center justify-center gap-2 ${
+              phase === 'main' && !session.exercises[itemIndex]?.sets.every((s: any) => s.completed)
+                ? 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-50'
+                : 'bg-blue-600 hover:bg-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95'
+            }`}
           >
             Tiếp theo <FastForward size={20} />
           </button>
