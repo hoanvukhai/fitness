@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSettings } from '@/hooks/useSettings';
-import { getWorkoutSession, saveWorkoutSession } from '@/lib/firestore';
+import { getWorkoutSession, saveWorkoutSession, getCompletedSessionCount, getLastExerciseStats } from '@/lib/firestore';
 import {
   getTodaySession, generateWorkoutId, formatDate,
   calcTotalVolume, getDayLabel, getSessionLabel
@@ -41,35 +41,50 @@ function getExercisesForSession(day: string, session: string, month: number) {
   return session === 'A' ? (dayData.sessionA || []) : (dayData.sessionB || []);
 }
 
-function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
-  const tier1Map: Record<string, number> = {
-    'Đẩy ngực tạ đòn': settings.tier1Weights?.benchPress || 0,
-    'Bench Press': settings.tier1Weights?.benchPress || 0,
-    'Đẩy vai tạ đơn ngồi': settings.tier1Weights?.ohp || 0,
-    'Kéo tạ đòn cúi người': settings.tier1Weights?.barbellRow || 0,
-    'Kéo xà / Lat Pulldown': settings.tier1Weights?.pullup || 0,
-    'Squat tạ đòn': settings.tier1Weights?.backSquat || 0,
-    'RDL': settings.tier1Weights?.rdl || 0,
-  };
+async function buildExerciseLogs(exercises: any[], settings: any, day: string, sessionNumber: number, currentMonth: number, weekInMonth: number): Promise<ExerciseLog[]> {
+  const data = getGiaoan();
+  
+  const logs: ExerciseLog[] = [];
+  
+  for (const ex of exercises) {
+    let targetWeight = settings.accessoryWeights?.[ex.id] || 0;
+    let targetReps = ex.repsDisplay || '';
+    
+    // Core Ramp logic
+    if (ex.tier === 'core' && data.coreRamp && data.coreRamp[day]) {
+      const rampData = data.coreRamp[day];
+      const monthData = rampData.months?.find((m: any) => m.month === currentMonth) || rampData.months[0];
+      if (monthData && monthData.weeks) {
+        // weekInMonth is 1-4, weeks array index is 0-3
+        const target = monthData.weeks[weekInMonth - 1];
+        if (target) {
+          targetReps = `${target} ${rampData.unit || ''}`;
+        }
+      }
+    }
 
-  return exercises.map(ex => {
-    let targetWeight = ex.tier === 'tier1'
-      ? (tier1Map[ex.name] || tier1Map[ex.nameEn] || 0)
-      : (settings.accessoryWeights?.[ex.id] || 0);
-
-    // Tính toán RIR dựa trên Tier và Tuần
+    // Progression & RIR
     let computedRIR = '';
     if (ex.tier === 'tier1' || ex.tier === 'main') {
-      const weekInMonth = ((settings.currentWeek - 1) % 4) + 1;
       if (weekInMonth === 1) computedRIR = '2-3';
       else if (weekInMonth === 2) computedRIR = '2';
       else if (weekInMonth === 3) computedRIR = '1-2';
       else if (weekInMonth === 4) computedRIR = '1';
     } else if (ex.tier === 'accessory') {
-      computedRIR = '1-2'; // Phụ thường đẩy đến gần thất bại
+      computedRIR = '1-2';
     }
 
-    return {
+    // Get last exercise stats
+    const lastStats = await getLastExerciseStats(ex.id);
+    let previousWeight = 0;
+    let previousReps = 0;
+    if (lastStats) {
+       previousWeight = lastStats.weight;
+       previousReps = lastStats.reps;
+       targetWeight = lastStats.weight;
+    }
+
+    logs.push({
       exerciseId: ex.id,
       name: ex.name,
       nameEn: ex.nameEn || '',
@@ -77,7 +92,7 @@ function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
       originalNameEn: ex.nameEn || '',
       tier: ex.tier,
       targetWeight,
-      targetReps: ex.repsDisplay || '',
+      targetReps,
       targetSets: ex.sets,
       rest: ex.rest || '90 giây',
       RIR: computedRIR || ex.rir || '',
@@ -89,8 +104,11 @@ function buildExerciseLogs(exercises: any[], settings: any): ExerciseLog[] {
       })),
       checked: false,
       notes: '',
-    };
-  });
+      // Add a custom field to store last stats text
+      lastStatsText: lastStats ? `${previousWeight}kg x ${previousReps} reps` : ''
+    });
+  }
+  return logs;
 }
 
 const DAY_OPTIONS = [
@@ -180,7 +198,7 @@ export default function TodayPage() {
     return `${m}:${sec.toString().padStart(2, '0')}`;
   };
 
-  const loadSession = useCallback(async () => {
+    const loadSession = useCallback(async () => {
     if (!settings) return;
     setLoadingSession(true);
     const slot = overrideDay || getTodaySession(settings);
@@ -191,12 +209,21 @@ export default function TodayPage() {
     let existing = await getWorkoutSession(id);
 
     if (!existing) {
-      const raw = getExercisesForSession(day, sess, settings.currentMonth);
-      const logs = buildExerciseLogs(raw, settings);
+      // Logic tự động đếm buổi (Session Counting)
+      const completedCount = await getCompletedSessionCount(day, sess);
+      const sessionNumber = completedCount + 1;
+      const cyclePos = (sessionNumber - 1) % 12; // 12 weeks = 1 macrocycle
+      const currentMonth = Math.floor(cyclePos / 4) + 1; // 1, 2, or 3
+      const weekInMonth = (cyclePos % 4) + 1; // 1, 2, 3, or 4
+      const totalWeek = cyclePos + 1;
+
+      const raw = getExercisesForSession(day, sess, currentMonth);
+      const logs = await buildExerciseLogs(raw, settings, day, sessionNumber, currentMonth, weekInMonth);
+      
       existing = {
         id, date: todayDate,
         day: day as any, session: sess,
-        week: settings.currentWeek, month: settings.currentMonth,
+        week: totalWeek, month: currentMonth,
         status: 'planned',
         warmup: { done: false },
         exercises: logs,
@@ -415,7 +442,7 @@ export default function TodayPage() {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500">
-              <span>Tuần {settings.currentWeek} · Tháng {settings.currentMonth}</span>
+              <span>Tuần {session?.week} · Tháng {session?.month}</span>
               {(session?.status === 'in_progress' || session?.status === 'paused') && (
                 <span className={`flex items-center gap-1 ${session.status === 'paused' ? 'text-amber-500' : 'text-blue-400 animate-pulse'}`}>
                   ⏱ {formatElapsed(elapsedSeconds)}

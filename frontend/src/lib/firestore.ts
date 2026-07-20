@@ -86,3 +86,36 @@ export async function deleteWorkout(id: string): Promise<void> {
   const ref = doc(db, 'workouts', id);
   await deleteDoc(ref);
 }
+
+export async function getCompletedSessionCount(day: string, session: string): Promise<number> {
+  const q = query(
+    collection(db, 'workouts'),
+    where('day', '==', day),
+    where('session', '==', session),
+    where('status', '==', 'completed')
+  );
+  const snap = await getDocs(q);
+  return snap.size;
+}
+
+export async function getLastExerciseStats(exerciseId: string): Promise<{ weight: number, reps: number } | null> {
+  const q = query(
+    collection(db, 'workouts'),
+    where('status', '==', 'completed'),
+    orderBy('date', 'desc'),
+    limit(15) // search recent workouts
+  );
+  const snap = await getDocs(q);
+  for (const document of snap.docs) {
+    const data = document.data() as WorkoutSession;
+    const ex = data.exercises.find(e => e.exerciseId === exerciseId || e.originalNameEn === exerciseId || e.nameEn === exerciseId);
+    if (ex && ex.sets && ex.sets.length > 0) {
+      const completedSets = ex.sets.filter(s => s.completed);
+      if (completedSets.length > 0) {
+        const lastSet = completedSets[completedSets.length - 1];
+        return { weight: lastSet.weight || 0, reps: lastSet.reps || 0 };
+      }
+    }
+  }
+  return null;
+}

@@ -19,13 +19,14 @@ interface ActiveWorkoutProps {
 type Phase = 'warmup' | 'main' | 'cooldown';
 
 const SetInputRow = ({ s, index, isCurrent, isTimeBased, onComplete, onUndo }: { s: SetLog, index: number, isCurrent: boolean, isTimeBased?: boolean, onComplete: (w: number, r: number) => void, onUndo: () => void }) => {
-  const [w, setW] = useState(s.weight.toString());
-  const [r, setR] = useState(s.reps.toString());
+  const [w, setW] = useState(s.weight === 0 ? '' : s.weight.toString());
+  const [r, setR] = useState(s.reps === 0 ? '' : s.reps.toString());
 
   // Update local state if prop changes (e.g. auto-fill)
   useEffect(() => {
-    setW(s.weight.toString());
-  }, [s.weight]);
+    setW(s.weight === 0 ? '' : s.weight.toString());
+    setR(s.reps === 0 ? '' : s.reps.toString());
+  }, [s.weight, s.reps]);
 
   return (
     <div className={`flex items-center gap-3 p-4 rounded-2xl transition-colors ${s.completed ? 'bg-slate-900/50 opacity-60' : isCurrent ? 'bg-slate-800 border border-blue-500/50 shadow-[0_0_20px_rgba(59,130,246,0.15)]' : 'bg-slate-900 border border-slate-800'}`}>
@@ -201,8 +202,8 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
     const ex = session.exercises[itemIndex];
     let newSets = ex.sets.map((s, i) => i === setIdx ? { ...s, weight, reps, completed: true } : s);
 
-    // Auto fill next empty sets with this weight
-    newSets = newSets.map((s, i) => i > setIdx && !s.completed && s.weight === 0 ? { ...s, weight } : s);
+    // Auto fill next empty sets with this weight and reps
+    newSets = newSets.map((s, i) => i > setIdx && !s.completed ? { ...s, weight, reps } : s);
 
     const allDone = newSets.every(s => s.completed);
 
@@ -440,6 +441,12 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
               <div className="flex-1 border-l border-slate-800 pl-4">
                 <div className="text-xs text-slate-500 mb-1">RIR</div>
                 <div className="font-bold text-orange-400">{ex.RIR}</div>
+              </div>
+            )}
+            {ex.lastStatsText && (
+              <div className="flex-1 border-l border-slate-800 pl-4">
+                <div className="text-xs text-slate-500 mb-1">Lần trước</div>
+                <div className="font-bold text-emerald-400 text-sm whitespace-nowrap">{ex.lastStatsText}</div>
               </div>
             )}
           </div>

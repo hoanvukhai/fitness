@@ -26,6 +26,7 @@ export interface ExerciseLog {
   rest: string;
   RIR?: string;
   selectedAlternative?: string;
+  lastStatsText?: string;
 }
 
 export interface WarmupLog {
