@@ -27,16 +27,9 @@ export default function WarmupCooldown({ title, emoji, items, color, onComplete 
   const [done, setDone] = useState(false);
   const [selectedGuide, setSelectedGuide] = useState<any>(null);
 
-  const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-  const getGuide = (item: ChecklistItem) => {
+  const getGuide = (item: any) => {
     return dbData.exercises.find((e: any) => {
-      const eName = normalize(e.name);
-      const exNameEn = normalize(item.nameEn);
-      const exName = normalize(item.name);
-      if (eName === exNameEn || eName === exName) return true;
-      if (exNameEn && eName.includes(exNameEn)) return true;
-      if (exName && eName.includes(exName)) return true;
-      return false;
+      return e.name === item.nameEn || (e.aliases && e.aliases.includes(item.nameEn));
     });
   };
 

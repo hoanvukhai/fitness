@@ -18,6 +18,9 @@
       "nameVi": [
         "Bench Press",
         "Đẩy ngực tạ đòn"
+      ],
+      "aliases": [
+        "Bench Press"
       ]
     },
     {
@@ -39,6 +42,11 @@
         "Đẩy ngực tạ đơn ghế phẳng",
         "Đẩy ngực ghế dốc âm tạ đơn",
         "Đẩy tạ đơn hẹp tay nằm sàn"
+      ],
+      "aliases": [
+        "Flat DB Press",
+        "Decline DB Press",
+        "Close-grip DB Floor Press"
       ]
     },
     {
@@ -54,7 +62,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/incline_bench.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Incline Dumbbell Press",
@@ -72,6 +81,9 @@
       ],
       "nameVi": [
         "Đẩy ngực ghế dốc tạ đơn"
+      ],
+      "aliases": [
+        "Incline DB Press"
       ]
     },
     {
@@ -91,6 +103,9 @@
       "nameVi": [
         "Ép ngực máy",
         "Đẩy ngực máy"
+      ],
+      "aliases": [
+        "Machine Chest Press"
       ]
     },
     {
@@ -109,6 +124,10 @@
       ],
       "nameVi": [
         "Ép ngực tạ đơn ghế nghiêng"
+      ],
+      "aliases": [
+        "Pec Deck / Machine Fly",
+        "Incline DB Fly"
       ]
     },
     {
@@ -128,6 +147,10 @@
       "nameVi": [
         "Ép ngực cáp",
         "Ép ngực cáp 1 tay"
+      ],
+      "aliases": [
+        "Cable Crossover",
+        "Single-arm Cable Fly"
       ]
     },
     {
@@ -143,7 +166,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/pushup.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Barbell Overhead Press",
@@ -158,7 +182,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/ohp.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Seated Dumbbell Press",
@@ -179,6 +204,10 @@
         "Seated DB Shoulder Press",
         "Đẩy vai Arnold",
         "Đẩy vai tạ đơn ngồi"
+      ],
+      "aliases": [
+        "Seated DB Shoulder Press",
+        "Arnold Press"
       ]
     },
     {
@@ -194,7 +223,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/machine_shoulder.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Dumbbell Lateral Raise",
@@ -214,6 +244,11 @@
         "Dang vai ngang tạ đơn",
         "Nâng tạ đơn chữ Y ghế nghiêng",
         "Nâng vai chữ Y tạ đơn"
+      ],
+      "aliases": [
+        "Lateral Raise",
+        "Incline Bench Y-Raise",
+        "DB Y-Raise"
       ]
     },
     {
@@ -233,6 +268,10 @@
       "nameVi": [
         "Dang vai cáp",
         "Dang vai cáp nghiêng người"
+      ],
+      "aliases": [
+        "Cable Lateral Raise",
+        "Leaning Cable Lateral Raise"
       ]
     },
     {
@@ -249,6 +288,9 @@
       ],
       "nameVi": [
         "Nâng vai trước tạ đơn"
+      ],
+      "aliases": [
+        "DB Front Raise"
       ]
     },
     {
@@ -270,6 +312,12 @@
         "Bay vai sau máy",
         "Bay ngược tạ đơn cúi người",
         "Bay vai sau cáp chéo người"
+      ],
+      "aliases": [
+        "Cable Reverse Fly",
+        "Reverse Pec Deck Fly",
+        "Bent-over DB Reverse Fly",
+        "Cross-body Cable Reverse Fly"
       ]
     },
     {
@@ -285,7 +333,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/pullup.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Lat Pulldown",
@@ -306,6 +355,11 @@
         "Kéo cáp cao nắm rộng",
         "Kéo cáp cao tay hẹp",
         "Kéo xà / Lat Pulldown"
+      ],
+      "aliases": [
+        "Pull-up / Lat Pulldown",
+        "Wide-grip Lat Pulldown",
+        "Close-grip / V-bar Pulldown"
       ]
     },
     {
@@ -326,6 +380,9 @@
       "nameVi": [
         "Barbell Row",
         "Kéo tạ đòn cúi người"
+      ],
+      "aliases": [
+        "Barbell Row"
       ]
     },
     {
@@ -346,6 +403,10 @@
       "nameVi": [
         "Kéo tạ đơn ngực tựa ghế",
         "Kéo tạ đơn 1 tay"
+      ],
+      "aliases": [
+        "Chest-supported DB Row",
+        "Single-arm DB Row"
       ]
     },
     {
@@ -366,6 +427,11 @@
         "Kéo cáp ngồi",
         "Kéo cáp 1 tay đứng",
         "Kéo cáp đơn tay chéo người"
+      ],
+      "aliases": [
+        "Seated Cable Row",
+        "Standing Single-arm Cable Row",
+        "Cross-body Cable Row"
       ]
     },
     {
@@ -384,6 +450,9 @@
       ],
       "nameVi": [
         "T-bar Row"
+      ],
+      "aliases": [
+        "T-bar Row"
       ]
     },
     {
@@ -400,6 +469,9 @@
       ],
       "nameVi": [
         "Kéo cáp thẳng tay"
+      ],
+      "aliases": [
+        "Straight-arm Pulldown"
       ]
     },
     {
@@ -418,6 +490,9 @@
       ],
       "nameVi": [
         "Kéo mặt cáp"
+      ],
+      "aliases": [
+        "Face Pull"
       ]
     },
     {
@@ -438,6 +513,9 @@
       "nameVi": [
         "Back Squat",
         "Squat tạ đòn"
+      ],
+      "aliases": [
+        "Back Squat"
       ]
     },
     {
@@ -456,6 +534,9 @@
       ],
       "nameVi": [
         "Squat tạ đơn kiểu cốc"
+      ],
+      "aliases": [
+        "Goblet Squat"
       ]
     },
     {
@@ -476,6 +557,10 @@
       "nameVi": [
         "Đẩy đùi",
         "Hack Squat máy"
+      ],
+      "aliases": [
+        "Leg Press",
+        "Hack Squat"
       ]
     },
     {
@@ -494,6 +579,9 @@
       ],
       "nameVi": [
         "RDL"
+      ],
+      "aliases": [
+        "Romanian Deadlift"
       ]
     },
     {
@@ -509,7 +597,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/deadlift.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Dumbbell RDL",
@@ -524,7 +613,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/db_rdl.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Dumbbell Lunge",
@@ -543,6 +633,10 @@
       "nameVi": [
         "Lunge bước tạ đơn",
         "Bước lên bục tạ đơn"
+      ],
+      "aliases": [
+        "Walking Lunge",
+        "DB Step-up"
       ]
     },
     {
@@ -561,6 +655,9 @@
       ],
       "nameVi": [
         "Squat Bulgaria"
+      ],
+      "aliases": [
+        "Bulgarian Split Squat"
       ]
     },
     {
@@ -579,6 +676,11 @@
         "Đá đùi trước máy",
         "Đá đùi trước 1 chân",
         "Đá đùi trước nặng (drop-set hiệp cuối)"
+      ],
+      "aliases": [
+        "Leg Extension",
+        "Single-leg Leg Extension",
+        "Heavy Leg Extension (drop-set last set)"
       ]
     },
     {
@@ -599,6 +701,9 @@
       ],
       "nameVi": [
         "Cuốn gân kheo 1 chân"
+      ],
+      "aliases": [
+        "Single-leg Leg Curl"
       ]
     },
     {
@@ -620,6 +725,12 @@
         "Nhón gót tạ đơn",
         "Nhón gót tạ đơn 1 chân",
         "Nhón gót 1 chân"
+      ],
+      "aliases": [
+        "Standing Calf Raise",
+        "DB Calf Raise",
+        "Single-leg DB Calf Raise",
+        "Single-leg Calf Raise"
       ]
     },
     {
@@ -639,6 +750,10 @@
       "nameVi": [
         "Nhón gót ngồi",
         "Nhón gót đẩy đùi"
+      ],
+      "aliases": [
+        "Seated Calf Raise",
+        "Leg Press Calf Raise"
       ]
     },
     {
@@ -654,7 +769,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/close_grip.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Dips",
@@ -672,6 +788,9 @@
       ],
       "nameVi": [
         "Xà kép"
+      ],
+      "aliases": [
+        "Dips"
       ]
     },
     {
@@ -692,6 +811,11 @@
         "Kéo cáp tay sau",
         "Đá tay sau tạ đơn",
         "Duỗi tay sau cáp 1 tay"
+      ],
+      "aliases": [
+        "Tricep Pushdown",
+        "DB Tricep Kickback",
+        "Single-arm Cable Tricep Extension"
       ]
     },
     {
@@ -710,6 +834,9 @@
       ],
       "nameVi": [
         "Duỗi tay sau qua đầu"
+      ],
+      "aliases": [
+        "Overhead Tricep Extension"
       ]
     },
     {
@@ -728,6 +855,9 @@
       ],
       "nameVi": [
         "Nằm đẩy tạ EZ"
+      ],
+      "aliases": [
+        "Skullcrusher"
       ]
     },
     {
@@ -747,6 +877,9 @@
       ],
       "nameVi": [
         "Cuốn tay trước tạ đòn EZ"
+      ],
+      "aliases": [
+        "EZ-bar Curl"
       ]
     },
     {
@@ -766,6 +899,10 @@
       "nameVi": [
         "Cuốn tay trước ghế Scott",
         "Cuốn tay trước luân phiên"
+      ],
+      "aliases": [
+        "DB Preacher/Concentration Curl",
+        "Alternating DB Curl"
       ]
     },
     {
@@ -784,6 +921,9 @@
       ],
       "nameVi": [
         "Cuốn tay đơn kiểu búa"
+      ],
+      "aliases": [
+        "DB Hammer Curl"
       ]
     },
     {
@@ -799,7 +939,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/incline_curl.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Cable Curl",
@@ -818,6 +959,10 @@
       "nameVi": [
         "Cuốn tay cáp thanh chữ V",
         "Cuốn tay cáp"
+      ],
+      "aliases": [
+        "Cable Bar Curl",
+        "Cable Curl"
       ]
     },
     {
@@ -837,6 +982,10 @@
       "nameVi": [
         "Plank",
         "Plank (thêm tạ đĩa)"
+      ],
+      "aliases": [
+        "Plank",
+        "Weighted Plank"
       ]
     },
     {
@@ -853,7 +1002,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/ab_roller.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Cable Crunch",
@@ -868,7 +1018,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/cable_crunch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Hanging Leg Raise",
@@ -887,6 +1038,10 @@
       "nameVi": [
         "Nâng gối treo xà",
         "Nâng gối treo xà (chân thẳng)"
+      ],
+      "aliases": [
+        "Hanging Leg Raise",
+        "Hanging Leg Raise (straight leg)"
       ]
     },
     {
@@ -902,7 +1057,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/lying_raise.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Russian Twist",
@@ -915,7 +1071,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/russian_twist.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Bicycle Crunch",
@@ -930,7 +1087,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/bicycle_crunch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Jumping Jacks",
@@ -945,7 +1103,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/jumping_jacks.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "High Knees",
@@ -960,7 +1119,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/high_knees.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Burpees",
@@ -973,7 +1133,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/burpee.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Arm Circles",
@@ -986,7 +1147,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/arm_circles.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Cat-Cow Stretch",
@@ -999,7 +1161,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/cat_cow.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Downward Dog",
@@ -1012,7 +1175,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/downward_dog.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Lying Quad Stretch",
@@ -1025,7 +1189,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/quad_stretch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Child's Pose",
@@ -1038,7 +1203,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/child_pose.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Chest Wall Stretch",
@@ -1051,7 +1217,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/chest_stretch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Overhead Tricep Stretch",
@@ -1064,7 +1231,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/tricep_stretch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Cross-body Shoulder Stretch",
@@ -1077,7 +1245,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/shoulder_stretch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Diaphragm Breathing",
@@ -1090,7 +1259,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/diaphragm_breathing.jpg"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Dead Hang",
@@ -1103,7 +1273,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/dead_hang.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Bicep Wall Stretch",
@@ -1116,7 +1287,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/bicep_stretch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Standing Forward Fold",
@@ -1129,7 +1301,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/forward_fold.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Prone Hip Flexor Stretch",
@@ -1142,7 +1315,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/prone_quad_stretch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Standing Hamstring Stretch",
@@ -1155,7 +1329,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/hamstring_stretch.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Pigeon Pose",
@@ -1168,7 +1343,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/pigeon_pose.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Supine Knee Hug",
@@ -1181,7 +1357,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/knee_hug.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Band Pull-Aparts",
@@ -1194,7 +1371,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/band_pull_apart.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Light Push-up",
@@ -1207,7 +1385,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/pushup.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Light DB Press",
@@ -1218,7 +1397,8 @@
       "environment": "GYM",
       "instructions": "1. Chọn mức tạ đơn nhẹ (khoảng 50%). 2. Đẩy khởi động vai trước khi vào hiệp chính thức.",
       "alternatives": [],
-      "mediaUrls": []
+      "mediaUrls": [],
+      "aliases": []
     },
     {
       "name": "Thoracic Rotation",
@@ -1229,7 +1409,8 @@
       "environment": "ANY",
       "instructions": "1. Quỳ bốn chân. 2. Đặt một tay sau gáy. 3. Xoay cùi chỏ lên trên trần nhà, mở rộng lồng ngực. 4. Xoay trở xuống.",
       "alternatives": [],
-      "mediaUrls": []
+      "mediaUrls": [],
+      "aliases": []
     },
     {
       "name": "Light Row",
@@ -1240,7 +1421,8 @@
       "environment": "GYM",
       "instructions": "1. Chọn tạ nhẹ (50%). 2. Thực hiện động tác kéo để bơm máu vào xô/lưng, chuẩn bị khởi động.",
       "alternatives": [],
-      "mediaUrls": []
+      "mediaUrls": [],
+      "aliases": []
     },
     {
       "name": "Hip Circles",
@@ -1251,7 +1433,8 @@
       "environment": "ANY",
       "instructions": "1. Đứng thẳng, tay chống hông. 2. Xoay hông thành vòng tròn rộng. 3. Xoay theo cả hai chiều để làm nóng khớp háng.",
       "alternatives": [],
-      "mediaUrls": []
+      "mediaUrls": [],
+      "aliases": []
     },
     {
       "name": "Bodyweight Squat",
@@ -1262,7 +1445,8 @@
       "environment": "ANY",
       "instructions": "1. Đứng rộng bằng vai. 2. Ngồi xổm không tạ. 3. Giữ lưng thẳng, cảm nhận khớp háng và gối mượt mà.",
       "alternatives": [],
-      "mediaUrls": []
+      "mediaUrls": [],
+      "aliases": []
     },
     {
       "name": "Hip Flexor Stretch",
@@ -1273,7 +1457,8 @@
       "environment": "ANY",
       "instructions": "1. Quỳ một chân vuông góc. 2. Đẩy hông về phía trước. 3. Cảm nhận độ căng ở mặt trước đùi chân quỳ phía sau.",
       "alternatives": [],
-      "mediaUrls": []
+      "mediaUrls": [],
+      "aliases": []
     },
     {
       "name": "Light Goblet Squat",
@@ -1284,7 +1469,8 @@
       "environment": "GYM",
       "instructions": "1. Ôm tạ nhẹ (50%) ở trước ngực. 2. Squat xuống chậm rãi để khởi động cột sống và đùi trước hiệp chính.",
       "alternatives": [],
-      "mediaUrls": []
+      "mediaUrls": [],
+      "aliases": []
     },
     {
       "name": "Seated Leg Curl",
@@ -1303,6 +1489,9 @@
       ],
       "nameVi": [
         "Cuốn gân kheo ngồi"
+      ],
+      "aliases": [
+        "Seated Leg Curl"
       ]
     },
     {
@@ -1323,6 +1512,10 @@
       "nameVi": [
         "Cuốn gân kheo đứng máy",
         "Cuốn gân kheo đứng 1 chân"
+      ],
+      "aliases": [
+        "Standing Leg Curl",
+        "Single-leg Standing Leg Curl"
       ]
     },
     {
@@ -1343,6 +1536,10 @@
       "nameVi": [
         "Cuốn gân kheo nằm",
         "Cuốn gân kheo nằm 1 chân, nặng hơn"
+      ],
+      "aliases": [
+        "Lying Leg Curl",
+        "Single-leg Lying Leg Curl"
       ]
     },
     {
@@ -1356,7 +1553,8 @@
       "alternatives": [],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Single Leg Curl",
@@ -1373,7 +1571,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Single Lying Leg Curl",
@@ -1390,7 +1589,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/leg_curl.mp4"
-      ]
+      ],
+      "aliases": []
     },
     {
       "name": "Pallof Press",
@@ -1409,6 +1609,9 @@
       ],
       "nameVi": [
         "Pallof Press"
+      ],
+      "aliases": [
+        "Pallof Press"
       ]
     },
     {
@@ -1426,7 +1629,8 @@
       ],
       "mediaUrls": [
         "https://musclewiki.com/media/woodchopper.mp4"
-      ]
+      ],
+      "aliases": []
     }
   ],
   "templates": [],

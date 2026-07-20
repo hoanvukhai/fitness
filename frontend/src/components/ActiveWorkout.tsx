@@ -107,12 +107,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const getGuide = (nameEn: string, name: string) => {
     return dbData.exercises.find((e: any) => {
-      if (e.nameVi && e.nameVi.includes(name)) return true;
-      const eName = normalize(e.name);
-      if (eName === normalize(nameEn) || eName === normalize(name)) return true;
-      if (nameEn && eName.includes(normalize(nameEn))) return true;
-      if (name && eName.includes(normalize(name))) return true;
-      return false;
+      return e.name === nameEn || (e.aliases && e.aliases.includes(nameEn));
     });
   };
 
@@ -671,12 +666,9 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                 const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
                 // Always base alternatives on the ORIGINAL exercise
-                const baseNameEnNorm = normalize(currentExLog.originalNameEn || currentExLog.nameEn);
-                const baseNameNorm = normalize(currentExLog.originalName || currentExLog.name);
-                const dbEx = dbData.exercises.find(e => {
-                  if (e.nameVi && (e.nameVi.includes(currentExLog.originalName || '') || e.nameVi.includes(currentExLog.name))) return true;
-                  if (normalize(e.name) === baseNameEnNorm || normalize(e.name) === baseNameNorm) return true;
-                  return false;
+                const searchNameEn = currentExLog.originalNameEn || currentExLog.nameEn;
+                const dbEx = dbData.exercises.find((e: any) => {
+                  return e.name === searchNameEn || (e.aliases && e.aliases.includes(searchNameEn));
                 });
 
                 let alts = dbEx?.alternatives ? [...dbEx.alternatives] : [];
@@ -699,8 +691,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                 return (
                   <div className="space-y-2">
                     {alts.map(altNameEn => {
-                      const altNameEnNorm = normalize(altNameEn);
-                      const altDbEx = dbData.exercises.find(e => normalize(e.name) === altNameEnNorm);
+                      const altDbEx = dbData.exercises.find(e => e.name === altNameEn);
                       const altName = altDbEx ? altDbEx.name : altNameEn;
                       return (
                         <button

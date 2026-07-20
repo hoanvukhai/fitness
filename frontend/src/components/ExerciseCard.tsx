@@ -33,27 +33,13 @@ export default function ExerciseCard({
   const [showGuide, setShowGuide] = useState(false);
   const [showSwapDropdown, setShowSwapDropdown] = useState(false);
 
-  const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const guide = dbData.exercises.find((e: any) => {
-    if (e.nameVi && e.nameVi.includes(exercise.name)) return true;
-    const eName = normalize(e.name);
-    const exNameEn = normalize(exercise.nameEn);
-    const exName = normalize(exercise.name);
-    if (eName === exNameEn || eName === exName) return true;
-    if (exNameEn && eName.includes(exNameEn)) return true;
-    if (exName && eName.includes(exName)) return true;
-    return false;
+    return e.name === exercise.nameEn || (e.aliases && e.aliases.includes(exercise.nameEn));
   });
 
   const originalGuide = dbData.exercises.find((e: any) => {
-    if (e.nameVi && (e.nameVi.includes(exercise.originalName || '') || e.nameVi.includes(exercise.name))) return true;
-    const eName = normalize(e.name);
-    const exNameEn = normalize(exercise.originalNameEn || exercise.nameEn);
-    const exName = normalize(exercise.originalName || exercise.name);
-    if (eName === exNameEn || eName === exName) return true;
-    if (exNameEn && eName.includes(exNameEn)) return true;
-    if (exName && eName.includes(exName)) return true;
-    return false;
+    const searchNameEn = exercise.originalNameEn || exercise.nameEn;
+    return e.name === searchNameEn || (e.aliases && e.aliases.includes(searchNameEn));
   });
 
   let displayAlternatives = originalGuide?.alternatives ? [...originalGuide.alternatives] : [];
@@ -63,6 +49,7 @@ export default function ExerciseCard({
       displayAlternatives.unshift(origEn);
     }
   }
+  const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   displayAlternatives = displayAlternatives.filter(a => normalize(a) !== normalize(exercise.nameEn) && normalize(a) !== normalize(exercise.name));
 
   // Parse thời gian nghỉ từ string sang giây

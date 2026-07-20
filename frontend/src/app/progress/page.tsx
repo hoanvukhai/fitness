@@ -257,7 +257,7 @@ export default function ProgressPage() {
                     if (cell.session) {
                       const mins = Math.floor(cell.session.durationSeconds / 60);
                       if (mins < 45) opacityClass = 'opacity-40';
-                      else if (mins <= 60) opacityClass = 'opacity-70';
+                      else if (mins < 60) opacityClass = 'opacity-70';
                       else opacityClass = 'opacity-100';
                     }
 
