@@ -117,6 +117,7 @@ export default function TodayPage() {
   const todayDate = formatDate();
   const [confirmDate, setConfirmDate] = useState(todayDate);
   const [showDateConfirm, setShowDateConfirm] = useState(false);
+  const [showFinishConfirm, setShowFinishConfirm] = useState(false);
 
   const calculateElapsed = useCallback((sess: WorkoutSession) => {
     if (!sess.startedAt) return sess.durationSeconds || 0;
@@ -484,28 +485,47 @@ export default function TodayPage() {
           </button>
         )}
 
-        {/* Continue button */}
+        {/* Active Controls */}
         {(session?.status === 'in_progress' || session?.status === 'paused') && (
-          <button
-            onClick={() => {
-              if (session.status === 'paused') {
-                const updated = { ...session, status: 'in_progress' as const };
-                handleUpdateSession(updated);
-              }
-              setShowActiveWorkout(true);
-            }}
-            className={`w-full py-4 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg ${
-              session.status === 'paused' 
-                ? 'bg-orange-600 hover:bg-orange-700 shadow-orange-600/20' 
-                : 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20 animate-pulse'
-            }`}
-          >
-            {session.status === 'paused' ? (
-              <><Play size={22} /> Tiếp tục tập (Đang dừng)</>
-            ) : (
-              <><Dumbbell size={22} /> Đang tập...</>
-            )}
-          </button>
+          <div className="flex flex-col gap-3 mt-2 mb-4">
+            <button
+              onClick={() => setShowActiveWorkout(true)}
+              className="w-full py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-blue-600/20"
+            >
+              <Dumbbell size={22} />
+              Mở màn hình tập
+            </button>
+            <div className="flex gap-3 w-full">
+              <button
+                onClick={() => {
+                  const updated = { 
+                     ...session, 
+                     status: session.status === 'paused' ? 'in_progress' : 'paused' as const 
+                  };
+                  handleUpdateSession(updated);
+                }}
+                className={`flex-1 py-3.5 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg ${
+                  session.status === 'paused' 
+                    ? 'bg-orange-600 hover:bg-orange-700 shadow-orange-600/20' 
+                    : 'bg-slate-800 hover:bg-slate-700 border border-slate-700'
+                }`}
+              >
+                {session.status === 'paused' ? (
+                  <><Play size={18} fill="currentColor" /> Tiếp tục</>
+                ) : (
+                  <><Pause size={18} fill="currentColor" /> Tạm dừng</>
+                )}
+              </button>
+              
+              <button
+                onClick={() => setShowFinishConfirm(true)}
+                className="flex-1 py-3.5 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-emerald-600/20"
+              >
+                <CheckCircle2 size={18} />
+                Kết thúc
+              </button>
+            </div>
+          </div>
         )}
 
         {/* Date Confirm Mini Dialog */}
@@ -546,6 +566,41 @@ export default function TodayPage() {
           </div>
         )}
 
+        {/* Finish Confirm Mini Dialog */}
+        {showFinishConfirm && (
+          <div 
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-[100] p-4"
+            onClick={() => setShowFinishConfirm(false)}
+          >
+            <div 
+              className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl"
+              onClick={e => e.stopPropagation()}
+            >
+              <div>
+                <p className="font-bold text-white text-lg">Bạn có muốn kết thúc bài tập không?</p>
+                <p className="text-slate-400 text-sm mt-1">Buổi tập sẽ được lưu lại vào lịch sử.</p>
+              </div>
+              <div className="flex gap-2 pt-2">
+                <button 
+                  onClick={() => setShowFinishConfirm(false)}
+                  className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl text-white font-semibold transition-colors"
+                >
+                  Không
+                </button>
+                <button 
+                  onClick={() => {
+                    setShowFinishConfirm(false);
+                    finishSession();
+                  }}
+                  className="flex-1 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-xl text-white font-bold transition-colors"
+                >
+                  Có, kết thúc
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Workout Flow (Static List) */}
         {loadingSession ? (
           <div className="text-center text-slate-500 py-10 text-sm animate-pulse">Đang tải bài tập...</div>
@@ -570,16 +625,7 @@ export default function TodayPage() {
           </div>
         ) : null}
 
-        {/* Finish button (Always visible at bottom when in progress) */}
-        {(session?.status === 'in_progress' || session?.status === 'paused') && (
-          <button
-            onClick={finishSession}
-            className="w-full mt-4 py-4 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-emerald-600/20"
-          >
-            <CheckCircle2 size={22} />
-            Kết thúc và Lưu
-          </button>
-        )}
+        {/* Old finish button removed, now grouped with Pause/Resume */}
 
         {/* Active Workout Fullscreen Modal */}
         {session && (session.status === 'in_progress' || session.status === 'paused') && (
