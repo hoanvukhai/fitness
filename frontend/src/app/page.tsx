@@ -494,10 +494,17 @@ export default function TodayPage() {
               }
               setShowActiveWorkout(true);
             }}
-            className="w-full py-4 bg-orange-600 hover:bg-orange-700 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-orange-600/20"
+            className={`w-full py-4 rounded-2xl font-bold text-white text-lg flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg ${
+              session.status === 'paused' 
+                ? 'bg-orange-600 hover:bg-orange-700 shadow-orange-600/20' 
+                : 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20 animate-pulse'
+            }`}
           >
-            <Play size={22} />
-            Tiếp tục tập
+            {session.status === 'paused' ? (
+              <><Play size={22} /> Tiếp tục tập (Đang dừng)</>
+            ) : (
+              <><Dumbbell size={22} /> Đang tập...</>
+            )}
           </button>
         )}
 
@@ -584,12 +591,8 @@ export default function TodayPage() {
                 handleUpdateSession(updated);
               }}
               onClose={() => {
-              setShowActiveWorkout(false);
-              if (session.status === 'in_progress') {
-                const updated = { ...session, status: 'paused' as const };
-                handleUpdateSession(updated);
-              }
-            }}
+                setShowActiveWorkout(false);
+              }}
               onFinish={() => {
                 setShowActiveWorkout(false);
                 finishSession();
