@@ -101,13 +101,13 @@ export async function getCompletedSessionCount(day: string, session: string): Pr
 export async function getLastExerciseStats(exerciseId: string, searchNameEn?: string): Promise<{ weight: number, reps: number } | null> {
   const q = query(
     collection(db, 'workouts'),
-    where('status', '==', 'completed'),
     orderBy('date', 'desc'),
-    limit(15) // search recent workouts
+    limit(20) // search recent workouts
   );
   const snap = await getDocs(q);
   for (const document of snap.docs) {
     const data = document.data() as WorkoutSession;
+    if (data.status !== 'completed') continue;
     const ex = data.exercises.find(e => 
       (searchNameEn && e.nameEn === searchNameEn) || 
       (!searchNameEn && (e.exerciseId === exerciseId || e.originalNameEn === exerciseId || e.nameEn === exerciseId))
