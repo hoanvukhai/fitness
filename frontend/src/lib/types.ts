@@ -54,6 +54,8 @@ export interface WorkoutSession {
   totalVolume: number; // tổng kg * reps
   startedAt?: string;
   completedAt?: string;
+  totalPausedSeconds?: number;
+  lastPausedAt?: string;
   notes?: string;
 }
 

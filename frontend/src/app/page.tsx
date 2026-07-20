@@ -118,11 +118,46 @@ export default function TodayPage() {
   const [confirmDate, setConfirmDate] = useState(todayDate);
   const [showDateConfirm, setShowDateConfirm] = useState(false);
 
+  const calculateElapsed = useCallback((sess: WorkoutSession) => {
+    if (!sess.startedAt) return sess.durationSeconds || 0;
+    const start = new Date(sess.startedAt).getTime();
+    const pausedSecs = sess.totalPausedSeconds || 0;
+    
+    if (sess.status === 'paused' && sess.lastPausedAt) {
+      const pausedAt = new Date(sess.lastPausedAt).getTime();
+      return Math.floor((pausedAt - start) / 1000) - pausedSecs;
+    } else if (sess.status === 'completed' && sess.completedAt) {
+      const completedAt = new Date(sess.completedAt).getTime();
+      return Math.floor((completedAt - start) / 1000) - pausedSecs;
+    } else {
+      return Math.floor((Date.now() - start) / 1000) - pausedSecs;
+    }
+  }, []);
+
   useEffect(() => {
-    if (!session || session.status !== 'in_progress') return;
-    const interval = setInterval(() => setElapsedSeconds(s => s + 1), 1000);
+    if (!session) return;
+    setElapsedSeconds(calculateElapsed(session));
+    if (session.status !== 'in_progress') return;
+    const interval = setInterval(() => setElapsedSeconds(calculateElapsed(session)), 1000);
     return () => clearInterval(interval);
-  }, [session]);
+  }, [session, calculateElapsed]);
+
+  const handleUpdateSession = async (updated: WorkoutSession) => {
+    let finalUpdated = { ...updated };
+    if (session?.status === 'in_progress' && updated.status === 'paused') {
+      finalUpdated.lastPausedAt = new Date().toISOString();
+      finalUpdated.durationSeconds = calculateElapsed(finalUpdated);
+    } else if (session?.status === 'paused' && updated.status === 'in_progress') {
+      let pausedSecs = finalUpdated.totalPausedSeconds || 0;
+      if (session.lastPausedAt) {
+        pausedSecs += Math.floor((Date.now() - new Date(session.lastPausedAt).getTime()) / 1000);
+      }
+      finalUpdated.totalPausedSeconds = pausedSecs;
+      finalUpdated.lastPausedAt = undefined;
+    }
+    setSession(finalUpdated);
+    await saveWorkoutSession(finalUpdated);
+  };
 
   useEffect(() => {
     if (showActiveWorkout) {
@@ -196,8 +231,7 @@ export default function TodayPage() {
     if (!session) return;
     const newExercises = session.exercises.map((ex, i) => i === index ? updated : ex);
     const newSession = { ...session, exercises: newExercises };
-    setSession(newSession);
-    await saveWorkoutSession(newSession);
+    handleUpdateSession(newSession);
   };
 
   const finishSession = async () => {
@@ -205,27 +239,15 @@ export default function TodayPage() {
     const vol = calcTotalVolume(session.exercises);
     const done: WorkoutSession = {
       ...session, status: 'completed',
-      durationSeconds: elapsedSeconds, totalVolume: vol,
       completedAt: new Date().toISOString(),
     };
-    await saveWorkoutSession(done);
-    setSession(done);
+    done.durationSeconds = calculateElapsed(done);
+    done.totalVolume = vol;
+    handleUpdateSession(done);
     setFinished(true);
   };
 
-  const pauseSession = async () => {
-    if (!session) return;
-    const updated: WorkoutSession = { ...session, status: 'paused', durationSeconds: elapsedSeconds };
-    await saveWorkoutSession(updated);
-    setSession(updated);
-  };
-
-  const resumeSession = async () => {
-    if (!session) return;
-    const updated: WorkoutSession = { ...session, status: 'in_progress' };
-    await saveWorkoutSession(updated);
-    setSession(updated);
-  };
+  // Removed pauseSession and resumeSession since we handle it via handleUpdateSession
 
   const doneCount = session?.exercises.filter(ex => ex.checked).length || 0;
   const totalCount = session?.exercises.length || 0;
@@ -468,8 +490,7 @@ export default function TodayPage() {
             onClick={() => {
               if (session.status === 'paused') {
                 const updated = { ...session, status: 'in_progress' as const };
-                setSession(updated);
-                saveWorkoutSession(updated).catch(console.error);
+                handleUpdateSession(updated);
               }
               setShowActiveWorkout(true);
             }}
@@ -560,15 +581,13 @@ export default function TodayPage() {
               session={session}
               elapsedSeconds={elapsedSeconds}
               onUpdate={updated => {
-                setSession(updated);
-                saveWorkoutSession(updated).catch(console.error);
+                handleUpdateSession(updated);
               }}
               onClose={() => {
               setShowActiveWorkout(false);
               if (session.status === 'in_progress') {
                 const updated = { ...session, status: 'paused' as const };
-                setSession(updated);
-                saveWorkoutSession(updated).catch(console.error);
+                handleUpdateSession(updated);
               }
             }}
               onFinish={() => {
