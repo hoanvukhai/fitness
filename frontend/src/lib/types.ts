@@ -27,6 +27,12 @@ export interface ExerciseLog {
   RIR?: string;
   selectedAlternative?: string;
   lastStatsText?: string;
+  progressionSuggestion?: {
+    suggestedWeight: number;
+    reason: string;
+    oldRir?: string;
+    newRir?: string;
+  };
 }
 
 export interface WarmupLog {

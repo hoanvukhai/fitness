@@ -122,3 +122,36 @@ export async function getLastExerciseStats(exerciseId: string, searchNameEn?: st
   }
   return null;
 }
+
+export async function getExerciseHistory(exerciseId: string, searchNameEn?: string, limitCount: number = 2): Promise<{ weight: number, reps: number, sets: any[], date: string }[]> {
+  const q = query(
+    collection(db, 'workouts'),
+    orderBy('date', 'desc'),
+    limit(30)
+  );
+  const snap = await getDocs(q);
+  const history: { weight: number, reps: number, sets: any[], date: string }[] = [];
+  
+  for (const document of snap.docs) {
+    if (history.length >= limitCount) break;
+    const data = document.data() as WorkoutSession;
+    if (data.status !== 'completed') continue;
+    const ex = data.exercises.find(e => 
+      (searchNameEn && e.nameEn === searchNameEn) || 
+      (!searchNameEn && (e.exerciseId === exerciseId || e.originalNameEn === exerciseId || e.nameEn === exerciseId))
+    );
+    if (ex && ex.sets && ex.sets.length > 0) {
+      const completedSets = ex.sets.filter(s => s.completed);
+      if (completedSets.length > 0) {
+        const lastSet = completedSets[completedSets.length - 1];
+        history.push({
+          weight: lastSet.weight || 0,
+          reps: lastSet.reps || 0,
+          sets: completedSets,
+          date: data.date
+        });
+      }
+    }
+  }
+  return history;
+}

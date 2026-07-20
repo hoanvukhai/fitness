@@ -16,27 +16,38 @@ const TIER1_IDS_BY_KEY: Record<string, string> = {
 export function suggestTier1Weight(
   currentWeight: number,
   weekInMonth: number // 1-4
-): { weight: number; reason: string; rule: string } {
-  if (weekInMonth <= 2) {
+): { suggestedWeight: number; reason: string; oldRir: string; newRir: string } {
+  if (weekInMonth === 1) {
     return {
-      weight: currentWeight,
-      reason: `Tuần ${weekInMonth}: Giữ nguyên tạ, củng cố kỹ thuật (RIR 2-3)`,
-      rule: 'tier1_week1-2',
+      suggestedWeight: currentWeight,
+      reason: `Tuần 1: Làm quen mức tạ mới của tháng`,
+      oldRir: '1',
+      newRir: '2-3',
+    };
+  }
+  if (weekInMonth === 2) {
+    return {
+      suggestedWeight: currentWeight,
+      reason: `Tuần 2: Củng cố kỹ thuật, đạt đủ reps`,
+      oldRir: '2-3',
+      newRir: '2',
     };
   }
   if (weekInMonth === 3) {
-    const newWeight = Math.ceil(currentWeight * 1.025 / 2.5) * 2.5; // làm tròn lên 2.5kg
+    const newWeight = currentWeight > 0 ? Math.ceil(currentWeight * 1.025 / 2.5) * 2.5 : 0;
     return {
-      weight: newWeight,
-      reason: `Tuần 3: Tăng tạ +2.5% (${currentWeight}kg → ${newWeight}kg), RIR 1-2`,
-      rule: 'tier1_week3',
+      suggestedWeight: newWeight > 0 ? newWeight : currentWeight,
+      reason: `Tuần 3: Bắt đầu đẩy cường độ, tăng nhẹ tạ`,
+      oldRir: '2',
+      newRir: '1-2',
     };
   }
-  // Tuần 4: giữ tạ tuần 3, dồn sức
+  // Tuần 4
   return {
-    weight: currentWeight,
-    reason: `Tuần 4 (Đỉnh điểm): Giữ tạ tuần 3, dồn hết sức (RIR 1). Tạ này là cơ sở cho tháng sau.`,
-    rule: 'tier1_week4',
+    suggestedWeight: currentWeight,
+    reason: `Tuần 4: Đỉnh điểm (Test), dồn sức làm cơ sở cho tháng sau`,
+    oldRir: '1-2',
+    newRir: '1',
   };
 }
 
@@ -45,37 +56,33 @@ export function suggestTier1Weight(
  * Nếu 2 buổi liên tiếp đạt đầu trên rep range → tăng tạ
  */
 export function suggestDoubleProgression(
-  exerciseName: string,
   currentWeight: number,
   lastTwoSessions: SetLog[][], // mảng [[set logs session -2], [set logs session -1]]
   maxRepRange: number,
   increment: number = 2.5
-): { weight: number; reason: string; shouldIncrease: boolean } {
+): { suggestedWeight: number; reason: string } {
   if (lastTwoSessions.length < 2) {
     return {
-      weight: currentWeight,
-      reason: 'Chưa đủ 2 buổi dữ liệu để đánh giá.',
-      shouldIncrease: false,
+      suggestedWeight: currentWeight,
+      reason: 'Chưa đủ 2 buổi dữ liệu để đánh giá tăng tạ.',
     };
   }
 
   const allSetsReachMax = lastTwoSessions.every(sessionSets =>
-    sessionSets.every(s => s.completed && s.reps >= maxRepRange)
+    sessionSets.length > 0 && sessionSets.every(s => s.completed && s.reps >= maxRepRange)
   );
 
   if (allSetsReachMax) {
-    const newWeight = currentWeight + increment;
+    const newWeight = currentWeight > 0 ? currentWeight + increment : 0;
     return {
-      weight: newWeight,
-      reason: `2 buổi liên tiếp đạt ${maxRepRange} reps → Tăng ${increment}kg (${currentWeight} → ${newWeight}kg)`,
-      shouldIncrease: true,
+      suggestedWeight: newWeight > 0 ? newWeight : currentWeight,
+      reason: `Đạt ${maxRepRange} reps trong 2 buổi liên tiếp -> Tăng ${increment}kg`,
     };
   }
 
   return {
-    weight: currentWeight,
-    reason: `Chưa đạt đầu trên rep range 2 buổi liên tiếp. Giữ ${currentWeight}kg, tiếp tục hoàn thiện.`,
-    shouldIncrease: false,
+    suggestedWeight: currentWeight,
+    reason: `Chưa đạt max reps trong 2 buổi liên tiếp -> Giữ nguyên tạ`,
   };
 }
 

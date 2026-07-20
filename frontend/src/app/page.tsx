@@ -2,10 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useSettings } from '@/hooks/useSettings';
-import { getWorkoutSession, saveWorkoutSession, getCompletedSessionCount, getLastExerciseStats } from '@/lib/firestore';
+import { getWorkoutSession, saveWorkoutSession, getCompletedSessionCount, getLastExerciseStats, getExerciseHistory } from '@/lib/firestore';
 import {
   getTodaySession, generateWorkoutId, formatDate,
-  calcTotalVolume, getDayLabel, getSessionLabel
+  calcTotalVolume, getDayLabel, getSessionLabel, suggestTier1Weight, suggestDoubleProgression
 } from '@/lib/workout-engine';
 import { ExerciseLog, WorkoutSession } from '@/lib/types';
 import Onboarding from '@/components/Onboarding';
@@ -64,17 +64,6 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
       }
     }
 
-    // Progression & RIR
-    let computedRIR = '';
-    if (ex.tier === 'tier1' || ex.tier === 'main') {
-      if (weekInMonth === 1) computedRIR = '2-3';
-      else if (weekInMonth === 2) computedRIR = '2';
-      else if (weekInMonth === 3) computedRIR = '1-2';
-      else if (weekInMonth === 4) computedRIR = '1';
-    } else if (ex.tier === 'accessory') {
-      computedRIR = '1-2';
-    }
-
     // --- XỬ LÝ ĐỔI BÀI TẬP (SMART SWAP) ---
     const originalNameEn = ex.nameEn || '';
     const originalName = ex.name;
@@ -102,24 +91,60 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
     }
     // ------------------------------------
 
-    // Get last exercise stats (Sử dụng finalNameEn để lấy đúng lịch sử của bài mới)
-    // Firestore id for stats is usually the exercise id, but wait, getLastExerciseStats uses exerciseId
-    // If it's a swapped exercise, its ID in history is the swapped one, BUT we track by exerciseId.
-    // wait! getExerciseStats queries by exerciseId. If we swap, we need to query by the swapped name if the ID doesn't change?
-    // In ActiveWorkout.tsx swap logic, it didn't change the exerciseId!
-    // This means history is currently bound to the exerciseId (e.g. 'm1-push-a-2'). 
-    // BUT getLastExerciseStats checks `e.nameEn === finalNameEn`! Let's just use finalNameEn if needed.
-    // Wait, getExerciseStats checks exerciseId? Let's fix that.
-    
-    // For now, we pass ex.id. But if they swapped, maybe the last history has the new name.
-    const lastStats = await getLastExerciseStats(ex.id, finalNameEn);
+    // Lấy lịch sử 2 buổi gần nhất của bài tập này
+    const history = await getExerciseHistory(ex.id, finalNameEn, 2);
     
     let previousWeight = 0;
     let previousReps = 0;
-    if (lastStats) {
-       previousWeight = lastStats.weight;
-       previousReps = lastStats.reps;
-       targetWeight = lastStats.weight;
+    if (history.length > 0) {
+       previousWeight = history[0].weight;
+       previousReps = history[0].reps;
+       targetWeight = history[0].weight; // default fallback
+    }
+
+    // --- TÍNH TOÁN PROGRESSIVE OVERLOAD ---
+    let progressionSuggestion: any = undefined;
+    let computedRIR = '';
+
+    if (ex.tier === 'core') {
+      computedRIR = '1-2';
+    } else if (ex.tier === 'tier1' || ex.tier === 'main') {
+      // Tier 1 Logic
+      const tier1Sugg = suggestTier1Weight(previousWeight, weekInMonth);
+      targetWeight = tier1Sugg.suggestedWeight > 0 ? tier1Sugg.suggestedWeight : targetWeight;
+      computedRIR = tier1Sugg.newRir;
+      
+      progressionSuggestion = {
+        suggestedWeight: targetWeight,
+        reason: tier1Sugg.reason,
+        oldRir: tier1Sugg.oldRir,
+        newRir: tier1Sugg.newRir
+      };
+    } else {
+      // Accessory Logic (Double Progression)
+      computedRIR = '1-2';
+      const maxRepMatch = targetReps.match(/\d+-(\d+)/);
+      const maxReps = maxRepMatch ? parseInt(maxRepMatch[1], 10) : parseInt(targetReps, 10);
+      
+      if (maxReps && !isNaN(maxReps)) {
+        const lastTwoSessionsSets = history.map(h => h.sets);
+        const dpSugg = suggestDoubleProgression(previousWeight, lastTwoSessionsSets, maxReps, 2.5);
+        targetWeight = dpSugg.suggestedWeight > 0 ? dpSugg.suggestedWeight : targetWeight;
+        
+        progressionSuggestion = {
+          suggestedWeight: targetWeight,
+          reason: dpSugg.reason,
+          oldRir: '1-2',
+          newRir: '1-2'
+        };
+      } else {
+        progressionSuggestion = {
+          suggestedWeight: targetWeight,
+          reason: 'Giữ nguyên tạ, tập trung chất lượng chuyển động.',
+          oldRir: '1-2',
+          newRir: '1-2'
+        };
+      }
     }
 
     logs.push({
@@ -143,7 +168,8 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
       })),
       checked: false,
       notes: '',
-      lastStatsText: lastStats ? `${previousWeight}kg x ${previousReps} reps` : ''
+      lastStatsText: history.length > 0 ? `${previousWeight}kg x ${previousReps} reps` : '',
+      progressionSuggestion
     });
   }
   return logs;
