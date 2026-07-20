@@ -64,7 +64,8 @@ export default function ExerciseDetailSheet({ ex, onClose }: { ex: Exercise; onC
                   {EQUIPMENT_LABELS[ex.equipment] || ex.equipment}
                 </span>
               </div>
-              <h2 className="text-xl font-extrabold text-white">{ex.name}</h2>
+              <h2 className="text-xl font-extrabold text-white">{ex.nameVi?.[0] || ex.name}</h2>
+              {ex.nameVi?.[0] && <p className="text-sm font-medium text-slate-400 mt-0.5">{ex.name}</p>}
             </div>
             <button
               onClick={onClose}

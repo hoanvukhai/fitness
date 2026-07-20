@@ -9,6 +9,7 @@ export const metadata = {
 
 export interface Exercise {
   name: string;
+  nameVi?: string[];
   tier: string;
   pattern: string;
   targetMuscle: string;

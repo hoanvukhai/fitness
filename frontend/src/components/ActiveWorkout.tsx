@@ -77,7 +77,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
     let wakeLock: any = null;
     const requestWakeLock = async () => {
       try {
-        if ('wakeLock' in navigator) {
+        if ('wakeLock' in navigator && document.visibilityState === 'visible') {
           wakeLock = await (navigator as any).wakeLock.request('screen');
         }
       } catch (err) {
