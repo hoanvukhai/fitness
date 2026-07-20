@@ -180,16 +180,12 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
 
   const handleFinishTimerExercise = () => {
-    // For time-based main exercises, auto-check all sets and advance
     if (phase === 'main') {
       const ex = session.exercises[itemIndex];
-      const newSets = ex.sets.map(s => ({ ...s, completed: true, reps: ex.sets[0]?.reps || 0 })); // Just mark done
-      onUpdate({
-        ...session,
-        exercises: session.exercises.map((e, i) => i === itemIndex ? { ...e, sets: newSets, checked: true } : e)
-      });
-      // Start rest
-      startRest(90);
+      const currentSet = ex.sets[viewedSetIndex];
+      if (currentSet && !currentSet.completed) {
+        handleCompleteSet(viewedSetIndex, currentSet.weight || 0, currentSet.reps || 0);
+      }
     } else {
       advance();
     }
