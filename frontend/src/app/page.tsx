@@ -153,7 +153,7 @@ export default function TodayPage() {
         pausedSecs += Math.floor((Date.now() - new Date(session.lastPausedAt).getTime()) / 1000);
       }
       finalUpdated.totalPausedSeconds = pausedSecs;
-      finalUpdated.lastPausedAt = undefined;
+      delete finalUpdated.lastPausedAt;
     }
     setSession(finalUpdated);
     await saveWorkoutSession(finalUpdated);
