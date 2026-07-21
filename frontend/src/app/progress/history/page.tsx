@@ -119,7 +119,8 @@ export default function HistoryPage() {
                         const doneSets = ex.sets.filter(s => s.completed);
                         if (doneSets.length === 0) return null;
                         const maxW = Math.max(...doneSets.map(s => s.weight));
-                        const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
+                        const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) || 
+                          (ex.name && ex.name.toLowerCase().includes('plank'));
                         
                         return (
                           <div key={ex.exerciseId} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">

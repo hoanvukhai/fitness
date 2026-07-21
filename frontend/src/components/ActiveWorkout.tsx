@@ -245,9 +245,9 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
       else setTimerLeft(0);
     } else {
       const ex = session.exercises[itemIndex];
-      const isTimeBased = ex?.targetReps.toLowerCase().includes('giây') ||
-        ex?.targetReps.toLowerCase().includes('s') ||
-        (ex?.name && normalize(ex.name).includes('plank'));
+      const isTimeBased = ex?.targetReps ? 
+        (/giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) || (ex.name && ex.name.toLowerCase().includes('plank'))) 
+        : false;
       if (isTimeBased) {
         const d = parseInt(ex.targetReps) || 60;
         setTimerLeft(d);

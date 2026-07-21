@@ -168,7 +168,8 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
             </h3>
             <div className="space-y-6">
               {edited.exercises.map((ex, eIdx) => {
-                const isTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
+                const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) || 
+                  (ex.name && ex.name.toLowerCase().includes('plank'));
                 
                 const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
                 const originalGuide = dbData.exercises.find((e: any) => {

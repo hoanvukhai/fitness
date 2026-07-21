@@ -64,7 +64,8 @@ export default function ExerciseCard({
 
   const restSeconds = parseRestSeconds(exercise.rest);
   // Bài tính thời gian (Core như Plank, Ab...)
-  const isTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
+  const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(exercise.targetReps.toLowerCase()) ||
+    (exercise.name && exercise.name.toLowerCase().includes('plank'));
 
   const updateSet = (setIdx: number, field: 'weight' | 'reps', value: number) => {
     let newSets = exercise.sets.map((s, i) =>
