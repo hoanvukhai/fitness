@@ -377,8 +377,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
     const ex = session.exercises[itemIndex];
     const guide = getGuide(ex.nameEn, ex.name);
 
-    const isTimeBased = ex.targetReps.toLowerCase().includes('giây') ||
-      ex.targetReps.toLowerCase().includes('s') ||
+    const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) ||
       normalize(ex.name).includes('plank');
 
     const currentSetIndex = ex.sets.findIndex(s => !s.completed);
