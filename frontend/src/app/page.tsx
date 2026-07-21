@@ -5,7 +5,7 @@ import { useSettings } from '@/hooks/useSettings';
 import { getWorkoutSession, saveWorkoutSession, getCompletedSessionCount, getLastExerciseStats, getExerciseHistory } from '@/lib/firestore';
 import {
   getTodaySession, generateWorkoutId, formatDate,
-  calcTotalVolume, getDayLabel, getSessionLabel, suggestTier1Weight, suggestDoubleProgression
+  calcTotalVolume, getDayLabel, getSessionLabel, suggestTier1Weight, suggestDoubleProgression, getWeekAndMonthFromStartDate
 } from '@/lib/workout-engine';
 import { ExerciseLog, WorkoutSession } from '@/lib/types';
 import Onboarding from '@/components/Onboarding';
@@ -273,13 +273,9 @@ export default function TodayPage() {
     let existing = await getWorkoutSession(id);
 
     if (!existing) {
-      // Logic tự động đếm buổi (Session Counting)
-      const completedCount = await getCompletedSessionCount(day, sess);
-      const sessionNumber = completedCount + 1;
-      const cyclePos = (sessionNumber - 1) % 12; // 12 weeks = 1 macrocycle
-      const currentMonth = Math.floor(cyclePos / 4) + 1; // 1, 2, or 3
-      const weekInMonth = (cyclePos % 4) + 1; // 1, 2, 3, or 4
-      const totalWeek = cyclePos + 1;
+      // Tính tuần/tháng dựa trên ngày bắt đầu chương trình thực tế
+      const { week: totalWeek, month: currentMonth, weekInMonth, cycleNumber } = getWeekAndMonthFromStartDate(settings.startDate);
+      const sessionNumber = totalWeek; // Dùng số tuần thực tế làm sessionNumber
 
       const raw = getExercisesForSession(day, sess, currentMonth);
       const logs = await buildExerciseLogs(raw, settings, day, sessionNumber, currentMonth, weekInMonth);
@@ -699,7 +695,7 @@ export default function TodayPage() {
         ) : (session?.status === 'in_progress' || session?.status === 'planned' || session?.status === 'paused') ? (
           <div className="space-y-4">
             {warmupItems.length > 0 && (
-              <WarmupCooldown title="Khởi động" emoji="🔥" items={warmupItems} color="orange" />
+              <WarmupCooldown title="Khởi động" emoji="🔥" items={warmupItems} color="orange" sessionId={session.id} />
             )}
 
             {session.exercises.map((ex, idx) => (
@@ -712,7 +708,7 @@ export default function TodayPage() {
             ))}
 
             {cooldownItems.length > 0 && (
-              <WarmupCooldown title="Giãn cơ" emoji="🧘" items={cooldownItems} color="teal" />
+              <WarmupCooldown title="Giãn cơ" emoji="🧘" items={cooldownItems} color="teal" sessionId={session.id} />
             )}
           </div>
         ) : null}

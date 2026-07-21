@@ -204,7 +204,7 @@ export default function ExerciseCard({
                                 setShowSwapDropdown(false);
                                 if (alt !== exercise.nameEn) {
                                   const isNewTimeBased = alt.toLowerCase().includes('plank');
-                                  const isOldTimeBased = exercise.targetReps.toLowerCase().includes('giây') || exercise.targetReps.toLowerCase().includes('s');
+                                  const isOldTimeBased = /giây|giay|\b\d+\s*s\b/.test(exercise.targetReps.toLowerCase());
                                   let newTargetReps = exercise.targetReps;
 
                                   if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';

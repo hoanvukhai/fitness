@@ -8,6 +8,7 @@ import { getSettings, saveSettings, getLastExerciseStats } from '@/lib/firestore
 import appConfig from '../../data/app-config.json';
 import WorkoutOverviewSheet from './WorkoutOverviewSheet';
 import ExerciseDetailSheet from './ExerciseDetailSheet';
+import { sounds } from '@/lib/sounds';
 
 interface ActiveWorkoutProps {
   session: WorkoutSession;
@@ -119,6 +120,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
       const t = setInterval(() => setRestLeft(r => r - 1), 1000);
       return () => clearInterval(t);
     } else if (session.status !== 'paused' && isResting && restLeft <= 0) {
+      sounds.restEnd();
       setIsResting(false);
     }
   }, [isResting, restLeft, session.status]);
@@ -135,6 +137,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
   // Handle phase changes
   const advance = () => {
+    sounds.start();
     if (phase === 'warmup') {
       if (itemIndex < warmups.length - 1) {
         setItemIndex(itemIndex + 1);
@@ -216,6 +219,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
     let restSeconds = parseInt(ex.rest) || 90;
     if (ex.rest.toLowerCase().includes('phút')) restSeconds *= 60;
 
+    sounds.complete();
     startRest(restSeconds);
 
     // Automatically advance viewed set tab to the next uncompleted one

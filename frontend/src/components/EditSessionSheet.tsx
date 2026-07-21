@@ -43,7 +43,7 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
       const newExercises = [...prev.exercises];
       const ex = newExercises[exerciseIndex];
       const isNewTimeBased = newName.toLowerCase().includes('plank');
-      const isOldTimeBased = ex.targetReps.toLowerCase().includes('giây') || ex.targetReps.toLowerCase().includes('s');
+      const isOldTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase());
       let newTargetReps = ex.targetReps;
       
       if (isNewTimeBased && !isOldTimeBased) newTargetReps = '60 giây';

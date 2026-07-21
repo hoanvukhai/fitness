@@ -94,6 +94,29 @@ export function getWeekInMonth(settings: AppSettings): number {
 }
 
 /**
+ * Tính tuần/tháng/weekInMonth dựa trên ngày bắt đầu chương trình thực tế
+ * Chu kỳ 12 tuần (3 tháng), sau đó reset về tháng 1 tuần 1 nhưng giữ ngưỡng tạ
+ */
+export function getWeekAndMonthFromStartDate(startDate: string): {
+  week: number;
+  month: number;
+  weekInMonth: number;
+  cycleNumber: number; // Số chu kỳ đã hoàn thành + 1
+} {
+  const startMs = new Date(startDate).getTime();
+  // Dùng múi giờ VN cho ngày hiện tại
+  const todayStr = new Date().toLocaleDateString('sv', { timeZone: 'Asia/Ho_Chi_Minh' });
+  const todayMs = new Date(todayStr).getTime();
+  const daysDiff = Math.max(0, Math.floor((todayMs - startMs) / 86400000));
+  const weekNumber = Math.floor(daysDiff / 7) + 1; // Tuần 1-based
+  const cyclePos = (weekNumber - 1) % 12; // Vị trí trong chu kỳ 12 tuần
+  const cycleNumber = Math.floor((weekNumber - 1) / 12) + 1;
+  const month = Math.floor(cyclePos / 4) + 1; // 1, 2, 3
+  const weekInMonth = (cyclePos % 4) + 1; // 1, 2, 3, 4
+  return { week: weekNumber, month, weekInMonth, cycleNumber };
+}
+
+/**
  * Tính hôm nay là buổi tập gì (theo lịch 6 buổi/tuần)
  * 0=CN, 1=T2, 2=T3, 3=T4, 4=T5, 5=T6, 6=T7
  */

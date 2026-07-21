@@ -19,13 +19,34 @@ interface WarmupCooldownProps {
   emoji: string;
   items: ChecklistItem[];
   color: 'orange' | 'teal';
+  sessionId?: string;
   onComplete?: () => void;
 }
 
-export default function WarmupCooldown({ title, emoji, items, color, onComplete }: WarmupCooldownProps) {
-  const [checked, setChecked] = useState<boolean[]>(new Array(items.length).fill(false));
-  const [done, setDone] = useState(false);
+export default function WarmupCooldown({ title, emoji, items, color, sessionId, onComplete }: WarmupCooldownProps) {
+  const storageKey = sessionId ? `wc-${sessionId}-${title}` : null;
+
+  const [checked, setChecked] = useState<boolean[]>(() => {
+    if (storageKey && typeof window !== 'undefined') {
+      try {
+        const saved = sessionStorage.getItem(storageKey);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length === items.length) return parsed;
+        }
+      } catch { /* ignore */ }
+    }
+    return new Array(items.length).fill(false);
+  });
+
+  const [done, setDone] = useState(() => checked.every(Boolean));
   const [selectedGuide, setSelectedGuide] = useState<any>(null);
+
+  const saveState = (next: boolean[]) => {
+    if (storageKey && typeof window !== 'undefined') {
+      try { sessionStorage.setItem(storageKey, JSON.stringify(next)); } catch { /* ignore */ }
+    }
+  };
 
   const getGuide = (item: any) => {
     return dbData.exercises.find((e: any) => {
@@ -37,6 +58,7 @@ export default function WarmupCooldown({ title, emoji, items, color, onComplete 
     const next = [...checked];
     next[i] = !next[i];
     setChecked(next);
+    saveState(next);
     if (next.every(Boolean)) {
       setDone(true);
       onComplete?.();
@@ -44,10 +66,13 @@ export default function WarmupCooldown({ title, emoji, items, color, onComplete 
   };
 
   const markAllDone = () => {
-    setChecked(new Array(items.length).fill(true));
+    const next = new Array(items.length).fill(true);
+    setChecked(next);
+    saveState(next);
     setDone(true);
     onComplete?.();
   };
+
 
   const accent = color === 'orange'
     ? 'text-orange-400 border-orange-500/30 bg-orange-500/10'
