@@ -23,10 +23,11 @@ export async function getSettings(): Promise<AppSettings | null> {
 export async function saveSettings(settings: Partial<AppSettings>): Promise<void> {
   const ref = doc(db, SETTINGS_DOC);
   const snap = await getDoc(ref);
+  const cleanData = JSON.parse(JSON.stringify(settings));
   if (snap.exists()) {
-    await updateDoc(ref, settings as Record<string, unknown>);
+    await updateDoc(ref, cleanData);
   } else {
-    await setDoc(ref, { id: 'main', ...settings });
+    await setDoc(ref, { id: 'main', ...cleanData });
   }
 }
 
@@ -34,7 +35,8 @@ export async function saveSettings(settings: Partial<AppSettings>): Promise<void
 
 export async function saveWorkoutSession(session: WorkoutSession): Promise<void> {
   const ref = doc(db, 'workouts', session.id);
-  await setDoc(ref, session);
+  const cleanData = JSON.parse(JSON.stringify(session));
+  await setDoc(ref, cleanData);
 }
 
 export async function getWorkoutSession(id: string): Promise<WorkoutSession | null> {
