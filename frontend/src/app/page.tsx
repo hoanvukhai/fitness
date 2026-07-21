@@ -109,9 +109,19 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
     if (ex.tier === 'core') {
       computedRIR = '1-2';
     } else if (ex.tier === 'tier1' || ex.tier === 'main') {
+      // Nếu chưa có lịch sử, fallback sang tier1Weights từ Settings
+      if (previousWeight === 0) {
+        const nameEnLower = (finalNameEn || '').toLowerCase();
+        if (nameEnLower.includes('bench')) previousWeight = settings.tier1Weights?.benchPress || 0;
+        else if (nameEnLower.includes('ohp') || nameEnLower.includes('shoulder press') || nameEnLower.includes('overhead')) previousWeight = settings.tier1Weights?.ohp || 0;
+        else if (nameEnLower.includes('row')) previousWeight = settings.tier1Weights?.barbellRow || 0;
+        else if (nameEnLower.includes('pull')) previousWeight = settings.tier1Weights?.pullup || 0;
+        else if (nameEnLower.includes('squat')) previousWeight = settings.tier1Weights?.backSquat || 0;
+        else if (nameEnLower.includes('rdl') || nameEnLower.includes('deadlift')) previousWeight = settings.tier1Weights?.rdl || 0;
+      }
       // Tier 1 Logic
       const tier1Sugg = suggestTier1Weight(previousWeight, weekInMonth);
-      targetWeight = tier1Sugg.suggestedWeight > 0 ? tier1Sugg.suggestedWeight : targetWeight;
+      targetWeight = tier1Sugg.suggestedWeight > 0 ? tier1Sugg.suggestedWeight : (previousWeight || targetWeight);
       computedRIR = tier1Sugg.newRir;
       
       progressionSuggestion = {

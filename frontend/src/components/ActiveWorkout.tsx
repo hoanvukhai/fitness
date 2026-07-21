@@ -56,14 +56,34 @@ const SetInputRow = ({ s, index, isCurrent, isTimeBased, onComplete, onUndo }: {
 };
 
 export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, onClose, onFinish }: ActiveWorkoutProps) {
-  const [phase, setPhase] = useState<Phase>('warmup');
-  const [itemIndex, setItemIndex] = useState(0);
+  const stateKey = `aw-state-${session.id}`;
+
+  const getSavedState = () => {
+    try {
+      const s = sessionStorage.getItem(stateKey);
+      return s ? JSON.parse(s) : null;
+    } catch { return null; }
+  };
+
+  const saved = getSavedState();
+  const [phase, setPhaseRaw] = useState<Phase>(saved?.phase || 'warmup');
+  const [itemIndex, setItemIndexRaw] = useState<number>(saved?.itemIndex || 0);
   const [isResting, setIsResting] = useState(false);
   const [restLeft, setRestLeft] = useState(0);
   const [showOverview, setShowOverview] = useState(false);
 
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerLeft, setTimerLeft] = useState(0);
+
+  const setPhase = (p: Phase) => {
+    setPhaseRaw(p);
+    try { sessionStorage.setItem(stateKey, JSON.stringify({ phase: p, itemIndex })); } catch {}
+  };
+
+  const setItemIndex = (i: number) => {
+    setItemIndexRaw(i);
+    try { sessionStorage.setItem(stateKey, JSON.stringify({ phase, itemIndex: i })); } catch {}
+  };
 
   const formatElapsed = (sec: number) => {
     const m = Math.floor(sec / 60);
@@ -74,6 +94,8 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   const [infoExercise, setInfoExercise] = useState<any | null>(null);
   const [showSwap, setShowSwap] = useState(false);
   const [viewedSetIndex, setViewedSetIndex] = useState(0);
+  const [showFinishConfirm, setShowFinishConfirm] = useState(false);
+  const [showSkipConfirm, setShowSkipConfirm] = useState(false);
 
   // WakeLock Effect to prevent screen from sleeping
   useEffect(() => {
@@ -606,9 +628,14 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
             {session.status === 'paused' ? ' (Đã dừng)' : ''}
           </button>
         </div>
-        <button onClick={() => setShowOverview(true)} className="p-2 -mr-2 text-blue-400 hover:text-blue-300 font-bold active:scale-95 transition-transform">
-          Danh sách
-        </button>
+        <div className="flex items-center gap-1">
+          <button onClick={() => setShowOverview(true)} className="p-2 text-blue-400 hover:text-blue-300 font-bold active:scale-95 transition-transform text-sm">
+            Danh s&#225;ch
+          </button>
+          <button onClick={() => setShowFinishConfirm(true)} className="p-2 -mr-2 text-emerald-400 hover:text-emerald-300 active:scale-95 transition-transform" title="K&#7871;t th&#250;c bu&#7893;i t&#7853;p">
+            <CheckCircle2 size={22} />
+          </button>
+        </div>
       </div>
 
       {renderContent()}
@@ -641,13 +668,12 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
           </button>
         ) : (
           <button
-            onClick={advance}
-            disabled={phase === 'main' && !session.exercises[itemIndex]?.sets.every((s: any) => s.completed)}
-            className={`flex-1 py-3 rounded-xl font-bold text-white transition-transform flex items-center justify-center gap-2 ${
-              phase === 'main' && !session.exercises[itemIndex]?.sets.every((s: any) => s.completed)
-                ? 'bg-slate-800 text-slate-500 cursor-not-allowed opacity-50'
-                : 'bg-blue-600 hover:bg-blue-500 shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95'
-            }`}
+            onClick={() => {
+              const allDone = session.exercises[itemIndex]?.sets.every((s: any) => s.completed);
+              if (allDone) { advance(); }
+              else { setShowSkipConfirm(true); }
+            }}
+            className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 rounded-xl font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.3)] active:scale-95 transition-transform flex items-center justify-center gap-2"
           >
             Tiếp theo <FastForward size={20} />
           </button>
@@ -655,6 +681,34 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
       </div>
 
       {renderRestTimer()}
+
+      {/* Finish Confirm */}
+      {showFinishConfirm && (
+        <div className="fixed inset-0 z-[210] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl">
+            <p className="font-bold text-white text-lg">Kết thúc buổi tập?</p>
+            <p className="text-slate-400 text-sm">Buổi tập sẽ được lưu vào lịch sử.</p>
+            <div className="flex gap-2">
+              <button onClick={() => setShowFinishConfirm(false)} className="flex-1 py-3 bg-slate-800 rounded-xl text-white font-semibold">Không</button>
+              <button onClick={() => { setShowFinishConfirm(false); sounds.finish(); onFinish(); }} className="flex-1 py-3 bg-emerald-600 rounded-xl text-white font-bold">Có, kết thúc</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Skip Confirm */}
+      {showSkipConfirm && (
+        <div className="fixed inset-0 z-[210] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl">
+            <p className="font-bold text-white text-lg">Bỏ qua bài này?</p>
+            <p className="text-slate-400 text-sm">Có hiệp chưa hoàn thành. Bạn vẫn muốn chuyển sang bài tiếp theo không?</p>
+            <div className="flex gap-2">
+              <button onClick={() => setShowSkipConfirm(false)} className="flex-1 py-3 bg-slate-800 rounded-xl text-white font-semibold">Tiếp tục tập</button>
+              <button onClick={() => { setShowSkipConfirm(false); advance(); }} className="flex-1 py-3 bg-amber-600 rounded-xl text-white font-bold">Bỏ qua</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showOverview && (
         <WorkoutOverviewSheet
