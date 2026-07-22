@@ -1,11 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, ChevronDown, ChevronUp, Lock, Timer, StickyNote, Info } from 'lucide-react';
+import { Check, ChevronDown, ChevronUp, Lock, Timer, StickyNote, Info, TrendingUp } from 'lucide-react';
 import { ExerciseLog, SetLog } from '@/lib/types';
 import RestTimer from './RestTimer';
 import ExerciseDetailSheet from './ExerciseDetailSheet';
 import dbData from '../../data/db.json';
+import { normalize } from '@/lib/utils';
+import giaoan from '../../data/giao-an.json';
 
 interface ExerciseCardProps {
   exercise: ExerciseLog;
@@ -49,7 +51,6 @@ export default function ExerciseCard({
       displayAlternatives.unshift(origEn);
     }
   }
-  const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   displayAlternatives = displayAlternatives.filter(a => normalize(a) !== normalize(exercise.nameEn) && normalize(a) !== normalize(exercise.name));
 
   // Parse thời gian nghỉ từ string sang giây
@@ -254,6 +255,28 @@ export default function ExerciseCard({
         {/* Expanded Content */}
         {expanded && (
           <div className="px-4 pb-4 space-y-4">
+            {/* G2: Core Ramp progress */}
+            {exercise.tier === 'core' && (() => {
+              // Tìm thông tin ramp từ giao-an cho bài core này
+              const monthMatch = exercise.targetReps.match(/(\d+)/);
+              const currentTarget = monthMatch ? parseInt(monthMatch[1]) : null;
+              if (!currentTarget) return null;
+              // Lấy progressionSuggestion để biết tháng hiện tại
+              const unit = /giây|giay/.test(exercise.targetReps) ? 's' : 'reps';
+              return (
+                <div className="bg-emerald-950/20 border border-emerald-800/30 rounded-xl px-3 py-2.5">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                      <TrendingUp size={12} />
+                      Mục tiêu tuần này
+                    </div>
+                    <div className="text-xs font-mono font-bold text-emerald-300">{currentTarget} {unit}</div>
+                  </div>
+                  <div className="text-[10px] text-emerald-400/60">Core Ramp — tăng dần theo tuần và tháng</div>
+                </div>
+              );
+            })()}
+
             {/* Suggestion from last session */}
             {(lastPerformance || suggestion) && (
               <div className="bg-blue-950/40 border border-blue-800/30 rounded-xl px-4 py-3 text-sm">

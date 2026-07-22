@@ -9,6 +9,7 @@ import appConfig from '../../data/app-config.json';
 import WorkoutOverviewSheet from './WorkoutOverviewSheet';
 import ExerciseDetailSheet from './ExerciseDetailSheet';
 import { sounds } from '@/lib/sounds';
+import { normalize } from '@/lib/utils';
 
 interface ActiveWorkoutProps {
   session: WorkoutSession;
@@ -129,7 +130,6 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
   // Scroll lock moved to page.tsx
 
   // Find exercise details from DB
-  const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
   const getGuide = (nameEn: string, name: string) => {
     return dbData.exercises.find((e: any) => {
       return e.name === nameEn || (e.aliases && e.aliases.includes(nameEn));
@@ -750,8 +750,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
               <p className="text-sm text-slate-400">Chọn một bài tập thay thế tương đương cho <strong>{session.exercises[itemIndex]?.name}</strong>:</p>
               {(() => {
                 const currentExLog = session.exercises[itemIndex];
-                const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-
+              
                 // Always base alternatives on the ORIGINAL exercise
                 const searchNameEn = currentExLog.originalNameEn || currentExLog.nameEn;
                 const dbEx = dbData.exercises.find((e: any) => {

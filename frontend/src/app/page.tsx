@@ -541,6 +541,22 @@ export default function TodayPage() {
           </div>
         )}
 
+        {/* G5: Test Week Banner */}
+        {(() => {
+          if (!settings?.startDate) return null;
+          const { weekInMonth } = getWeekAndMonthFromStartDate(settings.startDate);
+          if (weekInMonth !== 4) return null;
+          return (
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3 flex items-center gap-3">
+              <span className="text-xl">🔥</span>
+              <div>
+                <div className="text-sm font-bold text-amber-400">Tuần 4 — Tuần Test!</div>
+                <div className="text-xs text-amber-400/70">Dồn toàn bộ sức lực. Mức tạ tuần này làm cơ sở khởi điểm tháng sau.</div>
+              </div>
+            </div>
+          );
+        })()}
+
         {/* Progress Bar */}
         {session && (
           <div>

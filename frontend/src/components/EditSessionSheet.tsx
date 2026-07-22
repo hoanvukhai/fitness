@@ -5,6 +5,7 @@ import { X, Save, Clock, Calendar, CheckCircle2, ChevronDown } from 'lucide-reac
 import { WorkoutSession, ExerciseLog } from '@/lib/types';
 import { calcTotalVolume } from '@/lib/workout-engine';
 import dbData from '../../data/db.json';
+import { normalize } from '@/lib/utils';
 
 interface EditSessionSheetProps {
   session: WorkoutSession;
@@ -171,7 +172,7 @@ export default function EditSessionSheet({ session, onSave, onClose }: EditSessi
                 const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) || 
                   (ex.name && ex.name.toLowerCase().includes('plank'));
                 
-                const normalize = (str: string) => (str || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+                
                 const originalGuide = dbData.exercises.find((e: any) => {
                   const searchNameEn = ex.originalNameEn || ex.nameEn;
                   return e.name === searchNameEn || (e.aliases && e.aliases.includes(searchNameEn));

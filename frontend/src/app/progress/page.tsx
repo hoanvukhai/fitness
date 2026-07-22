@@ -31,6 +31,16 @@ const TIER1_EXERCISES = [
   { key: 'RDL', label: 'RDL', color: '#06b6d4' },
 ];
 
+// Map nameEn fallback cho các bài Tier 1
+const TIER1_NAME_EN_MAP: Record<string, string[]> = {
+  'Bench Press': ['Bench Press', 'Đẩy ngực tạ đòn'],
+  'OHP': ['OHP', 'Seated DB Shoulder Press', 'Đẩy vai tạ đơn ngồi'],
+  'Barbell Row': ['Barbell Row', 'Kéo tạ đòn cúi người'],
+  'Pull-up': ['Pull-up', 'Lat Pulldown', 'Kéo xà / Lat Pulldown'],
+  'Back Squat': ['Back Squat', 'Squat tạ đòn'],
+  'RDL': ['RDL', 'Romanian Deadlift'],
+};
+
 function buildChartData(workouts: WorkoutSession[]) {
   return workouts
     .filter(w => w.status === 'completed')
@@ -38,9 +48,15 @@ function buildChartData(workouts: WorkoutSession[]) {
     .map(w => {
       const point: Record<string, any> = { date: w.date.slice(5) }; // MM-DD
       TIER1_EXERCISES.forEach(ex => {
-        const found = w.exercises.find(e => e.name === ex.key);
+        const aliases = TIER1_NAME_EN_MAP[ex.label] || [ex.key];
+        const found = w.exercises.find(e =>
+          aliases.includes(e.name) || aliases.includes(e.nameEn) ||
+          aliases.includes(e.originalName || '') || aliases.includes(e.originalNameEn || '')
+        );
         if (found) {
-          const maxWeight = Math.max(...found.sets.filter(s => s.completed).map(s => s.weight), 0);
+          const completedSets = found.sets.filter(s => s.completed);
+          if (completedSets.length === 0) return;
+          const maxWeight = Math.max(...completedSets.map(s => s.weight), 0);
           if (maxWeight > 0) point[ex.label] = maxWeight;
         }
       });
