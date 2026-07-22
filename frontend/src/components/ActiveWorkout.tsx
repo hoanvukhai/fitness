@@ -78,12 +78,12 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
   const setPhase = (p: Phase) => {
     setPhaseRaw(p);
-    try { sessionStorage.setItem(stateKey, JSON.stringify({ phase: p, itemIndex })); } catch {}
+    try { sessionStorage.setItem(stateKey, JSON.stringify({ phase: p, itemIndex })); } catch { }
   };
 
   const setItemIndex = (i: number) => {
     setItemIndexRaw(i);
-    try { sessionStorage.setItem(stateKey, JSON.stringify({ phase, itemIndex: i })); } catch {}
+    try { sessionStorage.setItem(stateKey, JSON.stringify({ phase, itemIndex: i })); } catch { }
   };
 
   const formatElapsed = (sec: number) => {
@@ -271,8 +271,8 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
       else setTimerLeft(0);
     } else {
       const ex = session.exercises[itemIndex];
-      const isTimeBased = ex?.targetReps ? 
-        (/giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) || (ex.name && ex.name.toLowerCase().includes('plank'))) 
+      const isTimeBased = ex?.targetReps ?
+        (/giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) || (ex.name && ex.name.toLowerCase().includes('plank')))
         : false;
       if (isTimeBased) {
         const d = parseInt(ex.targetReps) || 60;
@@ -684,8 +684,14 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
       {/* Finish Confirm */}
       {showFinishConfirm && (
-        <div className="fixed inset-0 z-[210] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl">
+        <div 
+          className="fixed inset-0 z-[210] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4"
+          onClick={() => setShowFinishConfirm(false)}
+        >
+          <div 
+            className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
             <p className="font-bold text-white text-lg">Kết thúc buổi tập?</p>
             <p className="text-slate-400 text-sm">Buổi tập sẽ được lưu vào lịch sử.</p>
             <div className="flex gap-2">
@@ -698,8 +704,14 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
 
       {/* Skip Confirm */}
       {showSkipConfirm && (
-        <div className="fixed inset-0 z-[210] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl">
+        <div 
+          className="fixed inset-0 z-[210] bg-black/60 backdrop-blur-sm flex items-end justify-center p-4"
+          onClick={() => setShowSkipConfirm(false)}
+        >
+          <div 
+            className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
             <p className="font-bold text-white text-lg">Bỏ qua bài này?</p>
             <p className="text-slate-400 text-sm">Có hiệp chưa hoàn thành. Bạn vẫn muốn chuyển sang bài tiếp theo không?</p>
             <div className="flex gap-2">
@@ -750,7 +762,7 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
               <p className="text-sm text-slate-400">Chọn một bài tập thay thế tương đương cho <strong>{session.exercises[itemIndex]?.name}</strong>:</p>
               {(() => {
                 const currentExLog = session.exercises[itemIndex];
-              
+
                 // Always base alternatives on the ORIGINAL exercise
                 const searchNameEn = currentExLog.originalNameEn || currentExLog.nameEn;
                 const dbEx = dbData.exercises.find((e: any) => {
@@ -828,14 +840,14 @@ export default function ActiveWorkout({ session, elapsedSeconds = 0, onUpdate, o
                             const settings = await getSettings();
                             if (settings) {
                               const alts = settings.alternatives || {};
-                              
+
                               // If they swap back to original, remove from alternatives
                               if (altNameEn === originalNameEn) {
                                 delete alts[originalNameEn];
                               } else {
                                 alts[originalNameEn] = altNameEn;
                               }
-                              
+
                               await saveSettings({ ...settings, alternatives: alts });
                             }
                           }}

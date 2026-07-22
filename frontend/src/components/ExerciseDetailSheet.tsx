@@ -3,17 +3,17 @@ import { X, Zap, Target, LayoutGrid } from 'lucide-react';
 import type { Exercise } from '@/app/library/page';
 
 export const MUSCLE_LABELS: Record<string, { label: string; emoji: string; color: string }> = {
-  chest:     { label: 'Ngực',       emoji: '🫀', color: 'bg-rose-500/15 text-rose-400 border-rose-500/30' },
-  shoulders: { label: 'Vai',        emoji: '🔺', color: 'bg-orange-500/15 text-orange-400 border-orange-500/30' },
-  triceps:   { label: 'Tay sau',    emoji: '💪', color: 'bg-amber-500/15 text-amber-400 border-amber-500/30' },
-  back:      { label: 'Lưng',       emoji: '🏋️', color: 'bg-blue-500/15 text-blue-400 border-blue-500/30' },
-  biceps:    { label: 'Tay trước',  emoji: '💪', color: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30' },
-  legs:      { label: 'Chân',       emoji: '🦵', color: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' },
-  core:      { label: 'Core',       emoji: '⚡', color: 'bg-slate-500/15 text-slate-400 border-slate-500/30' },
+  chest: { label: 'Ngực', emoji: '🫀', color: 'bg-rose-500/15 text-rose-400 border-rose-500/30' },
+  shoulders: { label: 'Vai', emoji: '🔺', color: 'bg-orange-500/15 text-orange-400 border-orange-500/30' },
+  triceps: { label: 'Tay sau', emoji: '💪', color: 'bg-amber-500/15 text-amber-400 border-amber-500/30' },
+  back: { label: 'Lưng', emoji: '🏋️', color: 'bg-blue-500/15 text-blue-400 border-blue-500/30' },
+  biceps: { label: 'Tay trước', emoji: '💪', color: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30' },
+  legs: { label: 'Chân', emoji: '🦵', color: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30' },
+  core: { label: 'Core', emoji: '⚡', color: 'bg-slate-500/15 text-slate-400 border-slate-500/30' },
 };
 
 export const TIER_LABELS: Record<string, { label: string; color: string }> = {
-  TIER_1_PRIMARY:   { label: 'Tier 1', color: 'bg-rose-500/15 text-rose-400 border-rose-500/30' },
+  TIER_1_PRIMARY: { label: 'Tier 1', color: 'bg-rose-500/15 text-rose-400 border-rose-500/30' },
   TIER_2_SECONDARY: { label: 'Tier 2', color: 'bg-blue-500/15 text-blue-400 border-blue-500/30' },
   TIER_3_ISOLATION: { label: 'Tier 3', color: 'bg-slate-600/30 text-slate-400 border-slate-600/30' },
 };
@@ -41,11 +41,11 @@ export default function ExerciseDetailSheet({ ex, onClose }: { ex: Exercise; onC
   }, []);
 
   return (
-    <div 
+    <div
       className="fixed inset-0 z-[60] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
       onClick={onClose}
     >
-      <div 
+      <div
         className="bg-slate-900 border border-slate-800 rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
@@ -85,12 +85,12 @@ export default function ExerciseDetailSheet({ ex, onClose }: { ex: Exercise; onC
                   const videoId = url.includes('v=') ? url.split('v=')[1].split('&')[0] : url.split('/').pop();
                   return (
                     <div key={i} className="shrink-0 w-[90%] sm:w-full aspect-video rounded-2xl overflow-hidden bg-slate-800 snap-center flex-1">
-                      <iframe 
-                        width="100%" 
-                        height="100%" 
+                      <iframe
+                        width="100%"
+                        height="100%"
                         src={`https://www.youtube.com/embed/${videoId}?autoplay=0&mute=1`}
-                        title="YouTube video player" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        title="YouTube video player"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                         className="border-none"
                       />

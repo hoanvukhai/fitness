@@ -44,13 +44,13 @@ function getExercisesForSession(day: string, session: string, month: number) {
 
 async function buildExerciseLogs(exercises: any[], settings: any, day: string, sessionNumber: number, currentMonth: number, weekInMonth: number): Promise<ExerciseLog[]> {
   const data = getGiaoan();
-  
+
   const logs: ExerciseLog[] = [];
 
   // Xử lý Smart Swap trước khi fetch Firestore để batch queries
   const exercisesMeta = exercises.map(ex => {
     let targetReps = ex.repsDisplay || '';
-    
+
     // Core Ramp logic
     if (ex.tier === 'core' && data.coreRamp && data.coreRamp[day]) {
       const rampData = data.coreRamp[day];
@@ -93,13 +93,13 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
     let targetReps = initReps;
     let targetWeight = settings.accessoryWeights?.[ex.id] || 0;
     const history = histories[i];
-    
+
     let previousWeight = 0;
     let previousReps = 0;
     if (history.length > 0) {
-       previousWeight = history[0].weight;
-       previousReps = history[0].reps;
-       targetWeight = history[0].weight;
+      previousWeight = history[0].weight;
+      previousReps = history[0].reps;
+      targetWeight = history[0].weight;
     }
 
     // --- TÍNH TOÁN PROGRESSIVE OVERLOAD ---
@@ -188,7 +188,7 @@ export default function TodayPage() {
   const [overrideDay, setOverrideDay] = useState<{ day: string; session: 'A' | 'B' } | null>(null);
   const [finished, setFinished] = useState(false);
   const [showDayPicker, setShowDayPicker] = useState(false);
-  
+
   // Active Workout Modal State
   const [showActiveWorkout, setShowActiveWorkout] = useState(false);
 
@@ -201,7 +201,7 @@ export default function TodayPage() {
     if (!sess.startedAt) return sess.durationSeconds || 0;
     const start = new Date(sess.startedAt).getTime();
     const pausedSecs = sess.totalPausedSeconds || 0;
-    
+
     if (sess.status === 'paused' && sess.lastPausedAt) {
       const pausedAt = new Date(sess.lastPausedAt).getTime();
       return Math.floor((pausedAt - start) / 1000) - pausedSecs;
@@ -258,7 +258,7 @@ export default function TodayPage() {
     return `${m}:${sec.toString().padStart(2, '0')}`;
   };
 
-    const loadSession = useCallback(async () => {
+  const loadSession = useCallback(async () => {
     if (!settings) return;
     setLoadingSession(true);
     const slot = overrideDay || getTodaySession(settings);
@@ -275,7 +275,7 @@ export default function TodayPage() {
 
       const raw = getExercisesForSession(day, sess, currentMonth);
       const logs = await buildExerciseLogs(raw, settings, day, sessionNumber, currentMonth, weekInMonth);
-      
+
       existing = {
         id, date: todayDate,
         day: day as any, session: sess,
@@ -528,11 +528,10 @@ export default function TodayPage() {
               <button
                 key={`${opt.day}-${opt.session}`}
                 onClick={() => { setOverrideDay(opt); setShowDayPicker(false); setSession(null); }}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                  todaySlot.day === opt.day && todaySlot.session === opt.session
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${todaySlot.day === opt.day && todaySlot.session === opt.session
                     ? 'bg-slate-800 text-white border border-slate-700'
                     : 'text-slate-400 hover:bg-slate-800 border border-transparent'
-                }`}
+                  }`}
               >
                 <div className={`w-3 h-3 rounded-full ${opt.color} shadow-sm`} />
                 {opt.label}
@@ -598,17 +597,16 @@ export default function TodayPage() {
               <button
                 onClick={() => {
                   const newStatus = session.status === 'paused' ? 'in_progress' : 'paused';
-                  const updated: WorkoutSession = { 
-                     ...session, 
-                     status: newStatus 
+                  const updated: WorkoutSession = {
+                    ...session,
+                    status: newStatus
                   };
                   handleUpdateSession(updated);
                 }}
-                className={`flex-1 py-3.5 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg ${
-                  session.status === 'paused' 
-                    ? 'bg-orange-600 hover:bg-orange-700 shadow-orange-600/20' 
+                className={`flex-1 py-3.5 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg ${session.status === 'paused'
+                    ? 'bg-orange-600 hover:bg-orange-700 shadow-orange-600/20'
                     : 'bg-slate-800 hover:bg-slate-700 border border-slate-700'
-                }`}
+                  }`}
               >
                 {session.status === 'paused' ? (
                   <><Play size={18} fill="currentColor" /> Tiếp tục</>
@@ -616,7 +614,7 @@ export default function TodayPage() {
                   <><Pause size={18} fill="currentColor" /> Tạm dừng</>
                 )}
               </button>
-              
+
               <button
                 onClick={() => setShowFinishConfirm(true)}
                 className="flex-1 py-3.5 bg-emerald-600 hover:bg-emerald-700 rounded-2xl font-bold text-white text-base flex items-center justify-center gap-2 active:scale-95 transition-all shadow-lg shadow-emerald-600/20"
@@ -630,11 +628,11 @@ export default function TodayPage() {
 
         {/* Date Confirm Mini Dialog */}
         {showDateConfirm && (
-          <div 
+          <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-[100] p-4"
             onClick={() => setShowDateConfirm(false)}
           >
-            <div 
+            <div
               className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl"
               onClick={e => e.stopPropagation()}
             >
@@ -642,20 +640,20 @@ export default function TodayPage() {
                 <p className="font-bold text-white text-lg">Xác nhận ngày tập</p>
                 <p className="text-slate-400 text-sm mt-1">Sẽ dùng làm ngày lưu vào lịch sử.</p>
               </div>
-              <input 
-                type="date" 
+              <input
+                type="date"
                 value={confirmDate}
                 onChange={e => setConfirmDate(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-blue-500 focus:outline-none [color-scheme:dark]" 
+                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white focus:ring-1 focus:ring-blue-500 focus:outline-none [color-scheme:dark]"
               />
               <div className="flex gap-2 pt-2">
-                <button 
+                <button
                   onClick={() => setShowDateConfirm(false)}
                   className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl text-white font-semibold transition-colors"
                 >
                   Hủy
                 </button>
-                <button 
+                <button
                   onClick={() => startSession(confirmDate)}
                   className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 rounded-xl text-white font-bold transition-colors"
                 >
@@ -668,11 +666,11 @@ export default function TodayPage() {
 
         {/* Finish Confirm Mini Dialog */}
         {showFinishConfirm && (
-          <div 
+          <div
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center z-[100] p-4"
             onClick={() => setShowFinishConfirm(false)}
           >
-            <div 
+            <div
               className="bg-slate-900 border border-slate-800 rounded-3xl p-5 w-full max-w-sm mb-4 space-y-4 shadow-2xl"
               onClick={e => e.stopPropagation()}
             >
@@ -681,13 +679,13 @@ export default function TodayPage() {
                 <p className="text-slate-400 text-sm mt-1">Buổi tập sẽ được lưu lại vào lịch sử.</p>
               </div>
               <div className="flex gap-2 pt-2">
-                <button 
+                <button
                   onClick={() => setShowFinishConfirm(false)}
                   className="flex-1 py-3 bg-slate-800 hover:bg-slate-700 rounded-xl text-white font-semibold transition-colors"
                 >
                   Không
                 </button>
-                <button 
+                <button
                   onClick={() => {
                     setShowFinishConfirm(false);
                     finishSession();

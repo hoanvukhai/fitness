@@ -138,8 +138,8 @@ export default function ExerciseCard({
       )}
 
       <div className={`rounded-2xl border transition-all duration-300 overflow-hidden ${exercise.checked
-          ? 'bg-slate-900/40 border-slate-800/40 opacity-70'
-          : 'bg-slate-900 border-slate-800'
+        ? 'bg-slate-900/40 border-slate-800/40 opacity-70'
+        : 'bg-slate-900 border-slate-800'
         }`}>
         {/* Card Header */}
         <div
@@ -151,8 +151,8 @@ export default function ExerciseCard({
             <button
               onClick={e => { e.stopPropagation(); markAllDone(); }}
               className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 mt-0.5 transition-all ${exercise.checked
-                  ? 'bg-emerald-500 border-emerald-500'
-                  : 'border-slate-600 hover:border-slate-400'
+                ? 'bg-emerald-500 border-emerald-500'
+                : 'border-slate-600 hover:border-slate-400'
                 }`}
             >
               {exercise.checked && <Check size={12} strokeWidth={3} className="text-white" />}
@@ -192,9 +192,9 @@ export default function ExerciseCard({
 
                     {showSwapDropdown && (
                       <>
-                        <div 
-                          className="fixed inset-0 z-40" 
-                          onClick={(e) => { e.stopPropagation(); setShowSwapDropdown(false); }} 
+                        <div
+                          className="fixed inset-0 z-40"
+                          onClick={(e) => { e.stopPropagation(); setShowSwapDropdown(false); }}
                         />
                         <div className="absolute right-0 top-full mt-1.5 w-44 bg-slate-900 border border-slate-700 rounded-lg shadow-xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-150">
                           {displayAlternatives.map((alt: string) => (
@@ -214,13 +214,13 @@ export default function ExerciseCard({
                                   const originalNameEn = exercise.originalNameEn || exercise.nameEn;
                                   const originalName = exercise.originalName || exercise.name;
 
-                                  onChange({ 
-                                    ...exercise, 
+                                  onChange({
+                                    ...exercise,
                                     originalNameEn,
                                     originalName,
-                                    name: alt, 
-                                    nameEn: alt, 
-                                    selectedAlternative: alt, 
+                                    name: alt,
+                                    nameEn: alt,
+                                    selectedAlternative: alt,
                                     targetWeight: 0,
                                     targetReps: newTargetReps
                                   });
@@ -338,8 +338,8 @@ export default function ExerciseCard({
                     <button
                       onClick={() => completeSet(i)}
                       className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all active:scale-95 ${set.completed
-                          ? 'bg-emerald-500 border-emerald-500'
-                          : 'border-slate-600 hover:border-emerald-500'
+                        ? 'bg-emerald-500 border-emerald-500'
+                        : 'border-slate-600 hover:border-emerald-500'
                         }`}
                     >
                       {set.completed && <Check size={14} strokeWidth={3} className="text-white" />}

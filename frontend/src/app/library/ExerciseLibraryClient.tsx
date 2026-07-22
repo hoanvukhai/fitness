@@ -116,11 +116,10 @@ export default function ExerciseLibraryClient({ exercises }: { exercises: Exerci
         <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-none">
           <button
             onClick={() => setFilterMuscle('all')}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border ${
-              filterMuscle === 'all'
+            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border ${filterMuscle === 'all'
                 ? 'bg-blue-600 text-white border-blue-600'
                 : 'text-slate-400 border-slate-700 hover:border-slate-500'
-            }`}
+              }`}
           >
             Tất cả
           </button>
@@ -131,11 +130,10 @@ export default function ExerciseLibraryClient({ exercises }: { exercises: Exerci
               <button
                 key={m}
                 onClick={() => setFilterMuscle(filterMuscle === m ? 'all' : m)}
-                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
-                  filterMuscle === m
+                className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${filterMuscle === m
                     ? 'bg-slate-200 text-slate-900 border-transparent'
                     : 'text-slate-400 border-slate-700 hover:border-slate-500'
-                }`}
+                  }`}
               >
                 {cfg.emoji} {cfg.label}
               </button>
@@ -147,11 +145,10 @@ export default function ExerciseLibraryClient({ exercises }: { exercises: Exerci
         <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-none">
           <button
             onClick={() => setFilterEquip('all')}
-            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border ${
-              filterEquip === 'all'
+            className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border ${filterEquip === 'all'
                 ? 'bg-blue-600 text-white border-blue-600'
                 : 'text-slate-400 border-slate-700 hover:border-slate-500'
-            }`}
+              }`}
           >
             Mọi thiết bị
           </button>
@@ -159,11 +156,10 @@ export default function ExerciseLibraryClient({ exercises }: { exercises: Exerci
             <button
               key={eq}
               onClick={() => setFilterEquip(filterEquip === eq ? 'all' : eq)}
-              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${
-                filterEquip === eq
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all border ${filterEquip === eq
                   ? 'bg-slate-200 text-slate-900 border-transparent'
                   : 'text-slate-400 border-slate-700 hover:border-slate-500'
-              }`}
+                }`}
             >
               {EQUIPMENT_LABELS[eq]}
             </button>

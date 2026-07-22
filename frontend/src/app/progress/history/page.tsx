@@ -41,7 +41,7 @@ export default function HistoryPage() {
       {/* Header */}
       <div className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 px-4 py-4">
         <div className="max-w-lg mx-auto flex items-center">
-          <button 
+          <button
             onClick={() => router.back()}
             className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors -ml-2 p-2"
           >
@@ -89,7 +89,7 @@ export default function HistoryPage() {
                         <div className="text-[11px] text-slate-400 font-mono font-bold tracking-wider">THÁNG {w.month || 1} · TUẦN {w.week}</div>
                         <div className="text-xs text-slate-600 mt-0.5">{Math.floor(w.durationSeconds / 60)}m</div>
                       </div>
-                      
+
                       <div className="flex items-center gap-1 mr-2">
                         <button
                           onClick={e => { e.stopPropagation(); setEditingId(w.id); }}
@@ -119,9 +119,9 @@ export default function HistoryPage() {
                         const doneSets = ex.sets.filter(s => s.completed);
                         if (doneSets.length === 0) return null;
                         const maxW = Math.max(...doneSets.map(s => s.weight));
-                        const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) || 
+                        const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) ||
                           (ex.name && ex.name.toLowerCase().includes('plank'));
-                        
+
                         return (
                           <div key={ex.exerciseId} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
                             <div>
@@ -151,10 +151,10 @@ export default function HistoryPage() {
       </div>
 
       {editingId && (
-        <EditSessionSheet 
-          session={workouts.find(w => w.id === editingId)!} 
-          onSave={handleSaveEdit} 
-          onClose={() => setEditingId(null)} 
+        <EditSessionSheet
+          session={workouts.find(w => w.id === editingId)!}
+          onSave={handleSaveEdit}
+          onClose={() => setEditingId(null)}
         />
       )}
     </div>

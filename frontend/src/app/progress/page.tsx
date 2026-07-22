@@ -107,19 +107,19 @@ function getDaysDiff(d1: string, d2: string) {
 // A1: Tính chuỗi buổi tập (cho phép nghỉ tối đa 3 ngày mà không mất chuỗi)
 function calcStreak(workouts: WorkoutSession[]): number {
   const doneDates = Array.from(new Set(workouts.filter(w => w.status === 'completed').map(w => w.date))).sort().reverse();
-  
+
   if (doneDates.length === 0) return 0;
 
   const todayStr = todayVN();
   const lastWorkoutStr = doneDates[0];
-  
+
   // Nếu đã nghỉ quá 3 ngày tính từ hôm nay, chuỗi bị reset về 0
   if (getDaysDiff(todayStr, lastWorkoutStr) > 3) return 0;
 
   let streak = 1;
   for (let i = 0; i < doneDates.length - 1; i++) {
-    const gap = getDaysDiff(doneDates[i], doneDates[i+1]);
-    
+    const gap = getDaysDiff(doneDates[i], doneDates[i + 1]);
+
     // Nếu khoảng cách giữa 2 buổi tập <= 3 ngày (tức là nghỉ tối đa 2 ngày)
     if (gap <= 3) {
       streak++;
@@ -127,7 +127,7 @@ function calcStreak(workouts: WorkoutSession[]): number {
       break;
     }
   }
-  
+
   return streak;
 }
 
@@ -176,7 +176,7 @@ export default function ProgressPage() {
     const labels = new Array(calendarWeeks.length).fill(null);
     let currentMonth = -1;
     let lastPushedCol = -5;
-    
+
     calendarWeeks.forEach((week, index) => {
       const thursdayMonth = week[3]?.month ?? week[0].month;
       if (thursdayMonth !== currentMonth) {
@@ -207,7 +207,7 @@ export default function ProgressPage() {
     <div className="bg-slate-950 pb-8">
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
         <h1 className="text-2xl font-extrabold text-white">Tiến độ</h1>
-        
+
         <div className="grid grid-cols-3 gap-3">
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-center text-center">
             <Flame className="text-orange-500 mb-1" size={20} />
@@ -234,14 +234,14 @@ export default function ProgressPage() {
               <CalendarDays className="text-slate-400" size={18} />
               <h2 className="text-base font-bold text-white">3 tháng gần đây</h2>
             </div>
-            <button 
+            <button
               onClick={() => router.push('/progress/heatmap')}
               className="text-sm font-medium text-blue-400 hover:text-blue-300 transition-colors"
             >
               Xem toàn bộ
             </button>
           </div>
-          
+
           <div className="w-full pt-2">
             <div className="grid grid-cols-[auto_repeat(12,_minmax(0,_1fr))] gap-x-1 md:gap-x-1.5 gap-y-1 md:gap-y-1.5 w-full">
               {/* Row 0: Month Labels */}
@@ -256,8 +256,8 @@ export default function ProgressPage() {
               {[0, 1, 2, 3, 4, 5, 6].map(dayIndex => (
                 <Fragment key={dayIndex}>
                   {/* Row Label */}
-                  <div className={`flex items-center justify-end pr-2 text-[10px] text-slate-500 ${(dayIndex%2===1) ? 'opacity-0' : ''}`}>
-                    {['T2','T3','T4','T5','T6','T7','CN'][dayIndex]}
+                  <div className={`flex items-center justify-end pr-2 text-[10px] text-slate-500 ${(dayIndex % 2 === 1) ? 'opacity-0' : ''}`}>
+                    {['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'][dayIndex]}
                   </div>
                   {/* Cells */}
                   {calendarWeeks.map((week, wi) => {
@@ -268,7 +268,7 @@ export default function ProgressPage() {
                       legs: 'bg-emerald-500',
                     };
                     const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
-                    
+
                     let opacityClass = 'opacity-100';
                     if (cell.session) {
                       const mins = Math.floor(cell.session.durationSeconds / 60);
@@ -280,7 +280,7 @@ export default function ProgressPage() {
                     const title = cell.session
                       ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
                       : new Date(cell.date).toLocaleDateString('vi-VN');
-                    
+
                     return (
                       <div
                         key={wi}
@@ -295,7 +295,7 @@ export default function ProgressPage() {
           </div>
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-3 gap-3 border-t border-slate-800 pt-3">
             <div className="flex flex-wrap items-center gap-3">
-              {[{c:'bg-sky-500',l:'Push'},{c:'bg-indigo-500',l:'Pull'},{c:'bg-emerald-500',l:'Legs'},{c:'bg-slate-800/40',l:'Nghỉ'}].map(({c,l})=>(
+              {[{ c: 'bg-sky-500', l: 'Push' }, { c: 'bg-indigo-500', l: 'Pull' }, { c: 'bg-emerald-500', l: 'Legs' }, { c: 'bg-slate-800/40', l: 'Nghỉ' }].map(({ c, l }) => (
                 <div key={l} className="flex items-center gap-1.5">
                   <div className={`w-3 h-3 rounded-[2px] ${c}`} />
                   <span className="text-[10px] text-slate-500 font-medium">{l}</span>
@@ -327,11 +327,10 @@ export default function ProgressPage() {
                 <button
                   key={ex.label}
                   onClick={() => toggleLine(ex.label)}
-                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all border ${
-                    activeLines.has(ex.label)
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-all border ${activeLines.has(ex.label)
                       ? 'border-transparent text-white'
                       : 'border-slate-700 bg-transparent text-slate-500'
-                  }`}
+                    }`}
                   style={activeLines.has(ex.label) ? { backgroundColor: ex.color + '30', borderColor: ex.color + '60', color: ex.color } : {}}
                 >
                   <div className="w-2 h-2 rounded-full" style={{ background: activeLines.has(ex.label) ? ex.color : '#475569' }} />
@@ -393,10 +392,10 @@ export default function ProgressPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
-                      <div className="text-right hidden sm:block">
-                        <div className="text-[11px] text-slate-400 font-mono font-bold tracking-wider">THÁNG {w.month || 1} · TUẦN {w.week}</div>
-                        <div className="text-xs text-slate-600 mt-0.5">{Math.floor(w.durationSeconds / 60)}m</div>
-                      </div>
+                    <div className="text-right hidden sm:block">
+                      <div className="text-[11px] text-slate-400 font-mono font-bold tracking-wider">THÁNG {w.month || 1} · TUẦN {w.week}</div>
+                      <div className="text-xs text-slate-600 mt-0.5">{Math.floor(w.durationSeconds / 60)}m</div>
+                    </div>
                     {expandedSession === w.id
                       ? <ChevronDown size={16} className="text-slate-500" />
                       : <ChevronRight size={16} className="text-slate-500" />
@@ -409,9 +408,9 @@ export default function ProgressPage() {
                       const doneSets = ex.sets.filter(s => s.completed);
                       if (doneSets.length === 0) return null;
                       const maxW = Math.max(...doneSets.map(s => s.weight));
-                      const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) || 
+                      const isTimeBased = /giây|giay|\b\d+\s*s\b/.test(ex.targetReps.toLowerCase()) ||
                         (ex.name && ex.name.toLowerCase().includes('plank'));
-                      
+
                       return (
                         <div key={ex.exerciseId} className="flex items-center justify-between py-2 border-b border-slate-800/50 last:border-0">
                           <div>

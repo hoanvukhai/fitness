@@ -119,7 +119,7 @@ export default function ReferencePage() {
           <div className="md:hidden mb-8 overflow-x-auto pb-3">
             <div className="flex gap-2 w-max">
               {['Tổng quan', 'Nguyên tắc', 'Quy tắc', 'Core Ramp'].map((t, i) => (
-                <a key={t} href={['#overview','#principles','#rules','#core-ramp'][i]}
+                <a key={t} href={['#overview', '#principles', '#rules', '#core-ramp'][i]}
                   className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-full text-sm text-slate-400 whitespace-nowrap">{t}</a>
               ))}
               {data.months.map((m: any) => (
@@ -241,7 +241,7 @@ export default function ReferencePage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800">
-                {['push','pull','legs'].map(type => {
+                {['push', 'pull', 'legs'].map(type => {
                   const c = data.coreRamp[type];
                   return (
                     <React.Fragment key={type}>
@@ -282,7 +282,7 @@ export default function ReferencePage() {
                     <h2 className="text-3xl font-bold text-white">Tháng {m.monthNumber}: {m.phaseName}</h2>
                   </div>
                 </div>
-                {['push','pull','legs'].map(dayKey => {
+                {['push', 'pull', 'legs'].map(dayKey => {
                   const day = m.days[dayKey];
                   return (
                     <div key={dayKey} className="mb-12">

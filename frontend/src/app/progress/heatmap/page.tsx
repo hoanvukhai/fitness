@@ -58,20 +58,20 @@ export default function HeatmapPage() {
     startDate.setDate(startDate.getDate() - daysFromMon);
 
     const endDate = new Date(selectedYear, 11, 31); // Dec 31st
-    
+
     const weeks: { date: string; session?: WorkoutSession; month: number }[][] = [];
     let current = new Date(startDate);
-    
-    while (current <= endDate || current.getDay() !== 1) { 
+
+    while (current <= endDate || current.getDay() !== 1) {
       if (current > endDate && current.getDay() === 1) break;
 
       const week: { date: string; session?: WorkoutSession; month: number }[] = [];
       for (let d = 0; d < 7; d++) {
         const iso = dateVN(current);
-        week.push({ 
-          date: iso, 
+        week.push({
+          date: iso,
           session: done.get(iso),
-          month: current.getMonth() 
+          month: current.getMonth()
         });
         current.setDate(current.getDate() + 1);
       }
@@ -98,7 +98,7 @@ export default function HeatmapPage() {
     const labels = new Array(calendarWeeks.length).fill(null);
     let currentMonth = -1;
     let lastPushedCol = -5;
-    
+
     calendarWeeks.forEach((week, index) => {
       // Find thursday (index 3), if not use index 0
       const thursdayMonth = week[3]?.month ?? week[0].month;
@@ -122,7 +122,7 @@ export default function HeatmapPage() {
       {/* Header */}
       <div className="sticky top-0 z-30 bg-slate-950/95 backdrop-blur-md border-b border-slate-800 px-4 py-4">
         <div className="max-w-6xl mx-auto flex items-center">
-          <button 
+          <button
             onClick={() => router.back()}
             className="flex items-center gap-1 text-slate-400 hover:text-white transition-colors -ml-2 p-2"
           >
@@ -136,7 +136,7 @@ export default function HeatmapPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-8">
-        
+
         {/* Main Content */}
         <div className="flex-1 space-y-8 order-2 md:order-1 min-w-0">
           <div className="text-xl font-medium text-slate-300">
@@ -145,14 +145,14 @@ export default function HeatmapPage() {
 
           {/* Heatmap */}
           <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 overflow-hidden">
-            
+
             <div className="flex gap-2">
               <div className="flex flex-col gap-1 md:gap-1.5 pt-5 justify-between">
-                {['T2','T3','T4','T5','T6','T7','CN'].map((d, i) => (
-                  <div key={d} className={`h-3 md:h-3.5 flex items-center text-[10px] text-slate-500 w-4 md:w-5 ${(i%2===1) ? 'opacity-0' : ''}`}>{d}</div>
+                {['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map((d, i) => (
+                  <div key={d} className={`h-3 md:h-3.5 flex items-center text-[10px] text-slate-500 w-4 md:w-5 ${(i % 2 === 1) ? 'opacity-0' : ''}`}>{d}</div>
                 ))}
               </div>
-              
+
               <div className="flex-1 overflow-x-auto scrollbar-none pb-2" dir="rtl">
                 <div className="min-w-max relative flex gap-1 md:gap-1.5" dir="ltr">
                   {calendarWeeks.map((week, wi) => (
@@ -161,7 +161,7 @@ export default function HeatmapPage() {
                       <div className="h-4 text-[10px] text-slate-400 whitespace-nowrap overflow-visible">
                         {weekMonthLabels[wi] || ''}
                       </div>
-                      
+
                       {week.map((cell, di) => {
                         const isOutsideYear = new Date(cell.date).getFullYear() !== selectedYear;
                         if (isOutsideYear) {
@@ -174,7 +174,7 @@ export default function HeatmapPage() {
                           legs: 'bg-emerald-500',
                         };
                         const color = cell.session ? (dayColors[cell.session.day] || 'bg-slate-400') : 'bg-slate-800/40';
-                        
+
                         let opacityClass = 'opacity-100';
                         if (cell.session) {
                           const mins = Math.floor(cell.session.durationSeconds / 60);
@@ -186,7 +186,7 @@ export default function HeatmapPage() {
                         const title = cell.session
                           ? `${new Date(cell.date).toLocaleDateString('vi-VN')} · ${getDayLabel(cell.session.day)} ${cell.session.session} (${Math.floor(cell.session.durationSeconds / 60)}m)`
                           : new Date(cell.date).toLocaleDateString('vi-VN');
-                        
+
                         return (
                           <div
                             key={di}
@@ -229,30 +229,30 @@ export default function HeatmapPage() {
                   return (
                     <div key={month} className="relative pl-6">
                       <div className="absolute -left-1.5 top-1 w-3 h-3 rounded-full bg-slate-800 border-2 border-slate-950" />
-                      
+
                       <div className="font-bold text-slate-200 mb-2">Tháng {month + 1} <span className="text-slate-500 font-normal ml-1">{selectedYear}</span></div>
-                      
+
                       <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
                         <div className="flex items-start justify-between">
                           <div className="text-sm text-slate-300 font-medium">
                             Hoàn thành {total} buổi tập
                           </div>
-                          
+
                           {/* Mini breakdown bars */}
                           <div className="flex flex-col gap-1.5 w-24" title={`${pushCount} Push, ${pullCount} Pull, ${legsCount} Legs`}>
                             {pushCount > 0 && (
                               <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden flex">
-                                <div className="bg-sky-500 h-full rounded-full transition-all" style={{ width: `${(pushCount/total)*100}%` }} />
+                                <div className="bg-sky-500 h-full rounded-full transition-all" style={{ width: `${(pushCount / total) * 100}%` }} />
                               </div>
                             )}
                             {pullCount > 0 && (
                               <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden flex">
-                                <div className="bg-indigo-500 h-full rounded-full transition-all" style={{ width: `${(pullCount/total)*100}%` }} />
+                                <div className="bg-indigo-500 h-full rounded-full transition-all" style={{ width: `${(pullCount / total) * 100}%` }} />
                               </div>
                             )}
                             {legsCount > 0 && (
                               <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden flex">
-                                <div className="bg-emerald-500 h-full rounded-full transition-all" style={{ width: `${(legsCount/total)*100}%` }} />
+                                <div className="bg-emerald-500 h-full rounded-full transition-all" style={{ width: `${(legsCount / total) * 100}%` }} />
                               </div>
                             )}
                           </div>
@@ -282,11 +282,10 @@ export default function HeatmapPage() {
             <button
               key={year}
               onClick={() => setSelectedYear(year)}
-              className={`flex-shrink-0 w-auto md:w-full text-center md:text-left px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                selectedYear === year 
-                  ? 'bg-blue-600 text-white' 
+              className={`flex-shrink-0 w-auto md:w-full text-center md:text-left px-4 py-2 rounded-xl text-sm font-medium transition-colors ${selectedYear === year
+                  ? 'bg-blue-600 text-white'
                   : 'bg-slate-800 md:bg-transparent text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
-              }`}
+                }`}
             >
               Năm {year}
             </button>

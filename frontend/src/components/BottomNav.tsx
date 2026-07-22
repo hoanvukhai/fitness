@@ -5,10 +5,10 @@ import { usePathname } from 'next/navigation';
 import { CalendarDays, TrendingUp, BookOpen, Library } from 'lucide-react';
 
 const navItems = [
-  { href: '/',          icon: CalendarDays, label: 'Hôm nay' },
-  { href: '/progress',  icon: TrendingUp,   label: 'Tiến độ' },
-  { href: '/library',   icon: Library,      label: 'Bài tập' },
-  { href: '/reference', icon: BookOpen,     label: 'Tài liệu' },
+  { href: '/', icon: CalendarDays, label: 'Hôm nay' },
+  { href: '/progress', icon: TrendingUp, label: 'Tiến độ' },
+  { href: '/library', icon: Library, label: 'Bài tập' },
+  { href: '/reference', icon: BookOpen, label: 'Tài liệu' },
 ];
 
 export default function BottomNav() {
@@ -24,15 +24,13 @@ export default function BottomNav() {
               <Link
                 key={href}
                 href={href}
-                className={`flex items-center justify-center p-2 min-w-[64px] transition-all duration-200 ${
-                  isActive
+                className={`flex items-center justify-center p-2 min-w-[64px] transition-all duration-200 ${isActive
                     ? 'text-blue-400'
                     : 'text-slate-500 hover:text-slate-300'
-                }`}
+                  }`}
               >
-                <div className={`relative flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-200 ${
-                  isActive ? 'bg-blue-500/15' : ''
-                }`}>
+                <div className={`relative flex items-center justify-center w-12 h-12 rounded-2xl transition-all duration-200 ${isActive ? 'bg-blue-500/15' : ''
+                  }`}>
                   {isActive && (
                     <div className="absolute inset-0 rounded-2xl bg-blue-500/10 blur-sm" />
                   )}

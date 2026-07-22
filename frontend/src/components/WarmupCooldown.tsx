@@ -102,13 +102,11 @@ export default function WarmupCooldown({ title, emoji, items, color, sessionId, 
             tabIndex={0}
             onClick={() => toggle(i)}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(i); } }}
-            className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all cursor-pointer select-none ${
-              checked[i] ? 'bg-emerald-950/20 opacity-60' : 'bg-slate-800/50 hover:bg-slate-800'
-            }`}
+            className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all cursor-pointer select-none ${checked[i] ? 'bg-emerald-950/20 opacity-60' : 'bg-slate-800/50 hover:bg-slate-800'
+              }`}
           >
-            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-              checked[i] ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600'
-            }`}>
+            <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${checked[i] ? 'bg-emerald-500 border-emerald-500' : 'border-slate-600'
+              }`}>
               {checked[i] && <Check size={10} strokeWidth={3} className="text-white" />}
             </div>
             <div className="flex-1 min-w-0 flex items-center gap-2">
@@ -131,10 +129,10 @@ export default function WarmupCooldown({ title, emoji, items, color, sessionId, 
               {item.sets && item.reps
                 ? `${item.sets}×${item.reps}`
                 : item.reps
-                ? `${item.reps}`
-                : item.duration
-                ? `${item.duration}`
-                : ''}
+                  ? `${item.reps}`
+                  : item.duration
+                    ? `${item.duration}`
+                    : ''}
               {' '}{item.unit}
             </div>
           </div>

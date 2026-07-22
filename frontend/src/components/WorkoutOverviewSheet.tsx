@@ -20,9 +20,8 @@ export default function WorkoutOverviewSheet({ session, warmups, cooldowns, curr
       <button
         key={`${phase}-${index}`}
         onClick={() => onJump(phase, index)}
-        className={`w-full text-left p-4 flex items-center justify-between border-b border-slate-800/50 last:border-0 transition-colors ${
-          isActive ? 'bg-blue-500/10 border-l-4 border-l-blue-500' : 'hover:bg-slate-800/30'
-        }`}
+        className={`w-full text-left p-4 flex items-center justify-between border-b border-slate-800/50 last:border-0 transition-colors ${isActive ? 'bg-blue-500/10 border-l-4 border-l-blue-500' : 'hover:bg-slate-800/30'
+          }`}
       >
         <div>
           <div className={`font-semibold ${isActive ? 'text-blue-400' : 'text-slate-200'}`}>{name}</div>
@@ -38,7 +37,7 @@ export default function WorkoutOverviewSheet({ session, warmups, cooldowns, curr
   return (
     <div className="fixed inset-0 z-[120] flex flex-col justify-end">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200" onClick={onClose} />
-      
+
       <div className="bg-slate-900 rounded-t-3xl border-t border-slate-800 w-full max-h-[85vh] flex flex-col animate-in slide-in-from-bottom-full duration-300 relative z-10 shadow-2xl">
         <div className="flex items-center justify-between p-5 border-b border-slate-800">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
@@ -67,10 +66,10 @@ export default function WorkoutOverviewSheet({ session, warmups, cooldowns, curr
             </h3>
             <div className="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden">
               {session.exercises.map((ex, i) => renderItem(
-                'main', 
-                i, 
-                ex.name, 
-                ex.checked, 
+                'main',
+                i,
+                ex.name,
+                ex.checked,
                 `${ex.sets.filter(s => s.completed).length}/${ex.targetSets} hiệp • ${ex.targetReps}`
               ))}
             </div>
