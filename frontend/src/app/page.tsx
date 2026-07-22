@@ -46,60 +46,60 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
   const data = getGiaoan();
   
   const logs: ExerciseLog[] = [];
-  
-  for (const ex of exercises) {
-    let targetWeight = settings.accessoryWeights?.[ex.id] || 0;
+
+  // Xử lý Smart Swap trước khi fetch Firestore để batch queries
+  const exercisesMeta = exercises.map(ex => {
     let targetReps = ex.repsDisplay || '';
     
     // Core Ramp logic
     if (ex.tier === 'core' && data.coreRamp && data.coreRamp[day]) {
       const rampData = data.coreRamp[day];
       const monthData = rampData.months?.find((m: any) => m.month === currentMonth) || rampData.months[0];
-      if (monthData && monthData.weeks) {
-        // weekInMonth is 1-4, weeks array index is 0-3
+      if (monthData?.weeks) {
         const target = monthData.weeks[weekInMonth - 1];
-        if (target) {
-          targetReps = `${target} ${rampData.unit || ''}`;
-        }
+        if (target) targetReps = `${target} ${rampData.unit || ''}`;
       }
     }
 
-    // --- XỬ LÝ ĐỔI BÀI TẬP (SMART SWAP) ---
     const originalNameEn = ex.nameEn || '';
     const originalName = ex.name;
     let finalNameEn = originalNameEn;
     let finalName = originalName;
     let selectedAlternative = '';
 
-    // Kiểm tra xem có bài tập nào được ghi nhớ không (theo originalNameEn)
     if (settings.alternatives && originalNameEn && settings.alternatives[originalNameEn]) {
       const swappedNameEn = settings.alternatives[originalNameEn];
       const altDbEx = dbData.exercises.find((e: any) => e.name === swappedNameEn);
-      
       if (altDbEx) {
         finalNameEn = swappedNameEn;
         finalName = altDbEx.name;
         selectedAlternative = altDbEx.name;
-        
-        // Điều chỉnh lại reps nếu đổi từ tính giây sang đếm reps và ngược lại
         const isNewTimeBased = finalName.toLowerCase().includes('plank');
-        const isOldTimeBased = targetReps.toLowerCase().includes('giây') || targetReps.toLowerCase().includes('s');
-        
+        const isOldTimeBased = /giây|giay|\b\d+\s*s\b/.test(targetReps.toLowerCase());
         if (isNewTimeBased && !isOldTimeBased) targetReps = '60 giây';
         else if (!isNewTimeBased && isOldTimeBased) targetReps = '15';
       }
     }
-    // ------------------------------------
+    return { ex, targetReps, originalNameEn, originalName, finalNameEn, finalName, selectedAlternative };
+  });
 
-    // Lấy lịch sử 2 buổi gần nhất của bài tập này
-    const history = await getExerciseHistory(ex.id, finalNameEn, 2);
+  // T1: Batch tất cả Firestore queries song song
+  const histories = await Promise.all(
+    exercisesMeta.map(({ ex, finalNameEn }) => getExerciseHistory(ex.id, finalNameEn, 2))
+  );
+
+  for (let i = 0; i < exercisesMeta.length; i++) {
+    const { ex, targetReps: initReps, originalNameEn, originalName, finalNameEn, finalName, selectedAlternative } = exercisesMeta[i];
+    let targetReps = initReps;
+    let targetWeight = settings.accessoryWeights?.[ex.id] || 0;
+    const history = histories[i];
     
     let previousWeight = 0;
     let previousReps = 0;
     if (history.length > 0) {
        previousWeight = history[0].weight;
        previousReps = history[0].reps;
-       targetWeight = history[0].weight; // default fallback
+       targetWeight = history[0].weight;
     }
 
     // --- TÍNH TOÁN PROGRESSIVE OVERLOAD ---
@@ -109,7 +109,7 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
     if (ex.tier === 'core') {
       computedRIR = '1-2';
     } else if (ex.tier === 'tier1' || ex.tier === 'main') {
-      // Nếu chưa có lịch sử, fallback sang tier1Weights từ Settings
+      // Fallback sang tier1Weights từ Settings khi chưa có lịch sử
       if (previousWeight === 0) {
         const nameEnLower = (finalNameEn || '').toLowerCase();
         if (nameEnLower.includes('bench')) previousWeight = settings.tier1Weights?.benchPress || 0;
@@ -119,11 +119,9 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
         else if (nameEnLower.includes('squat')) previousWeight = settings.tier1Weights?.backSquat || 0;
         else if (nameEnLower.includes('rdl') || nameEnLower.includes('deadlift')) previousWeight = settings.tier1Weights?.rdl || 0;
       }
-      // Tier 1 Logic
       const tier1Sugg = suggestTier1Weight(previousWeight, weekInMonth);
       targetWeight = tier1Sugg.suggestedWeight > 0 ? tier1Sugg.suggestedWeight : (previousWeight || targetWeight);
       computedRIR = tier1Sugg.newRir;
-      
       progressionSuggestion = {
         suggestedWeight: targetWeight,
         reason: tier1Sugg.reason,
@@ -135,25 +133,13 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
       computedRIR = '1-2';
       const maxRepMatch = targetReps.match(/\d+-(\d+)/);
       const maxReps = maxRepMatch ? parseInt(maxRepMatch[1], 10) : parseInt(targetReps, 10);
-      
       if (maxReps && !isNaN(maxReps)) {
         const lastTwoSessionsSets = history.map(h => h.sets);
         const dpSugg = suggestDoubleProgression(previousWeight, lastTwoSessionsSets, maxReps, 2.5);
         targetWeight = dpSugg.suggestedWeight > 0 ? dpSugg.suggestedWeight : targetWeight;
-        
-        progressionSuggestion = {
-          suggestedWeight: targetWeight,
-          reason: dpSugg.reason,
-          oldRir: '1-2',
-          newRir: '1-2'
-        };
+        progressionSuggestion = { suggestedWeight: targetWeight, reason: dpSugg.reason, oldRir: '1-2', newRir: '1-2' };
       } else {
-        progressionSuggestion = {
-          suggestedWeight: targetWeight,
-          reason: 'Giữ nguyên tạ, tập trung chất lượng chuyển động.',
-          oldRir: '1-2',
-          newRir: '1-2'
-        };
+        progressionSuggestion = { suggestedWeight: targetWeight, reason: 'Giữ nguyên tạ, tập trung chất lượng chuyển động.', oldRir: '1-2', newRir: '1-2' };
       }
     }
 
@@ -161,9 +147,9 @@ async function buildExerciseLogs(exercises: any[], settings: any, day: string, s
       exerciseId: ex.id,
       name: finalName,
       nameEn: finalNameEn,
-      originalName: originalName,
-      originalNameEn: originalNameEn,
-      selectedAlternative: selectedAlternative,
+      originalName,
+      originalNameEn,
+      selectedAlternative,
       tier: ex.tier,
       targetWeight,
       targetReps,

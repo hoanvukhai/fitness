@@ -53,11 +53,12 @@ export function suggestTier1Weight(
 
 /**
  * Double Progression cho bài Phụ & Buổi B
- * Nếu 2 buổi liên tiếp đạt đầu trên rep range → tăng tạ
+ * Giáo án: "Hễ hoàn thành đủ số hiệp ở đầu trên rep range trong 2 buổi liên tiếp → tăng tạ"
+ * Điều kiện: tất cả set phải completed VÀ trung bình reps >= maxRepRange
  */
 export function suggestDoubleProgression(
   currentWeight: number,
-  lastTwoSessions: SetLog[][], // mảng [[set logs session -2], [set logs session -1]]
+  lastTwoSessions: SetLog[][], // [[set logs session -2], [set logs session -1]]
   maxRepRange: number,
   increment: number = 2.5
 ): { suggestedWeight: number; reason: string } {
@@ -68,21 +69,26 @@ export function suggestDoubleProgression(
     };
   }
 
-  const allSetsReachMax = lastTwoSessions.every(sessionSets =>
-    sessionSets.length > 0 && sessionSets.every(s => s.completed && s.reps >= maxRepRange)
-  );
+  // Điều kiện: tất cả set hoàn thành VÀ avg reps của buổi đó >= maxRepRange
+  const bothSessionsQualify = lastTwoSessions.every(sessionSets => {
+    if (!sessionSets || sessionSets.length === 0) return false;
+    const completedSets = sessionSets.filter(s => s.completed);
+    if (completedSets.length === 0) return false;
+    const avgReps = completedSets.reduce((sum, s) => sum + s.reps, 0) / completedSets.length;
+    return avgReps >= maxRepRange;
+  });
 
-  if (allSetsReachMax) {
+  if (bothSessionsQualify) {
     const newWeight = currentWeight > 0 ? currentWeight + increment : 0;
     return {
       suggestedWeight: newWeight > 0 ? newWeight : currentWeight,
-      reason: `Đạt ${maxRepRange} reps trong 2 buổi liên tiếp -> Tăng ${increment}kg`,
+      reason: `Đạt TB ≥ ${maxRepRange} reps trong 2 buổi → Tăng ${increment}kg`,
     };
   }
 
   return {
     suggestedWeight: currentWeight,
-    reason: `Chưa đạt max reps trong 2 buổi liên tiếp -> Giữ nguyên tạ`,
+    reason: `Chưa đạt đầu trên rep range trong 2 buổi liên tiếp → Giữ nguyên tạ`,
   };
 }
 
